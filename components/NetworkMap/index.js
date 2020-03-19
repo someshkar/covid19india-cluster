@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react'
 import Graph from 'react-graph-vis'
 
 import { rowsToGraph } from '../../util/parse'
+import { connect } from 'react-redux'
+import { updateGraph, updatePatients, selectPatient } from '../Redux/actions'
+import normalize from '../../util/normalize'
 
 // import dummyData from './dummyData.js'
 // import dumpedRows from '../../dump'
 // import jsonToGraph from '../../utils/parse'
 
-const NetworkMap = () => {
+const NetworkMap = ({ graph, updateGraph, updatePatients, selectPatient }) => {
+  console.log('Graph :', graph)
   const [isLoading, setIsLoading] = useState(true)
-  const [graph, setGraph] = useState({ nodes: [], edges: [] })
 
   useEffect(() => {
     fetch('/api/raw', {
@@ -19,7 +22,8 @@ const NetworkMap = () => {
       .then(resp => resp.json())
       .then(res => {
         console.log(res)
-        setGraph(rowsToGraph(res.data.rawPatientData))
+        updateGraph(rowsToGraph(res.data.rawPatientData))
+        updatePatients(normalize(res.data.rawPatientData))
         setIsLoading(false)
       })
       .catch(err => console.log('error', err))
@@ -39,6 +43,7 @@ const NetworkMap = () => {
   const events = {
     select: function(event) {
       var { nodes, edges } = event
+      selectPatient(event.nodes[0])
     },
   }
 
@@ -51,4 +56,14 @@ const NetworkMap = () => {
   )
 }
 
-export default NetworkMap
+const mapStateToProps = state => {
+  let { graph } = state
+
+  return { graph }
+}
+
+export default connect(mapStateToProps, {
+  updateGraph,
+  updatePatients,
+  selectPatient,
+})(NetworkMap)

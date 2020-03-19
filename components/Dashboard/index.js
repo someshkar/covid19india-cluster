@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import NetworkMap from '../NetworkMap'
 import SidePanel from '../SidePanel'
+import { Provider } from 'react-redux'
+import { store } from '../Redux/store'
 
 const Container = styled.div`
   height: 100vh;
@@ -12,11 +14,13 @@ const Container = styled.div`
 
 const Dashboard = () => {
   return (
-    <Container>
-      <div />
-      <SidePanel />
-      <NetworkMap />
-    </Container>
+    <Provider store={store}>
+      <Container>
+        <div />
+        <SidePanel />
+        <NetworkMap />
+      </Container>
+    </Provider>
   )
 }
 
