@@ -1,20 +1,36 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import Header from './header'
+import DataGrid from './datagrid'
+
 import { connect } from 'react-redux'
+
+const Container = styled.div`
+  background-color: #fafafa;
+  padding: 25px;
+`
 
 const Text = styled.div`
   font-size: 50px;
 `
 
 const SidePanel = ({ patient }) => {
-  console.log('Sidepanel', patient)
   return (
-    <div style={{ backgroundColor: 'red' }}>
-      <Text>{patient ? patient.patientId : 'hello'}</Text>
-    </div>
+    <Container>
+      {patient ? <Header {...patient} /> : null}
+      {patient ? <DataGrid {...patient} /> : null}
+    </Container>
   )
 }
+// const SidePanel = ({ patient }) => {
+//   console.log('Sidepanel', patient)
+//   return (
+//     <div style={{ backgroundColor: 'red' }}>
+//       <Text>{patient ? patient.patientId : 'hello'}</Text>
+//     </div>
+//   )
+// }
 
 const mapStateToProps = state => {
   let { patients } = state

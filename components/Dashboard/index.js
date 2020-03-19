@@ -9,14 +9,13 @@ const Container = styled.div`
   height: 100vh;
   width: 100vw;
   display: grid;
-  grid-template-columns: 5% 25% 70%;
+  grid-template-columns: 25% 75%;
 `
 
 const Dashboard = () => {
   return (
     <Provider store={store}>
       <Container>
-        <div />
         <SidePanel />
         <NetworkMap />
       </Container>

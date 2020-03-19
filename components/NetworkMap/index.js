@@ -37,7 +37,7 @@ const NetworkMap = ({ graph, updateGraph, updatePatients, selectPatient }) => {
       color: '#000000',
     },
     height: '100%',
-    width: '70%',
+    width: '75%',
   }
 
   const events = {

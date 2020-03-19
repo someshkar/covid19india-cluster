@@ -70,7 +70,7 @@ export function letterToCode(str) {
   return parseInt(letterPos.toString() + str.substring(1))
 }
 
-function getIcon(patient) {
+export function getIcon(patient) {
   if (patient.gender === 'male') {
     if (patient.status === 'Recovered') {
       return male_cured
