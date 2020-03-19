@@ -116,7 +116,7 @@ export function rowsToGraph(rows) {
 
     let node = {
       id: patientCode,
-      label: row.patientId,
+      label: 'P' + row.patientId.toString(),
       shape: 'image',
       image: getIcon(row),
     }

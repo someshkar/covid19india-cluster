@@ -8,31 +8,6 @@ import { rowsToGraph } from '../../util/parse'
 // import jsonToGraph from '../../utils/parse'
 
 const NetworkMap = () => {
-  // const testGraph = {
-  //   nodes: [
-  //     {
-  //       id: 1,
-  //       label: 'Node 1',
-  //       title: 'node 1 tootip text',
-  //       shape: 'circularImage',
-  //       image: 'https://avatars2.githubusercontent.com/u/14039437?v=4',
-  //     },
-  //     { id: 2, label: 'Node 2', title: 'node 2 tootip text' },
-  //     { id: 3, label: 'Node 3', title: 'node 3 tootip text' },
-  //     { id: 4, label: 'Node 4', title: 'node 4 tootip text' },
-  //     { id: 5, label: 'Node 5', title: 'node 5 tootip text' },
-  //     { id: 6, label: 'Node 6', title: 'node 6 tootip text' },
-  //   ],
-  //   edges: [
-  //     { from: 1, to: 2 },
-  //     { from: 1, to: 3 },
-  //     { from: 2, to: 4 },
-  //     { from: 2, to: 5 },
-  //   ],
-  // }
-
-  // const graph = jsonToGraph(dumpedRows)
-
   const [isLoading, setIsLoading] = useState(true)
   const [graph, setGraph] = useState({ nodes: [], edges: [] })
 
@@ -58,7 +33,7 @@ const NetworkMap = () => {
       color: '#000000',
     },
     height: '100%',
-    width: '100%',
+    width: '70%',
   }
 
   const events = {
