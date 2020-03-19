@@ -3,8 +3,10 @@ import styled from 'styled-components'
 import _ from 'lodash'
 
 const Container = styled.div`
+  font-size: 16px;
   display: grid;
   grid-row-gap: 10px;
+  overflow: auto;
 `
 
 const DoubleCell = styled.div`
@@ -24,7 +26,7 @@ function Cell({ name, children }) {
     background: #fff;
     border-radius: 5px;
     border: 1px solid #e7e7e7;
-    padding: 15px 30px;
+    padding: 15px 20px;
   `
 
   const Name = styled.div`

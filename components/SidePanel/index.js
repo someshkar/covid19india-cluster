@@ -9,10 +9,7 @@ import { connect } from 'react-redux'
 const Container = styled.div`
   background-color: #fafafa;
   padding: 25px;
-`
-
-const Text = styled.div`
-  font-size: 50px;
+  overflow: auto;
 `
 
 const SidePanel = ({ patient }) => {
