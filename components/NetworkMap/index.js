@@ -15,7 +15,9 @@ const NetworkMap = ({ graph, updateGraph, updatePatients, selectPatient }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/raw', {
+    // fetch('/api/raw', {
+    fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
+      cors: 'no-cors',
       method: 'GET',
       redirect: 'follow',
     })
