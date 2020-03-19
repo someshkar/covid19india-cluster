@@ -1,5 +1,6 @@
 import Document, { Head, Main, NextScript } from 'next/document'
 // Import styled components ServerStyleSheet
+import GitHubForkRibbon from 'react-github-fork-ribbon'
 import { ServerStyleSheet } from 'styled-components'
 
 export default class MyDocument extends Document {
@@ -31,6 +32,14 @@ export default class MyDocument extends Document {
           {this.props.styleTags}
         </Head>
         <body>
+          <GitHubForkRibbon
+            position="right"
+            color="green"
+            href="https://github.com/someshkar/covid19india-network"
+            target="_blank"
+          >
+            Fork me on GitHub
+          </GitHubForkRibbon>
           <Main />
           <NextScript />
         </body>
