@@ -21,6 +21,7 @@
 //   ],
 // }
 
+// OLD, don't use this schema
 // const row = {
 //       patientId: 'P' + rawRow['Patient number'],
 //       dateAnnounced: rawRow['Date Announced'],
@@ -35,8 +36,25 @@
 //       sources: [rawRow['Source_1'], rawRow['Source_2'], rawRow['Source_3']],
 //     }
 
-// const dumpedRows = require('../../api/dump.json')
-// import dumpedRows from '../../api/dump.json'
+// New schema
+// const row = {
+//       patientId: parseInt(rawRow['Patient number']), // Change in frontend, used to be 'P' + rawRow['Patient Number']
+//       reportedOn: rawRow['Date Announced'],
+//       onsetEstimate: '',
+//       ageEstimate: rawRow['Age Bracket'],
+//       gender: processGender(rawRow['Gender']), // Change in frontend, used to be 'M'/'F'
+//       city: rawRow['Detected City'],
+//       state: rawRow['Detected State'],
+//       district: rawRow['Detected District'],
+//       status: rawRow['Current Status'],
+//       notes: rawRow['Notes'],
+//       contractedFrom: rawRow['Contracted from which Patient (Suspected)'],
+//       sources: processSources([
+//         rawRow['Source_1'],
+//         rawRow['Source_2'],
+//         rawRow['Source_3'],
+//       ]),
+//     }
 
 import {
   male_hosp,
@@ -53,7 +71,7 @@ function letterToCode(str) {
 }
 
 function getIcon(patient) {
-  if (patient.gender === 'M') {
+  if (patient.gender === 'male') {
     if (patient.status === 'Recovered') {
       return male_cured
     } else if (patient.status === 'Hospitalized') {
@@ -63,7 +81,7 @@ function getIcon(patient) {
     } else {
       return male_hosp
     }
-  } else if (patient.gender === 'F') {
+  } else if (patient.gender === 'female') {
     if (patient.status === 'Recovered') {
       return female_cured
     } else if (patient.status === 'Hospitalized') {
@@ -94,7 +112,7 @@ export function rowsToGraph(rows) {
   }
 
   rows.forEach(row => {
-    const patientCode = letterToCode(row.patientId)
+    const patientCode = letterToCode('P' + row.patientId.toString())
 
     let node = {
       id: patientCode,

@@ -15,22 +15,52 @@ module.exports = async (req, res) => {
       break
     }
 
+    // Turn M/F to word
+    function processGender(letter) {
+      if (rawRow['Gender'] === 'M') return 'male'
+      else return 'female'
+    }
+
+    // Remove empty strings ("")
+    function processSources(sources) {
+      return sources.filter(source => source)
+    }
+
     const row = {
-      patientId: 'P' + rawRow['Patient number'],
-      dateAnnounced: rawRow['Date Announced'],
+      patientId: parseInt(rawRow['Patient number']), // Change in frontend, used to be 'P' + rawRow['Patient Number']
+      reportedOn: rawRow['Date Announced'],
+      onsetEstimate: '',
       ageEstimate: rawRow['Age Bracket'],
-      gender: rawRow['Gender'],
+      gender: processGender(rawRow['Gender']), // Change in frontend, used to be 'M'/'F'
       city: rawRow['Detected City'],
-      district: rawRow['Detected District'],
       state: rawRow['Detected State'],
+      district: rawRow['Detected District'],
       status: rawRow['Current Status'],
       notes: rawRow['Notes'],
       contractedFrom: rawRow['Contracted from which Patient (Suspected)'],
-      sources: [rawRow['Source_1'], rawRow['Source_2'], rawRow['Source_3']],
+      sources: processSources([
+        rawRow['Source_1'],
+        rawRow['Source_2'],
+        rawRow['Source_3'],
+      ]),
     }
 
     rows.push(row)
   }
 
-  res.json(rows)
+  let resp = {
+    success: true,
+    data: {
+      source: 'covid19india.org',
+      lastRefreshed: new Date(),
+      summary: {
+        total: rows.length,
+      },
+      rawPatientData: rows,
+    },
+    lastRefreshed: new Date(),
+    lastOriginUpdate: new Date(),
+  }
+
+  res.json(resp)
 }

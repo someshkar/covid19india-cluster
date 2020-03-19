@@ -42,9 +42,9 @@ const NetworkMap = () => {
       redirect: 'follow',
     })
       .then(resp => resp.json())
-      .then(data => {
-        console.log(data)
-        setGraph(rowsToGraph(data))
+      .then(res => {
+        console.log(res)
+        setGraph(rowsToGraph(res.data.rawPatientData))
         setIsLoading(false)
       })
       .catch(err => console.log('error', err))
