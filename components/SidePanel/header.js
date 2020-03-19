@@ -52,7 +52,7 @@ export default function Header(patient) {
       </Title>
       <PatientContainer>
         <Image src={getIcon(patient)} />
-        <Name>Patient {patientId}</Name>
+        <Name>P {patientId.toString().substring(2)}</Name>
       </PatientContainer>
     </Container>
   )

@@ -43,7 +43,9 @@ const NetworkMap = ({ graph, updateGraph, updatePatients, selectPatient }) => {
   const events = {
     select: function(event) {
       var { nodes, edges } = event
-      selectPatient(event.nodes[0])
+      if (event.nodes[0]) {
+        selectPatient(event.nodes[0])
+      }
     },
   }
 
