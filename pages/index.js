@@ -13,9 +13,9 @@ const Home = () => (
 
     <main>
       {/* <div>COVID 19 India Network Map</div> */}
-      <div className="sidebar"></div>
+      {/* <div className="sidebar"></div> */}
       {/* <div className="panel"></div> */}
-      <SidePanel />
+      {/* <SidePanel /> */}
       <NoSSR>
         <NetworkMap />
       </NoSSR>
@@ -39,7 +39,7 @@ const Home = () => (
         height: 100vh;
         width: 100vw;
         display: grid;
-        grid-template-columns: 5% 25% 70%;
+        /* grid-template-columns: 5% 25% 70%; */
       }
 
       .sidebar {
