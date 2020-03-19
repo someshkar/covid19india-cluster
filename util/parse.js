@@ -65,12 +65,12 @@ import {
   female_dead,
 } from '../images/index'
 
-function letterToCode(str) {
+export function letterToCode(str) {
   const letterPos = parseInt(str[0], 36)
   return parseInt(letterPos.toString() + str.substring(1))
 }
 
-function getIcon(patient) {
+export function getIcon(patient) {
   if (patient.gender === 'male') {
     if (patient.status === 'Recovered') {
       return male_cured
@@ -116,7 +116,7 @@ export function rowsToGraph(rows) {
 
     let node = {
       id: patientCode,
-      label: row.patientId,
+      label: 'P' + row.patientId.toString(),
       shape: 'image',
       image: getIcon(row),
     }
