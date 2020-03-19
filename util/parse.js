@@ -45,7 +45,7 @@ import {
   female_cured,
   female_hosp,
   female_dead,
-} from '../../images/index'
+} from '../images/index'
 
 function letterToCode(str) {
   const letterPos = parseInt(str[0], 36)
@@ -87,7 +87,7 @@ function codeToLetter(code) {
   return letters[letterPos - 10] + codeStr.substring(2)
 }
 
-function rowsToGraph(rows) {
+export function rowsToGraph(rows) {
   let graph = {
     nodes: [],
     edges: [],
@@ -116,13 +116,6 @@ function rowsToGraph(rows) {
   })
 
   return graph
-}
-
-module.exports = {
-  rowsToGraph,
-  codeToLetter,
-  letterToCode,
-  getIcon,
 }
 
 // console.log(letterToCode('P699999'))
