@@ -11,7 +11,6 @@ import normalize from '../../util/normalize'
 // import jsonToGraph from '../../utils/parse'
 
 const NetworkMap = ({ graph, updateGraph, updatePatients, selectPatient }) => {
-  console.log('Graph :', graph)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -23,7 +22,6 @@ const NetworkMap = ({ graph, updateGraph, updatePatients, selectPatient }) => {
     })
       .then(resp => resp.json())
       .then(res => {
-        console.log(res)
         updateGraph(rowsToGraph(res.data.rawPatientData))
         updatePatients(normalize(res.data.rawPatientData))
         setIsLoading(false)

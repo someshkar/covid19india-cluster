@@ -58,13 +58,12 @@ export default function DataGrid(patient) {
 
   return (
     <Container>
-      <Cell name="Description">{`${ageEstimate} year-old ${gender}`}</Cell>
       <DoubleCell>
-        <Cell name="Gender">{gender}</Cell>
-        <Cell name="Age">{ageEstimate}</Cell>
+        <Cell name="Gender">{gender ? gender : '-'}</Cell>
+        <Cell name="Age">{ageEstimate ? ageEstimate : '-'}</Cell>
       </DoubleCell>
       <DoubleCell>
-        <Cell name="State">{state}</Cell>
+        <Cell name="State">{state ? state : '-'}</Cell>
         <Cell name="District/City">{city ? city : district}</Cell>
       </DoubleCell>
       <Cell name="Status">{status}</Cell>

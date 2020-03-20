@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import NetworkMap from '../NetworkMap'
 import SidePanel from '../SidePanel'
+import FilterPanel from '../FilterPanel'
 import { Provider } from 'react-redux'
 import { store } from '../Redux/store'
 
@@ -9,13 +10,14 @@ const Container = styled.div`
   height: 100vh;
   width: 100vw;
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 5% 25% 70%;
 `
 
 const Dashboard = () => {
   return (
     <Provider store={store}>
       <Container>
+        <FilterPanel />
         <SidePanel />
         <NetworkMap />
       </Container>

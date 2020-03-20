@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 
 const Container = styled.div`
   background-color: #fafafa;
-  padding: 25px;
+  padding: 15px;
   overflow: auto;
 `
 
