@@ -44,13 +44,11 @@ export const addStates = (graph, patients) => {
 
 export const removeStates = (graph, patients) => {
   let states = {}
-
   for (let patientId in patients) {
     if (!states[hash(patients[patientId].state)]) {
       states[hash(patients[patientId].state)] = patients[patientId].state
     }
   }
-
   for (var key in states) {
     let node = {
       id: key,

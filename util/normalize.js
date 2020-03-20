@@ -6,7 +6,7 @@ const normalize = array => {
   }
 
   array.forEach(item => {
-    let patientCode = letterToCode('P' + item.patientId.toString())
+    let patientCode = letterToCode('P' + item.patientId)
     item.patientId = patientCode
     newArray.byId[patientCode] = item
     newArray.allIds.push(patientCode)
