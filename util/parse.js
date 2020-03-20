@@ -64,6 +64,7 @@ import {
   female_hosp,
   female_dead,
 } from '../images/index'
+import dotProp from 'dot-prop-immutable'
 
 export function letterToCode(str) {
   const letterPos = parseInt(str[0], 36)
@@ -120,8 +121,7 @@ export function rowsToGraph(rows) {
       shape: 'image',
       image: getIcon(row),
     }
-
-    graph.nodes.push(node)
+    graph = dotProp.set(graph, 'nodes', list => [...list, node])
 
     if (row.contractedFrom) {
       let edge = {
@@ -129,7 +129,7 @@ export function rowsToGraph(rows) {
         to: patientCode,
       }
 
-      graph.edges.push(edge)
+      graph = dotProp.set(graph, 'edges', list => [...list, edge])
     }
   })
 

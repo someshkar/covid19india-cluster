@@ -1,11 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { state, city, abroad } from '../../images/index'
+import { connect } from 'react-redux'
+import _ from 'lodash'
+
+import { state, city, abroad, p2p } from '../../images/index'
+
+import { addStates, removeStates } from '../../util/filters/state'
+
+import { updateGraph } from '../Redux/actions'
 
 const filters = [
-  { name: 'State', icon: state },
-  { name: 'City', icon: city },
+  {
+    name: 'P2P',
+    icon: p2p,
+    add: graph => {
+      return graph
+    },
+    remove: graph => {
+      return graph
+    },
+  },
+  { name: 'State', icon: state, add: addStates, remove: removeStates },
 ]
 
 const HeaderContainer = styled.div`
@@ -21,22 +37,25 @@ const HeaderContainer = styled.div`
 
 const FilterMenuContainer = styled.div`
   display: grid;
-  grid-template-rows: 10% 10% 75%;
+  grid-template-rows: 10% 10% 10% 70%;
   overflow: auto;
   font-family: 'Lato', sans-serif;
   color: #7c7a7a;
   font-weight: bold;
 `
 
-const FilterCategory = ({ filter }) => {
+const FilterCategory = ({ filter, onClick, selected }) => {
   const FilterContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     height: '20vh';
+    user-select: none;
+    background-color: ${selected ? '#e7e7e7' : ''};
+    cursor: pointer;
     &:hover {
-      background-color: #e7e7e7;
+      background-color: #ededed;
     }
   `
   const FilterName = styled.div`
@@ -49,14 +68,31 @@ const FilterCategory = ({ filter }) => {
   `
 
   return (
-    <FilterContainer>
+    <FilterContainer onClick={onClick}>
       <FilterIcon src={filter.icon} />
       <FilterName>{filter.name}</FilterName>
     </FilterContainer>
   )
 }
 
-const FilterPanel = () => {
+const FilterPanel = ({ graph, patients, updateGraph }) => {
+  const [selected, selectCategory] = React.useState('P2P')
+  const changeGraph = name => {
+    // console.log('Changegraph', graph, patients.byId)
+    let currentFilter = _.find(filters, function(o) {
+      return o.name === selected
+    })
+    let choosenFilter = _.find(filters, function(o) {
+      return o.name === name
+    })
+
+    let newGraph = currentFilter.remove(graph, patients.byId)
+
+    selectCategory(name)
+    newGraph = choosenFilter.add(newGraph, patients.byId)
+    console.log(newGraph)
+    updateGraph(newGraph)
+  }
   const FilterHeader = styled.div`
     text-align: center;
     text-transform: uppercase;
@@ -67,11 +103,21 @@ const FilterPanel = () => {
       <FilterHeader>Cluster Filter</FilterHeader>
       <FilterMenuContainer>
         {filters.map(filter => (
-          <FilterCategory filter={filter} />
+          <FilterCategory
+            filter={filter}
+            onClick={() => changeGraph(filter.name)}
+            selected={selected === filter.name ? true : false}
+          />
         ))}
       </FilterMenuContainer>
     </HeaderContainer>
   )
 }
 
-export default FilterPanel
+const mapStateToProps = state => {
+  const { patients } = state
+  const { graph } = state
+  return { graph, patients }
+}
+
+export default connect(mapStateToProps, { updateGraph })(FilterPanel)

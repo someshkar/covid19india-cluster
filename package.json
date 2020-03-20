@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "dot-prop-immutable": "^2.1.0",
     "google-spreadsheet": "^3.0.10",
     "lodash": "^4.17.15",
     "next": "9.3.1",
