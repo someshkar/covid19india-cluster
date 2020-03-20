@@ -4,7 +4,7 @@ This is a dashboard of network connections and clusters to track outbreak and tr
 
 Primary app is at [https://covid19india-network.now.sh](https://covid19india-network.now.sh/).
 
-![enter image description here](https://i.ibb.co/dmNDthW/Screen-Shot-2020-03-19-at-9-15-51-PM.png)
+![enter image description here]([https://ibb.co/hD3BNfc][img]https://i.ibb.co/J5DvTQq/Screen-Shot-2020-03-20-at-8-40-43-PM.png)
 
 ## Roadmap
 

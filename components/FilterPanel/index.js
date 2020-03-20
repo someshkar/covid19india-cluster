@@ -44,7 +44,7 @@ const FilterMenuContainer = styled.div`
   font-weight: bold;
 `
 
-const FilterCategory = ({ filter, onClick, selected }) => {
+const FilterCategory = ({ filter, onClick }) => {
   const FilterContainer = styled.div`
     display: flex;
     flex-direction: column;
