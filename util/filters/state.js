@@ -62,7 +62,7 @@ export const removeStates = (graph, patients) => {
     let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
       return o.id == key
     })
-    console.log('nodes:', index)
+
     if (index !== -1) {
       graph = dotProp.delete(graph, `nodes.${index}`)
     }
