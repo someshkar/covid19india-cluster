@@ -52,7 +52,6 @@ const FilterCategory = ({ filter, onClick, selected }) => {
     justify-content: space-evenly;
     height: '20vh';
     user-select: none;
-    background: ${selected ? '#e7e7e7' : '#f2f2f2'};
     cursor: pointer;
     &:hover {
       background-color: #ededed;
