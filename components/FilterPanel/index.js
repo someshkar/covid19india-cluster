@@ -52,9 +52,11 @@ const FilterCategory = ({ filter, onClick, selected }) => {
     justify-content: space-evenly;
     height: '20vh';
     user-select: none;
+    background-color: ${props => (props.selected ? '#d6d6d6' : '#F2F2F2')};
+    transition: all 0.2s ease-out;
     cursor: pointer;
     &:hover {
-      background-color: #ededed;
+      background-color: #d7d7d7;
     }
   `
   const FilterName = styled.div`
@@ -67,7 +69,7 @@ const FilterCategory = ({ filter, onClick, selected }) => {
   `
 
   return (
-    <FilterContainer onClick={onClick}>
+    <FilterContainer onClick={onClick} selected={selected}>
       <FilterIcon src={filter.icon} />
       <FilterName>{filter.name}</FilterName>
     </FilterContainer>
