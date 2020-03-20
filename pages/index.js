@@ -1,9 +1,6 @@
 import Head from 'next/head'
-import NoSSR from 'react-no-ssr'
 
 import Dashboard from '../components/Dashboard'
-import NetworkMap from '../components/NetworkMap'
-import SidePanel from '../components/SidePanel'
 
 const Home = () => (
   <div className="container">
@@ -13,13 +10,7 @@ const Home = () => (
     </Head>
 
     <main>
-      {/* <div>COVID 19 India Network Map</div> */}
-      {/* <div className="sidebar"></div> */}
-      {/* <div className="panel"></div> */}
-      {/* <SidePanel /> */}
-      <NoSSR>
-        <Dashboard />
-      </NoSSR>
+      <Dashboard />
     </main>
 
     <style jsx global>{`
@@ -49,6 +40,13 @@ const Home = () => (
 
       .panel {
         background: red;
+      }
+
+      @media screen and (max-width: 768px) {
+        html,
+        body {
+          overflow: auto;
+        }
       }
     `}</style>
   </div>

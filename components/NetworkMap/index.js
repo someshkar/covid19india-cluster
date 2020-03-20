@@ -6,11 +6,14 @@ import { connect } from 'react-redux'
 import { updateGraph, updatePatients, selectPatient } from '../Redux/actions'
 import normalize from '../../util/normalize'
 
-// import dummyData from './dummyData.js'
-// import dumpedRows from '../../dump'
-// import jsonToGraph from '../../utils/parse'
-
-const NetworkMap = ({ graph, updateGraph, updatePatients, selectPatient }) => {
+const NetworkMap = ({
+  graph,
+  updateGraph,
+  updatePatients,
+  selectPatient,
+  height,
+  width,
+}) => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -36,8 +39,8 @@ const NetworkMap = ({ graph, updateGraph, updatePatients, selectPatient }) => {
     edges: {
       color: '#000000',
     },
-    height: '100%',
-    width: '75%',
+    height: height,
+    width: width,
   }
 
   const events = {

@@ -5,9 +5,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 
 import { state, city, abroad, p2p } from '../../images/index'
-
 import { addStates, removeStates } from '../../util/filters/state'
-
 import { updateGraph } from '../Redux/actions'
 
 const filters = [
@@ -33,6 +31,12 @@ const HeaderContainer = styled.div`
   font-family: 'Lato', sans-serif;
   color: #7c7a7a;
   font-weight: bold;
+
+  @media screen and (max-width: 768px) {
+    grid-template-rows: 1fr;
+    grid-template-columns: 20% 80%;
+    padding-top: 0;
+  }
 `
 
 const FilterMenuContainer = styled.div`
@@ -42,6 +46,11 @@ const FilterMenuContainer = styled.div`
   font-family: 'Lato', sans-serif;
   color: #7c7a7a;
   font-weight: bold;
+
+  @media screen and (max-width: 768px) {
+    grid-template-rows: 1fr;
+    grid-template-columns: 20% 20% 20% 40%;
+  }
 `
 
 const FilterCategory = ({ filter, onClick, selected }) => {
@@ -98,6 +107,12 @@ const FilterPanel = ({ graph, patients, updateGraph }) => {
     text-align: center;
     text-transform: uppercase;
     font-size: 14px;
+
+    @media screen and (max-width: 768px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   `
   return (
     <HeaderContainer>
