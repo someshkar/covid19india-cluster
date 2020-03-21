@@ -25,6 +25,7 @@ const NetworkMap = ({
     })
       .then(resp => resp.json())
       .then(res => {
+        console.log(res)
         updateGraph(rowsToGraph(res.data.rawPatientData))
         updatePatients(normalize(res.data.rawPatientData))
         setIsLoading(false)

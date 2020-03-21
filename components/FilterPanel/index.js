@@ -10,6 +10,8 @@ import {
   removeStates,
   addCities,
   removeCities,
+  addTravel,
+  removeTravel,
 } from '../../util/filters'
 import { updateGraph } from '../Redux/actions'
 
@@ -26,6 +28,7 @@ const filters = [
   },
   { name: 'State', icon: state, add: addStates, remove: removeStates },
   { name: 'City', icon: city, add: addCities, remove: removeCities },
+  { name: 'Travel', icon: abroad, add: addTravel, remove: removeTravel },
 ]
 
 const HeaderContainer = styled.div`
@@ -47,7 +50,7 @@ const HeaderContainer = styled.div`
 
 const FilterMenuContainer = styled.div`
   display: grid;
-  grid-template-rows: 10% 10% 10% 70%;
+  grid-template-rows: 10% 10% 10% 10% 60%;
   overflow: auto;
   font-family: 'Lato', sans-serif;
   color: #7c7a7a;
@@ -55,7 +58,7 @@ const FilterMenuContainer = styled.div`
 
   @media screen and (max-width: 768px) {
     grid-template-rows: 1fr;
-    grid-template-columns: 20% 20% 20% 40%;
+    grid-template-columns: 20% 20% 20% 20% 20%;
   }
 `
 
