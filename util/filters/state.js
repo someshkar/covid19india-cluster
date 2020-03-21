@@ -58,7 +58,7 @@ export const removeStates = (graph, patients) => {
       image: state_node,
     }
     let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
-      return o.id == key
+      return o.id == node.id
     })
 
     if (index !== -1) {
@@ -80,12 +80,9 @@ export const removeStates = (graph, patients) => {
       color: { opacity: '0.3' },
     }
     let edgeIndex = _.findIndex(graph.edges, function(o) {
-      return (
-        o.to == patients[patientId].patientId &&
-        o.from === hash(patients[patientId].state)
-      )
+      return o.to == edge.to && o.from === edge.from
     })
-    console.log('edge', edgeIndex)
+
     graph = dotProp.delete(graph, `edges.${edgeIndex}`)
   }
 
