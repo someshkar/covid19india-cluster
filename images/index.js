@@ -9,6 +9,7 @@ import state from './filter/state.png'
 import city from './filter/city.png'
 import p2p from './filter/p2p.png'
 import state_node from './nodes/state.png'
+import city_node from './nodes/city.png'
 
 export {
   male_cured,
@@ -22,4 +23,5 @@ export {
   city,
   state_node,
   p2p,
+  city_node,
 }
