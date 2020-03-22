@@ -12,7 +12,8 @@ import p2p from './filter/p2p.png'
 
 import state_node from './nodes/state.png'
 import city_node from './nodes/city.png'
-import plane_node from './nodes/plane.png'
+import plane_abroad_node from './nodes/plane.png'
+import plane_local_node from './nodes/plane_local.png'
 
 export {
   male_cured,
@@ -27,5 +28,6 @@ export {
   p2p,
   city_node,
   abroad,
-  plane_node,
+  plane_abroad_node,
+  plane_local_node,
 }
