@@ -54,12 +54,14 @@ export default function DataGrid(patient) {
     status,
     reportedOn,
     sources,
-  } = patient
+  } = patient;
+
+  const genderInitCap = gender.charAt(0).toUpperCase() + gender.slice(1);
 
   return (
     <Container>
       <DoubleCell>
-        <Cell name="Gender">{gender ? gender : '-'}</Cell>
+        <Cell name="Gender">{gender ? genderInitCap : '-'}</Cell>
         <Cell name="Age">{ageEstimate ? ageEstimate : '-'}</Cell>
       </DoubleCell>
       <DoubleCell>
