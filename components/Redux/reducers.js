@@ -9,6 +9,7 @@ import actionTypes from './actionTypes'
 
 // Setup initial state with an fleet info object.
 const initialState = {
+  filter: 'P2P',
   selected: null,
   graph: null,
   patients: null,
@@ -17,6 +18,10 @@ const initialState = {
 // Export the Device Reducer.
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.SELECT_FILTER: {
+      const { filter } = action.payload
+      return { ...state, filter: filter }
+    }
     case actionTypes.UPDATE_GRAPH: {
       const { graph } = action.payload
       return { ...state, graph: graph }
