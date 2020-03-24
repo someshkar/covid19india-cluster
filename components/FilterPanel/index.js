@@ -13,7 +13,7 @@ import {
   addTravel,
   removeTravel,
 } from '../../util/filters'
-import { updateGraph } from '../Redux/actions'
+import { updateGraph, selectFilter } from '../Redux/actions'
 
 const filters = [
   {
@@ -94,12 +94,19 @@ const FilterCategory = ({ filter, onClick, selected }) => {
   )
 }
 
-const FilterPanel = ({ graph, patients, updateGraph }) => {
-  const [selected, selectCategory] = React.useState('P2P')
+const FilterPanel = ({
+  graph,
+  patients,
+  updateGraph,
+  selectFilter,
+  filter,
+}) => {
+  // const [selected, selectCategory] = React.useState('P2P')
+
   const changeGraph = name => {
     // console.log('Changegraph', graph, patients.byId)
     let currentFilter = _.find(filters, function(o) {
-      return o.name === selected
+      return o.name === filter
     })
     let choosenFilter = _.find(filters, function(o) {
       return o.name === name
@@ -107,7 +114,7 @@ const FilterPanel = ({ graph, patients, updateGraph }) => {
 
     let newGraph = currentFilter.remove(graph, patients.byId)
 
-    selectCategory(name)
+    selectFilter(name)
     newGraph = choosenFilter.add(newGraph, patients.byId)
     console.log(newGraph)
     updateGraph(newGraph)
@@ -127,11 +134,11 @@ const FilterPanel = ({ graph, patients, updateGraph }) => {
     <HeaderContainer>
       <FilterHeader>Cluster Filter</FilterHeader>
       <FilterMenuContainer>
-        {filters.map(filter => (
+        {filters.map(filterItem => (
           <FilterCategory
-            filter={filter}
-            onClick={() => changeGraph(filter.name)}
-            selected={selected === filter.name ? true : false}
+            filter={filterItem}
+            onClick={() => changeGraph(filterItem.name)}
+            selected={filter === filterItem.name ? true : false}
           />
         ))}
       </FilterMenuContainer>
@@ -140,9 +147,10 @@ const FilterPanel = ({ graph, patients, updateGraph }) => {
 }
 
 const mapStateToProps = state => {
-  const { patients } = state
-  const { graph } = state
-  return { graph, patients }
+  const { patients, graph, filter } = state
+  return { graph, patients, filter }
 }
 
-export default connect(mapStateToProps, { updateGraph })(FilterPanel)
+export default connect(mapStateToProps, { updateGraph, selectFilter })(
+  FilterPanel
+)

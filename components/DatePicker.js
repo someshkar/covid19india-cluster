@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import DayPicker from 'react-day-picker'
 
 import { connect } from 'react-redux'
-import { updateGraph } from './Redux/actions'
+import { updateGraph, selectFilter } from './Redux/actions'
 import { rowsToGraph } from '../util/parse'
 
 const Container = styled.div`
@@ -13,7 +13,7 @@ const Container = styled.div`
   right: 10px;
 `
 
-function DatePicker({ updateGraph }) {
+function DatePicker({ updateGraph, selectFilter }) {
   const [selectedDay, changeSelectedDay] = useState(new Date())
 
   function handleDayClick(date) {
@@ -48,6 +48,7 @@ function DatePicker({ updateGraph }) {
         .then(res => {
           console.log(res)
           updateGraph(rowsToGraph(res.data.rawPatientData))
+          selectFilter('P2P')
         })
     }
   }
@@ -68,4 +69,4 @@ function DatePicker({ updateGraph }) {
   )
 }
 
-export default connect(null, { updateGraph })(DatePicker)
+export default connect(null, { updateGraph, selectFilter })(DatePicker)
