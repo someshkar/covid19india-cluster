@@ -42,6 +42,9 @@ const NetworkMap = ({
     },
     height: height,
     width: width,
+    interaction: {
+      navigationButtons: true,
+    },
   }
 
   const events = {
