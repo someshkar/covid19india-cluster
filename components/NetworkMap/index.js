@@ -50,7 +50,6 @@ const NetworkMap = ({
           easingFunction: 'easeInCubic'
         }
       }
-      console.log(graphRef.current.Network.getPositions([251]))
       graphRef.current.Network.moveTo(moveParams)
     }
   }, [selected])
@@ -62,16 +61,7 @@ const NetworkMap = ({
         const nodeKey = letterToCode(`P${searchTerm}`)
         const coordsMap = graphRef.current.Network.getPositions([nodeKey])
         graphRef.current.Network.selectNodes([nodeKey])
-        const moveParams = {
-          position: coordsMap[nodeKey] || { x: 0, y: 0 },
-          scale: 1.5,
-          offset: { x:0, y:0 },
-          animation: {
-            duration: 500,
-            easingFunction: 'easeInCubic'
-          }
-        }
-        graphRef.current.Network.moveTo(moveParams)
+        selectPatient({ id: nodeKey, coords: coordsMap[nodeKey] })
       } catch (e) {
         // None found. TODO: Add a UI response
       }
