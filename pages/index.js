@@ -64,7 +64,7 @@ const Home = () => {
         div.vis-navigation {
           position: absolute;
           bottom: 10px;
-          right: 10px;
+          left: 10px;
         }
         div.vis-network div.vis-navigation div.vis-button.vis-up,
         div.vis-network div.vis-navigation div.vis-button.vis-down,
