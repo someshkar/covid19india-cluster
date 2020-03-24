@@ -5,6 +5,7 @@ import DayPicker from 'react-day-picker'
 import { connect } from 'react-redux'
 import { updateGraph, selectFilter } from './Redux/actions'
 import { rowsToGraph } from '../util/parse'
+import { isBrowser } from 'react-device-detect'
 
 const Container = styled.div`
   position: absolute;
@@ -55,16 +56,18 @@ function DatePicker({ updateGraph, selectFilter }) {
 
   return (
     <Container>
-      <DayPicker
-        selectedDays={selectedDay}
-        onDayClick={day => handleDayClick(day)}
-        disabledDays={[
-          {
-            before: new Date(2020, 2, 23),
-            after: new Date(),
-          },
-        ]}
-      />
+      {isBrowser ? (
+        <DayPicker
+          selectedDays={selectedDay}
+          onDayClick={day => handleDayClick(day)}
+          disabledDays={[
+            {
+              before: new Date(2020, 2, 23),
+              after: new Date(),
+            },
+          ]}
+        />
+      ) : null}
     </Container>
   )
 }

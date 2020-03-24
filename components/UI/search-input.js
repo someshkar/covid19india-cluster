@@ -4,16 +4,19 @@ import useDebounce from '../../util/useDebounce'
 
 const Input = styled.input`
   margin: 10px;
-  background: #ccc;
+  background: #fff;
   font-size: 16px;
   padding: 10px;
-  border: none;
+  outline: none;
+  border: 1px solid #cec1c1;
   border-radius: 3px;
   width: calc(100% - 16px);
+  &:focus {
+    border: 1px solid #f2994a;
+  }
 `
 
 export const SearchInput = ({ searchTerm }) => {
-
   const [term, setTerm] = useState('')
   const debouncedTerm = useDebounce(term)
 
@@ -23,17 +26,16 @@ export const SearchInput = ({ searchTerm }) => {
     }
   }, [debouncedTerm])
 
-  const handleTextChange = (e) => {
+  const handleTextChange = e => {
     setTerm(e.target.value)
   }
 
   return (
     <Input
-      placeholder={'Search for a patient'}
+      placeholder="Type patient number to search..."
       value={term}
       onChange={handleTextChange}
-      aria-label='Search input'
+      aria-label="Search input"
     />
   )
-
 }
