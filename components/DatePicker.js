@@ -2,6 +2,10 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import DayPicker from 'react-day-picker'
 
+import { connect } from 'react-redux'
+import { updateGraph } from './Redux/actions'
+import { rowsToGraph } from '../util/parse'
+
 const Container = styled.div`
   position: absolute;
   z-index: 1000;
@@ -9,7 +13,7 @@ const Container = styled.div`
   right: 10px;
 `
 
-function DatePicker() {
+function DatePicker({ updateGraph }) {
   const [selectedDay, changeSelectedDay] = useState(new Date())
 
   function handleDayClick(date) {
@@ -43,6 +47,7 @@ function DatePicker() {
         .then(resp => resp.json())
         .then(res => {
           console.log(res)
+          updateGraph(rowsToGraph(res.data.rawPatientData))
         })
     }
   }
@@ -63,4 +68,4 @@ function DatePicker() {
   )
 }
 
-export default DatePicker
+export default connect(null, { updateGraph })(DatePicker)
