@@ -97,7 +97,7 @@ export function getIcon(patient) {
   }
 }
 
-function codeToLetter(code) {
+export const codeToLetter = (code) => {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const codeStr = code.toString()
 
