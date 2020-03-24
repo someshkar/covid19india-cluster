@@ -20,21 +20,9 @@ const SidePanel = ({ patient }) => {
     </Container>
   )
 }
-// const SidePanel = ({ patient }) => {
-//   console.log('Sidepanel', patient)
-//   return (
-//     <div style={{ backgroundColor: 'red' }}>
-//       <Text>{patient ? patient.patientId : 'hello'}</Text>
-//     </div>
-//   )
-// }
 
 const mapStateToProps = state => {
-  let { patients } = state
-  let { selected } = state
-  let selectedPatient = selected ? selected : 251
-  let patient = patients ? patients.byId[selectedPatient] : null
-
+  const { patient } = state
   return { patient }
 }
 

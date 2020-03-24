@@ -30,9 +30,7 @@ const selectPatient = patient => (dispatch, getState) => {
   // Dispatch the result.
   dispatch({
     type: actionTypes.SELECT_PATIENT,
-    payload: {
-      patient: patient,
-    },
+    payload: patient,
   })
 }
 
