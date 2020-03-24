@@ -33,16 +33,17 @@ export default (state = initialState, action) => {
     }
     case actionTypes.UPDATE_PATIENTS: {
       const { patients } = action.payload
-      return { ...state, patients: patients, patient: patients.byId[251] }
+      return { ...state, patients: patients, patient: patients.byId[251] } // `P1` in code
     }
     case actionTypes.SELECT_PATIENT: {
       const { id, coords } = action.payload
       const { patients } = state
+      const existingPatient = patients.byId[id]
       const patient = {
         ...patients.byId[id],
         coords
       }
-      return { ...state, patient }
+      return existingPatient ? { ...state, patient } : state
     }
     default:
       return state
