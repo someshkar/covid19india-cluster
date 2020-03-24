@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Graph from 'react-graph-vis'
+import { connect } from 'react-redux'
 
 import { rowsToGraph } from '../../util/parse'
 import { connect, useSelector } from 'react-redux'
 import { updateGraph, updatePatients, selectPatient } from '../Redux/actions'
 import normalize from '../../util/normalize'
+import DatePicker from '../DatePicker'
 
 const NetworkMap = ({
   graph,
@@ -75,7 +77,10 @@ const NetworkMap = ({
   return (
     <div style={{ height: '100vh', width: '100vw' }}>
       {isLoading ? null : (
-        <Graph ref={graphRef} graph={graph} options={options} events={events} />
+        <>
+          <Graph ref={graphRef} graph={graph} options={options} events={events} />
+          <DatePicker />
+        </>
       )}
     </div>
   )
