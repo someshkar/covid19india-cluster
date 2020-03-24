@@ -119,6 +119,7 @@ export const rowsToGraph = rows => {
       label: 'P' + row.patientId,
       shape: 'image',
       image: getIcon(row),
+      group: 'patient'
     }
 
     graph = dotProp.set(graph, 'nodes', list => [...list, node])

@@ -88,11 +88,18 @@ const NetworkMap = ({
 
   const events = {
     select: function(event) {
-      const selectedPatientId = event.nodes[0]
-      if (selectedPatientId) {
-        // As per the vis.js API, event.pointer.canvas points to the selected node within the canvas
-        // which in our case is the patient. Inject this into the update logic.
-        selectPatient({ id: selectedPatientId, coords: event.pointer.canvas })
+      const selectedNodeId = event.nodes[0]
+      const selectedNode = graph.nodes.find(v => v.id === selectedNodeId)
+      if (selectedNode) {
+        switch (selectedNode.group) {
+          case 'patient':
+            // As per the vis.js API, event.pointer.canvas points to the selected node within the canvas
+            // which in our case is the patient. Inject this into the update logic.
+            selectPatient({ id: selectedNode.id, coords: event.pointer.canvas })
+            break
+          case 'city':
+          default:
+        }
       }
     },
   }
