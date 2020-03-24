@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
 
 import Header from './header'
 import DataGrid from './datagrid'
-
-import { connect } from 'react-redux'
 
 const Container = styled.div`
   background-color: #fafafa;
@@ -13,9 +12,10 @@ const Container = styled.div`
 `
 
 const SidePanel = ({ patient }) => {
+
   return (
     <Container>
-      {patient ? <Header {...patient} /> : null}
+      {patient ? <Header patient={patient} /> : null}
       {patient ? <DataGrid {...patient} /> : null}
     </Container>
   )

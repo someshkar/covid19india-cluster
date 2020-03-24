@@ -13,6 +13,7 @@ const initialState = {
   selected: null,
   graph: null,
   patients: null,
+  searchTerm: '' 
 }
 
 // Export the Device Reducer.
@@ -21,6 +22,10 @@ export default (state = initialState, action) => {
     case actionTypes.SELECT_FILTER: {
       const { filter } = action.payload
       return { ...state, filter: filter }
+    }
+    case actionTypes.SEARCH: {
+      const { term } = action.payload
+      return { ...state, searchTerm: term }
     }
     case actionTypes.UPDATE_GRAPH: {
       const { graph } = action.payload

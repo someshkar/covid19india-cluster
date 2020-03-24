@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Graph from 'react-graph-vis'
-import { connect } from 'react-redux'
-
-import { rowsToGraph } from '../../util/parse'
 import { connect, useSelector } from 'react-redux'
 import { updateGraph, updatePatients, selectPatient } from '../Redux/actions'
+
+import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
 
@@ -19,7 +18,10 @@ const NetworkMap = ({
 
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
-  const selected = useSelector(state => state.patient)
+  const { selected, searchTerm } = useSelector(state => ({
+    searchTerm: state.searchTerm,
+    selected: state.patient
+  }))
 
   useEffect(() => {
     fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
@@ -48,9 +50,33 @@ const NetworkMap = ({
           easingFunction: 'easeInCubic'
         }
       }
+      console.log(graphRef.current.Network.getPositions([251]))
       graphRef.current.Network.moveTo(moveParams)
     }
   }, [selected])
+
+  useEffect(() => {
+    // TODO: Add search by age, district, etc.
+    if (graphRef.current && searchTerm) { // Make sure the ref is ready
+      try {
+        const nodeKey = letterToCode(`P${searchTerm}`)
+        const coordsMap = graphRef.current.Network.getPositions([nodeKey])
+        graphRef.current.Network.selectNodes([nodeKey])
+        const moveParams = {
+          position: coordsMap[nodeKey] || { x: 0, y: 0 },
+          scale: 1.5,
+          offset: { x:0, y:0 },
+          animation: {
+            duration: 500,
+            easingFunction: 'easeInCubic'
+          }
+        }
+        graphRef.current.Network.moveTo(moveParams)
+      } catch (e) {
+        // None found. TODO: Add a UI response
+      }
+    }
+  }, [searchTerm])
 
   const options = {
     layout: {
@@ -58,6 +84,13 @@ const NetworkMap = ({
     },
     edges: {
       color: '#000000',
+    },
+    nodes: {
+      chosen: {
+        node: (values, id, selected, hovering) => {
+          values.color = selected ? '#000' : 'green'
+        }
+      }
     },
     height: height,
     width: width,
@@ -87,8 +120,8 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph } = state
-  return { graph }
+  let { graph, searchTerm } = state
+  return { graph, searchTerm }
 }
 
 export default connect(mapStateToProps, {

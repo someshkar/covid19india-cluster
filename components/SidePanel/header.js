@@ -1,7 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
 
 import { getIcon } from '../../util/parse'
+import { SearchInput } from '../UI/search-input'
+import { setSearchTerm } from '../Redux/actions'
 
 const Container = styled.div`
   font-family: 'Lato', sans-serif;
@@ -42,7 +45,12 @@ const Name = styled.div`
   font-size: 40px;
 `
 
-export default function Header(patient) {
+function Header({ patient, setSearchTerm }) {
+
+  const onSearch = (term) => {
+    setSearchTerm(term)
+  }
+
   const { patientId } = patient
 
   return (
@@ -50,6 +58,7 @@ export default function Header(patient) {
       <Title>
         covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot> 2H ago
       </Title>
+      <SearchInput searchTerm={onSearch} />
       <PatientContainer>
         <Image src={getIcon(patient)} />
         <Name>P {patientId.toString().substring(2)}</Name>
@@ -57,3 +66,7 @@ export default function Header(patient) {
     </Container>
   )
 }
+
+export default connect(null, {
+  setSearchTerm
+})(Header)
