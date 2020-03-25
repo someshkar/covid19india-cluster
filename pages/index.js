@@ -63,7 +63,7 @@ const Home = () => {
         }
         div.vis-navigation {
           position: absolute;
-          bottom: 10px;
+          bottom: 5px;
           left: 10px;
         }
         div.vis-network div.vis-navigation div.vis-button.vis-up,
@@ -74,6 +74,13 @@ const Home = () => {
         div.vis-network div.vis-navigation div.vis-button.vis-zoomOut,
         div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
           background-image: none !important;
+          display: inline-block;
+        }
+
+        div.vis-network div.vis-navigation div.vis-button.vis-zoomIn,
+        div.vis-network div.vis-navigation div.vis-button.vis-zoomOut,
+        div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
+          margin-right: 10px;
         }
 
         div.vis-network div.vis-navigation div.vis-button:hover {
@@ -81,12 +88,12 @@ const Home = () => {
         }
 
         .vis-button:after {
-          font-size: 2em;
+          font-size: 1.8em;
           color: gray;
         }
 
         .vis-button:hover:after {
-          font-size: 2em;
+          font-size: 1.8em;
           color: lightgray;
         }
 
