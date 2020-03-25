@@ -14,12 +14,16 @@ const Container = styled.div`
   right: 10px;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 `
 const DatePickerButton = styled.button`
-  width: 280px;
+  width: 200px;
   height: 30px;
   font-size: 16px;
   cursor: pointer;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #e7e7e7;
 `
 
 function DatePicker({ updateGraph, selectFilter }) {
