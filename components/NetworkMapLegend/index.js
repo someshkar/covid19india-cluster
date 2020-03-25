@@ -1,8 +1,13 @@
+import { useEffect } from 'react';
 import styled from 'styled-components'
 import {
     male_hosp,
     male_cured,
-    male_dead
+    male_dead,
+    state_node,
+    city_node,
+    plane_abroad_node,
+    plane_local_node,
 } from '../../images/index'
 
 
@@ -32,13 +37,19 @@ const Image = styled.img`
     height: 25px;
     
     @media screen and (max-width: 768px) {
-        height: 6.75px;
+        height: 8.75px;
     }
 `
 
 const ImageContainer = styled.div`
     display: flex;
     align-items: center;
+    margin-bottom: 0.5rem;
+
+
+    & :last-of-type {
+        margin-bottom: 0;
+    }
 `
 
 const Label = styled.span`
@@ -51,14 +62,14 @@ const Label = styled.span`
     }
 `
 
-const NetworkMapLegend = () => {
+const NetworkMapLegend = ({ currentFilter }) => {
     return (
         <LegendContainer>
-            <ImageContainer style={{marginBottom: '0.5rem'}}>
+            <ImageContainer>
                 <Image src={male_cured} />
                 <Label>Recovered</Label>
             </ImageContainer>
-            <ImageContainer style={{marginBottom: '0.5rem'}}>
+            <ImageContainer>
                 <Image src={male_hosp} />
                 <Label>Hospitalized</Label>
             </ImageContainer>
@@ -66,6 +77,33 @@ const NetworkMapLegend = () => {
                 <Image src={male_dead} />
                 <Label>Deceased</Label>
             </ImageContainer>
+            {['State', 'City'].includes(currentFilter) ?
+                <ImageContainer>
+                    <Image src={state_node} />
+                    <Label>State</Label>
+                </ImageContainer>
+                : null
+            }
+            {currentFilter === 'City' ?
+                <ImageContainer>
+                    <Image src={city_node} />
+                    <Label>City</Label>
+                </ImageContainer>
+                : null
+            }
+            {currentFilter === 'Travel' ?
+                <>
+                    <ImageContainer>
+                        <Image src={plane_local_node} />
+                        <Label>Domestic Flight</Label>
+                    </ImageContainer>
+                    <ImageContainer>
+                        <Image src={plane_abroad_node} />
+                        <Label>International Flight</Label>
+                    </ImageContainer>
+                </>
+                : null
+            }
         </LegendContainer>
     )
 }

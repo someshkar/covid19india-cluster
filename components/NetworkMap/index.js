@@ -9,6 +9,7 @@ import DatePicker from '../DatePicker'
 import NetworkMapLegend from '../NetworkMapLegend'
 
 const NetworkMap = ({
+  filter,
   graph,
   updateGraph,
   updatePatients,
@@ -109,7 +110,7 @@ const NetworkMap = ({
     <div style={{ height: '100vh', width: '100vw' }}>
       {isLoading ? null : (
         <>
-          <NetworkMapLegend />
+          <NetworkMapLegend currentFilter={filter}/>
           <Graph ref={graphRef} graph={graph} options={options} events={events} />
           <DatePicker />
         </>
@@ -119,8 +120,8 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm } = state
-  return { graph, searchTerm }
+  let { graph, searchTerm, filter } = state
+  return { graph, searchTerm, filter }
 }
 
 export default connect(mapStateToProps, {
