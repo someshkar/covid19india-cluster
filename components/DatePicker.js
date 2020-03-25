@@ -12,12 +12,25 @@ const Container = styled.div`
   z-index: 1000;
   bottom: 10px;
   right: 10px;
+  display: flex;
+  flex-direction: column;
+`
+const DatePickerButton = styled.button`
+  width: 280px;
+  height: 30px;
+  font-size: 16px;
+  cursor: pointer;
 `
 
 function DatePicker({ updateGraph, selectFilter }) {
-  const [selectedDay, changeSelectedDay] = useState(new Date())
+  const [selectedDay, changeSelectedDay] = useState(new Date());
+  const [isDayPickerVisible, changeDayPickerVisibility] = useState(false);
+
+  const toggleDayPickerVisibility = () => changeDayPickerVisibility(!isDayPickerVisible);
 
   function handleDayClick(date) {
+    toggleDayPickerVisibility();
+
     function formatDate(date) {
       var d = new Date(date),
         month = '' + (d.getMonth() + 1),
@@ -54,19 +67,30 @@ function DatePicker({ updateGraph, selectFilter }) {
     }
   }
 
+  const renderDayPicker = () => isDayPickerVisible ? (
+    <DayPicker
+      selectedDays={selectedDay}
+      onDayClick={day => handleDayClick(day)}
+      disabledDays={[
+        {
+          before: new Date(2020, 2, 23),
+          after: new Date(),
+        },
+      ]}
+    />
+  ) : null
+
   return (
     <Container>
       {isBrowser ? (
-        <DayPicker
-          selectedDays={selectedDay}
-          onDayClick={day => handleDayClick(day)}
-          disabledDays={[
-            {
-              before: new Date(2020, 2, 23),
-              after: new Date(),
-            },
-          ]}
-        />
+        <>
+          {renderDayPicker()}
+          <DatePickerButton
+            onClick={toggleDayPickerVisibility}
+          >
+            <span>{selectedDay.toDateString()}</span>
+          </DatePickerButton>
+        </>
       ) : null}
     </Container>
   )
