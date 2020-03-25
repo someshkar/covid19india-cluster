@@ -95,11 +95,11 @@ const NetworkMapLegend = ({ currentFilter }) => {
                 <>
                     <ImageContainer>
                         <Image src={plane_local_node} />
-                        <Label>Domestic Flight</Label>
+                        <Label>Domestic</Label>
                     </ImageContainer>
                     <ImageContainer>
                         <Image src={plane_abroad_node} />
-                        <Label>International Flight</Label>
+                        <Label>International</Label>
                     </ImageContainer>
                 </>
                 : null
