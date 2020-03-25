@@ -6,8 +6,10 @@ import { updateGraph, updatePatients, selectPatient } from '../Redux/actions'
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
+import NetworkMapLegend from '../NetworkMapLegend'
 
 const NetworkMap = ({
+  filter,
   graph,
   updateGraph,
   updatePatients,
@@ -44,7 +46,7 @@ const NetworkMap = ({
       const moveParams = {
         position: selected.coords,
         scale: 1.5,
-        offset: { x:0, y:0 },
+        offset: { x: 0, y: 0 },
         animation: {
           duration: 500,
           easingFunction: 'easeInCubic'
@@ -90,7 +92,7 @@ const NetworkMap = ({
   }
 
   const events = {
-    select: function(event) {
+    select: function (event) {
       const selectedNodeId = event.nodes[0]
       const selectedNode = graph.nodes.find(v => v.id === selectedNodeId)
       if (selectedNode) {
@@ -111,6 +113,7 @@ const NetworkMap = ({
     <div style={{ height: '100vh', width: '100vw' }}>
       {isLoading ? null : (
         <>
+          <NetworkMapLegend currentFilter={filter}/>
           <Graph ref={graphRef} graph={graph} options={options} events={events} />
           <DatePicker />
         </>
@@ -120,8 +123,8 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm } = state
-  return { graph, searchTerm }
+  let { graph, searchTerm, filter } = state
+  return { graph, searchTerm, filter }
 }
 
 export default connect(mapStateToProps, {
