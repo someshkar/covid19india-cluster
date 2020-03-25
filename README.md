@@ -54,17 +54,11 @@ Submit an issue or feature request at [issues](https://www.covid19india.org/) or
 
 ```bash
 
-npm run dev
+npm install
 
 # or
 
-yarn dev
-
-#or
-
-# if you have now CLI : npm i -g now
-
-now dev
+yarn install
 
 ```
 
