@@ -36,7 +36,13 @@ export const addCities = (graph, patients) => {
       shape: 'image',
       image: state_node,
     }
-    graph = dotProp.set(graph, 'nodes', list => [...list, node])
+    let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
+      return o.id == node.id
+    })
+
+    if (index === -1) {
+      graph = dotProp.set(graph, 'nodes', list => [...list, node])
+    }
   }
 
   for (var key in stateCitiesMap) {
@@ -49,7 +55,13 @@ export const addCities = (graph, patients) => {
         image: city_node,
       }
 
-      graph = dotProp.set(graph, 'nodes', list => [...list, cityNode])
+      let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
+        return o.id == cityNode.id
+      })
+
+      if (index === -1) {
+        graph = dotProp.set(graph, 'nodes', list => [...list, cityNode])
+      }
     }
   }
 
