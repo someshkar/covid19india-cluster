@@ -48,7 +48,9 @@ const Name = styled.div`
 function Header({ patient, setSearchTerm }) {
 
   const onSearch = (term) => {
-    setSearchTerm(term)
+  let _serchTerm = term.toUpperCase().replace(/P/g, "").trim();
+    setSearchTerm(parseInt(_serchTerm))
+
   }
 
   const { patientId } = patient
