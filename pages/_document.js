@@ -35,7 +35,7 @@ export default class MyDocument extends Document {
           <GitHubForkRibbon
             position="right"
             color="green"
-            href="https://github.com/someshkar/covid19india-network"
+            href="https://github.com/someshkar/covid19india-cluster"
             target="_blank"
           >
             Fork me on GitHub
