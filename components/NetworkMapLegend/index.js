@@ -13,26 +13,26 @@ const LegendContainer = styled.div`
     display: flex;
     flex-direction: column;
     background: #fafafa;
-    padding: 12px 15px;
+    padding: 5px;
     border: 1px solid #e7e7e7;
     border-radius: 5px;
-    margin-left: 10px;
-    margin-top: 10px;
+    margin-left: 5px;
+    margin-top: 5px;
     z-index: 2;
     
     
     @media screen and (max-width: 768px) {
-        padding: 5px 8px;
+        padding: 4px;
         left 0%;
     }
 `
 
 
 const Image = styled.img`
-    height: 40px;
+    height: 25px;
     
     @media screen and (max-width: 768px) {
-        height: 18px;
+        height: 6.75px;
     }
 `
 
@@ -43,11 +43,11 @@ const ImageContainer = styled.div`
 
 const Label = styled.span`
     font-family: 'Lato', sans-serif;
-    font-size: 16px;
+    font-size: 12px;
     margin-left: 0.3rem;
     
     @media screen and (max-width: 768px) {
-        font-size: 11px;
+        font-size: 7px;
     }
 `
 
