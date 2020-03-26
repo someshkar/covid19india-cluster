@@ -106,6 +106,17 @@ export const codeToLetter = (code) => {
   return letters[letterPos - 10] + codeStr.substring(2)
 }
 
+
+export const findRelationship = (relArr, patient) => {
+  if(relArr.length>0) {
+    for (let rel of relArr) {
+      if(rel['with'].indexOf(patient) !== -1)
+        return rel['link']
+    }
+  }
+  return false;
+}
+
 export const rowsToGraph = rows => {
   let graph = {
     nodes: [],
@@ -125,12 +136,20 @@ export const rowsToGraph = rows => {
     graph = dotProp.set(graph, 'nodes', list => [...list, node])
 
     if (row.contractedFrom) {
-      let edge = {
-        from: letterToCode(row.contractedFrom),
-        to: patientCode,
+      let allContractors = row.contractedFrom.split(',');
+      for (let contractor of allContractors) {
+        contractor = contractor.trim();
+        let relation = findRelationship(row.relationship,contractor);
+        contractor = letterToCode(contractor);
+        let edge = {
+          from: contractor,
+          to: patientCode,
+        }
+        if(relation) {
+          edge.label = relation
+        }
+        graph = dotProp.set(graph, 'edges', list => [...list, edge])
       }
-
-      graph = dotProp.set(graph, 'edges', list => [...list, edge])
     }
   })
   return graph
