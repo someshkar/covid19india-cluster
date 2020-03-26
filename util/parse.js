@@ -147,6 +147,7 @@ export const rowsToGraph = rows => {
         }
         if(relation) {
           edge.label = relation
+          edge.font = {size:8}
         }
         graph = dotProp.set(graph, 'edges', list => [...list, edge])
       }
