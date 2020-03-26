@@ -146,8 +146,8 @@ export const rowsToGraph = (rows, removeLeafNode) => {
   if(removeLeafNode){
     rows.forEach(row => {
       if (row.contractedFrom){
-        listOfConnectedCases.add(row.patientId)
-        parseContractedData(row.contractedFrom).forEach(e => listOfConnectedCases.add(parseInt(e)))
+        listOfConnectedCases.add(letterToCode('P' + row.patientId))
+        listOfConnectedCases.add(letterToCode(row.contractedFrom))
       }
     })
   }
@@ -155,12 +155,18 @@ export const rowsToGraph = (rows, removeLeafNode) => {
   rows
     .forEach(row => {
     const patientCode = letterToCode('P' + row.patientId)
-    if(removeLeafNode && listOfConnectedCases.has(row.patientId)) {
-       graph = addNodeToGraph(patientCode, row, graph);
-    }else if(!removeLeafNode){
-       graph = addNodeToGraph(patientCode, row, graph);
+    if (row.contractedFrom) {
+     let edge = {
+       from: letterToCode(row.contractedFrom),
+       to: patientCode,
+     }
+     graph = dotProp.set(graph, 'edges', list => [...list, edge])
     }
-    graph = addEdgeToGraph(row, patientCode, graph);
+    if(removeLeafNode && listOfConnectedCases.has(patientCode) ) {
+        graph = addNodeToGraph(patientCode, row, graph);
+    }else if(!removeLeafNode){
+        graph = addNodeToGraph(patientCode, row, graph);
+    }
   })
   return graph
 }
