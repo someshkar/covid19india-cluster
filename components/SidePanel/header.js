@@ -45,7 +45,7 @@ const Name = styled.div`
   font-size: 40px;
 `
 
-function Header({ patient, setSearchTerm }) {
+function Header({ patient, setSearchTerm,updatedDate }) {
 
   const onSearch = (term) => {
   let _serchTerm = term.toUpperCase().replace(/P/g, "").trim();
@@ -53,12 +53,12 @@ function Header({ patient, setSearchTerm }) {
 
   }
 
-  const { patientId } = patient
+  const { patientId } = patient;
 
   return (
     <Container>
       <Title>
-        covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot> 2H ago
+        covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot> {updatedDate}
       </Title>
       <SearchInput searchTerm={onSearch} />
       <PatientContainer>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Graph from 'react-graph-vis'
+import Graph from 'react-graph-vis';
+import moment from 'moment'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, selectPatient } from '../Redux/actions'
+import { updateGraph, updatePatients, selectPatient,upDatedDate } from '../Redux/actions'
 
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
@@ -16,6 +17,7 @@ const NetworkMap = ({
   selectPatient,
   height,
   width,
+  upDatedDate
 }) => {
 
   const graphRef = useRef()
@@ -39,7 +41,9 @@ const NetworkMap = ({
             city:(item.city==="Navi Mumbai"||item.city==="Mumbai Suburb"||item.city==="Mumbai City")?"Mumbai":item.city
 
           }
-        })
+        });
+        let date =moment(res.lastRefreshed).fromNow();
+        upDatedDate(date)
         updateGraph(rowsToGraph(_res))
         updatePatients(normalize(_res))
         setIsLoading(false)
@@ -138,4 +142,5 @@ export default connect(mapStateToProps, {
   updateGraph,
   updatePatients,
   selectPatient,
+  upDatedDate
 })(NetworkMap)

@@ -52,7 +52,16 @@ const setSearchTerm = term => (dispatch, getState) => {
       term,
     },
   })
+};
+
+const upDatedDate = date =>(dispatch,getState)=>{
+  dispatch({
+    type: actionTypes.LAST_UPDATED,
+    payload: {
+      date,
+    },
+  })
 }
 
 // Export the actions.
-export { updateGraph, updatePatients, selectPatient, selectFilter, setSearchTerm }
+export { updateGraph, updatePatients, selectPatient, selectFilter, setSearchTerm,upDatedDate }
