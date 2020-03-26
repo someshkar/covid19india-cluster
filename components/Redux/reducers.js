@@ -13,7 +13,8 @@ const initialState = {
   selected: null,
   graph: null,
   patients: null,
-  searchTerm: '' 
+  searchTerm: '',
+  updatedDate: null
 }
 
 // Export the Device Reducer.
@@ -44,6 +45,12 @@ export default (state = initialState, action) => {
         coords
       }
       return existingPatient ? { ...state, patient } : state
+    }
+    case actionTypes.LAST_UPDATED: {
+      return {
+        ...state,
+        updatedDate: action.payload.date
+      }
     }
     default:
       return state

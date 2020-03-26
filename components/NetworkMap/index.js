@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Graph from 'react-graph-vis'
+import Graph from 'react-graph-vis';
+import moment from 'moment'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, selectPatient } from '../Redux/actions'
+import { updateGraph, updatePatients, selectPatient,upDatedDate } from '../Redux/actions'
 
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
@@ -16,6 +17,7 @@ const NetworkMap = ({
   selectPatient,
   height,
   width,
+  upDatedDate
 }) => {
 
   const graphRef = useRef()
@@ -33,8 +35,17 @@ const NetworkMap = ({
     })
       .then(resp => resp.json())
       .then(res => {
-        updateGraph(rowsToGraph(res.data.rawPatientData))
-        updatePatients(normalize(res.data.rawPatientData))
+        let _res = res.data&&res.data.rawPatientData.map(item =>{
+          return {
+            ...item,
+            city:(item.city==="Navi Mumbai"||item.city==="Mumbai Suburb"||item.city==="Mumbai City")?"Mumbai":item.city
+
+          }
+        });
+        let date =moment(res.lastRefreshed).fromNow();
+        upDatedDate(date)
+        updateGraph(rowsToGraph(_res))
+        updatePatients(normalize(_res))
         setIsLoading(false)
       })
       .catch(err => console.log('error', err))
@@ -60,7 +71,7 @@ const NetworkMap = ({
     // TODO: Add search by age, district, etc.
     if (graphRef.current && searchTerm) { // Make sure the ref is ready
       try {
-        const nodeKey = letterToCode(`P${searchTerm}`)
+        const nodeKey = letterToCode(`P${searchTerm}`);
         const coordsMap = graphRef.current.Network.getPositions([nodeKey])
         graphRef.current.Network.selectNodes([nodeKey])
         selectPatient({ id: nodeKey, coords: coordsMap[nodeKey] })
@@ -131,4 +142,5 @@ export default connect(mapStateToProps, {
   updateGraph,
   updatePatients,
   selectPatient,
+  upDatedDate
 })(NetworkMap)
