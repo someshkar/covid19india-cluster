@@ -106,32 +106,61 @@ export const codeToLetter = (code) => {
   return letters[letterPos - 10] + codeStr.substring(2)
 }
 
-export const rowsToGraph = rows => {
+function parseContractedData(data){
+    let list = data.split(",")
+    return list.map(ele => ele.replace("P",""))
+}
+
+function addNodeToGraph(patientCode, row, graph) {
+    let node = {
+        id: patientCode,
+        label: 'P' + row.patientId,
+        shape: 'image',
+        image: getIcon(row),
+        group: 'patient'
+    }
+
+    graph = dotProp.set(graph, 'nodes', list => [...list, node])
+    return graph;
+}
+
+function addEdgeToGraph(row, patientCode, graph) {
+    if (row.contractedFrom) {
+        let edge = {
+            from: letterToCode(row.contractedFrom),
+            to: patientCode,
+        }
+
+        graph = dotProp.set(graph, 'edges', list => [...list, edge])
+    }
+    return graph;
+}
+
+export const rowsToGraph = (rows, removeLeafNode) => {
   let graph = {
     nodes: [],
     edges: [],
   }
 
-  rows.forEach(row => {
-    const patientCode = letterToCode('P' + row.patientId)
-    let node = {
-      id: patientCode,
-      label: 'P' + row.patientId,
-      shape: 'image',
-      image: getIcon(row),
-      group: 'patient'
-    }
-
-    graph = dotProp.set(graph, 'nodes', list => [...list, node])
-
-    if (row.contractedFrom) {
-      let edge = {
-        from: letterToCode(row.contractedFrom),
-        to: patientCode,
+  let listOfConnectedCases = new Set()
+  if(removeLeafNode){
+    rows.forEach(row => {
+      if (row.contractedFrom){
+        listOfConnectedCases.add(row.patientId)
+        parseContractedData(row.contractedFrom).forEach(e => listOfConnectedCases.add(parseInt(e)))
       }
+    })
+  }
 
-      graph = dotProp.set(graph, 'edges', list => [...list, edge])
+  rows
+    .forEach(row => {
+    const patientCode = letterToCode('P' + row.patientId)
+    if(removeLeafNode && listOfConnectedCases.has(row.patientId)) {
+       graph = addNodeToGraph(patientCode, row, graph);
+    }else if(!removeLeafNode){
+       graph = addNodeToGraph(patientCode, row, graph);
     }
+    graph = addEdgeToGraph(row, patientCode, graph);
   })
   return graph
 }
