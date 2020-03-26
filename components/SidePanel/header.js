@@ -12,9 +12,9 @@ const Container = styled.div`
 `
 
 const Title = styled.div`
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 12px;
   color: #858383;
 `
 
