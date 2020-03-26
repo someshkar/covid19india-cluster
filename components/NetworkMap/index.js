@@ -35,17 +35,10 @@ const NetworkMap = ({
     })
       .then(resp => resp.json())
       .then(res => {
-        let _res = res.data&&res.data.rawPatientData.map(item =>{
-          return {
-            ...item,
-            city:(item.city==="Navi Mumbai"||item.city==="Mumbai Suburb"||item.city==="Mumbai City")?"Mumbai":item.city
-
-          }
-        });
+        updateGraph(rowsToGraph(res.data.rawPatientData))
+        updatePatients(normalize(res.data.rawPatientData))
         let date =moment(res.lastRefreshed).fromNow();
         upDatedDate(date)
-        updateGraph(rowsToGraph(_res))
-        updatePatients(normalize(_res))
         setIsLoading(false)
       })
       .catch(err => console.log('error', err))
