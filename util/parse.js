@@ -63,8 +63,15 @@ import {
   female_cured,
   female_hosp,
   female_dead,
+  male_hosp_new,
+  male_cured_new,
+  male_dead_new,
+  female_cured_new,
+  female_hosp_new,
+  female_dead_new,
 } from '../images/index'
 import dotProp from 'dot-prop-immutable'
+import moment from 'moment'
 
 export function letterToCode(str) {
   const letterPos = parseInt(str[0], 36)
@@ -72,28 +79,55 @@ export function letterToCode(str) {
 }
 
 export function getIcon(patient) {
-  if (patient.gender === 'male') {
-    if (patient.status === 'Recovered') {
-      return male_cured
-    } else if (patient.status === 'Hospitalized') {
-      return male_hosp
-    } else if (patient.status === 'Deceased') {
-      return male_dead
-    } else {
-      return male_hosp
-    }
-  } else if (patient.gender === 'female') {
-    if (patient.status === 'Recovered') {
-      return female_cured
-    } else if (patient.status === 'Hospitalized') {
-      return female_hosp
-    } else if (patient.status === 'Deceased') {
-      return female_dead
-    } else {
-      return female_hosp
-    }
+  let activeDays = moment().diff(moment(patient.reportedOn,'DD/MM/YYYY'),'days')
+  if (activeDays>3){
+      if (patient.gender === 'male') {
+        if (patient.status === 'Recovered') {
+          return male_cured
+        } else if (patient.status === 'Hospitalized') {
+          return male_hosp
+        } else if (patient.status === 'Deceased') {
+          return male_dead
+        } else {
+          return male_hosp
+        }
+      } else if (patient.gender === 'female') {
+        if (patient.status === 'Recovered') {
+          return female_cured
+        } else if (patient.status === 'Hospitalized') {
+          return female_hosp
+        } else if (patient.status === 'Deceased') {
+          return female_dead
+        } else {
+          return female_hosp
+        }
+      } else {
+        return female_hosp
+      }
   } else {
-    return female_hosp
+      if (patient.gender === 'male') {
+            if (patient.status === 'Recovered') {
+              return male_cured_new
+            } else if (patient.status === 'Hospitalized') {
+              return male_hosp_new
+            } else if (patient.status === 'Deceased') {
+              return male_dead_new
+            } else {
+              return male_hosp_new
+            }
+          } else if (patient.gender === 'female') {
+            if (patient.status === 'Recovered') {
+              return female_cured_new
+            } else if (patient.status === 'Hospitalized') {
+              return female_hosp_new
+            } else if (patient.status === 'Deceased') {
+              return female_dead_new
+            } else {
+              return female_hosp_new
+            }
+          } else {
+            return female_hosp_new
+          }
   }
 }
 
@@ -111,7 +145,6 @@ export const rowsToGraph = rows => {
     nodes: [],
     edges: [],
   }
-
   rows.forEach(row => {
     const patientCode = letterToCode('P' + row.patientId)
     let node = {
@@ -121,7 +154,6 @@ export const rowsToGraph = rows => {
       image: getIcon(row),
       group: 'patient'
     }
-
     graph = dotProp.set(graph, 'nodes', list => [...list, node])
 
     if (row.contractedFrom) {
