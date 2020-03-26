@@ -12,7 +12,7 @@ const Container = styled.div`
 `
 
 const Title = styled.div`
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-weight: bold;
   font-size: 14px;
   color: #858383;
@@ -58,7 +58,7 @@ function Header({ patient, setSearchTerm,updatedDate }) {
   return (
     <Container>
       <Title>
-        covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot> {updatedDate}
+        Covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot>{updatedDate}
       </Title>
       <SearchInput searchTerm={onSearch} />
       <PatientContainer>
