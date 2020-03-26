@@ -11,7 +11,7 @@ export const addCities = (graph, patients) => {
   for (let patientId in patients) {
     let city = patients[patientId].city
       ? patients[patientId].city
-      : patients[patientId].district
+      : (patients[patientId].district ? patients[patientId].district: patients[patientId].state )
     if (!states[hash(patients[patientId].state)]) {
       states[hash(patients[patientId].state)] = patients[patientId].state
       if (!stateCitiesMap[hash(patients[patientId].state)]) {
@@ -86,7 +86,7 @@ export const addCities = (graph, patients) => {
   for (let patientId in patients) {
     let city = patients[patientId].city
       ? patients[patientId].city
-      : patients[patientId].district
+      : (patients[patientId].district ? patients[patientId].district: patients[patientId].state )
     let edge = {
       from: hash(city),
       to: patients[patientId].patientId,
