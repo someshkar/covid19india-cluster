@@ -37,11 +37,11 @@ Credits : [https://github.com/NirantK/coronaIndia](https://github.com/NirantK/co
 
 ## Customizing
 
-This app can be hooked to any google sheets based database. Is currently based on [covid19india.org](<[https://docs.google.com/spreadsheets/d/1nzXUdaIWC84QipdVGUKTiCSc5xntBbpMpzLm6Si33zk/edit#gid=0](https://docs.google.com/spreadsheets/d/1nzXUdaIWC84QipdVGUKTiCSc5xntBbpMpzLm6Si33zk/edit#gid=0)>) live crowdsourced patient database. Edit client_secrets.json and modify the endpoint in the /api folder to hook it to your own, then deploy to zeit.co to have it working online.
+This app can be hooked to any google sheets based database. Is currently based on [covid19india.org](<[https://docs.google.com/spreadsheets/d/1nzXUdaIWC84QipdVGUKTiCSc5xntBbpMpzLm6Si33zk/edit#gid=0](https://docs.google.com/spreadsheets/d/1nzXUdaIWC84QipdVGUKTiCSc5xntBbpMpzLm6Si33zk/edit#gid=0)>) live crowdsourced patient database. Edit `client_secrets.json` and modify the endpoint in the `/api` folder to hook it to your own, then deploy to [zeit.co](https://zeit.co/) to have it working online.
 
 ## Issues
 
-Submit an issue or feature request at [issues](https://www.covid19india.org/) or contact the maintainers.
+Submit an [issue](https://github.com/someshkar/covid19india-cluster/issues/new?assignees=&labels=&template=bug_report_template.md&title=) or [feature request](https://github.com/someshkar/covid19india-cluster/issues/new?assignees=&labels=&template=feature_request_template.md&title=) at [issues](https://github.com/someshkar/covid19india-cluster/issues/new/choose) or contact the maintainers.
 
 ## Maintainers
 
