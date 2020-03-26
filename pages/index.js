@@ -17,7 +17,7 @@ const Home = () => {
   return (
     <div className="container">
       <Head>
-        <title>COVID 19 India Network</title>
+        <title>COVID19 India Network</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -63,7 +63,7 @@ const Home = () => {
         }
         div.vis-navigation {
           position: absolute;
-          bottom: 5px;
+          bottom: 6px;
           left: 10px;
         }
         div.vis-network div.vis-navigation div.vis-button.vis-up,
