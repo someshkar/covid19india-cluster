@@ -11,7 +11,7 @@ export const addAll= (graph, patients) => {
   for (let patientId in patients) {
     let city = patients[patientId].city
       ? patients[patientId].city
-      : patients[patientId].district
+      : (patients[patientId].district ? patients[patientId].district: patients[patientId].state )
     if (!states[hash(patients[patientId].state)]) {
       states[hash(patients[patientId].state)] = patients[patientId].state
       if (!stateCitiesMap[hash(patients[patientId].state)]) {
@@ -107,7 +107,7 @@ export const addAll= (graph, patients) => {
               enabled: false,
             },
           },
-          color: { opacity: '0.2' },
+          color: { color:'red', opacity: '0.3' },
         }
 
         graph = dotProp.set(graph, 'edges', list => [...list, edge])
@@ -136,7 +136,7 @@ export const addAll= (graph, patients) => {
   for (let patientId in patients) {
     let city = patients[patientId].city
       ? patients[patientId].city
-      : patients[patientId].district
+      : (patients[patientId].district ? patients[patientId].district: patients[patientId].state )
     let edge = {
       from: hash(city),
       to: patients[patientId].patientId,
