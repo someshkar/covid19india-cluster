@@ -45,12 +45,22 @@ const Name = styled.div`
   font-size: 40px;
 `
 
-function Header({ patient, setSearchTerm }) {
-
+function Header({ patient, lastRefreshed, setSearchTerm }) {
   const onSearch = (term) => {
   let _serchTerm = term.toUpperCase().replace(/P/g, "").trim();
     setSearchTerm(parseInt(_serchTerm))
 
+  }
+
+  const getTimeDiff = () => {
+    const dateNow = new Date();
+    const dateRefresh = new Date(lastRefreshed);
+    const minDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60));
+    const hourDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60 * 60));
+    const dayDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60 * 60 * 24));
+    return minDiff < 60 ? `${minDiff}M ago` 
+            : hourDiff < 24 ? `${hourDiff}H ago`
+              : `${dayDiff}D ago`;
   }
 
   const { patientId } = patient
@@ -58,7 +68,7 @@ function Header({ patient, setSearchTerm }) {
   return (
     <Container>
       <Title>
-        covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot> 2H ago
+        covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot> {getTimeDiff()}
       </Title>
       <SearchInput searchTerm={onSearch} />
       <PatientContainer>

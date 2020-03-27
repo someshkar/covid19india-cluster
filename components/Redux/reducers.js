@@ -35,6 +35,10 @@ export default (state = initialState, action) => {
       const { patients } = action.payload
       return { ...state, patients: patients, patient: patients.byId[251] } // `P1` in code
     }
+    case actionTypes.UPDATE_LAST_REFRESHED: {
+      const { lastRefreshed } = action.payload
+      return { ...state, lastRefreshed: lastRefreshed }
+    }
     case actionTypes.SELECT_PATIENT: {
       const { id, coords } = action.payload
       const { patients } = state

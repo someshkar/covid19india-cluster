@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Graph from 'react-graph-vis'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, selectPatient } from '../Redux/actions'
+import { updateGraph, updatePatients, updateLastRefreshed, selectPatient } from '../Redux/actions'
 
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
@@ -13,6 +13,7 @@ const NetworkMap = ({
   graph,
   updateGraph,
   updatePatients,
+  updateLastRefreshed,
   selectPatient,
   height,
   width,
@@ -35,6 +36,7 @@ const NetworkMap = ({
       .then(res => {
         updateGraph(rowsToGraph(res.data.rawPatientData))
         updatePatients(normalize(res.data.rawPatientData))
+        updateLastRefreshed(res.data.lastRefreshed)
         setIsLoading(false)
       })
       .catch(err => console.log('error', err))
@@ -130,5 +132,6 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   updateGraph,
   updatePatients,
+  updateLastRefreshed,
   selectPatient,
 })(NetworkMap)
