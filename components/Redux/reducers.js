@@ -33,7 +33,8 @@ export default (state = initialState, action) => {
     }
     case actionTypes.UPDATE_PATIENTS: {
       const { patients } = action.payload
-      return { ...state, patients: patients, patient: patients.byId[251] } // `P1` in code
+      return { ...state, patients: patients, patient: patients.byId[251], // `P1` in code
+         totalCount: patients.allIds.length } 
     }
     case actionTypes.UPDATE_LAST_REFRESHED: {
       const { lastRefreshed } = action.payload

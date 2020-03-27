@@ -45,7 +45,7 @@ const Name = styled.div`
   font-size: 40px;
 `
 
-function Header({ patient, lastRefreshed, setSearchTerm }) {
+function Header({ patient, lastRefreshed, setSearchTerm, totalCount }) {
   const onSearch = (term) => {
   let _serchTerm = term.toUpperCase().replace(/P/g, "").trim();
     setSearchTerm(parseInt(_serchTerm))
@@ -70,6 +70,9 @@ function Header({ patient, lastRefreshed, setSearchTerm }) {
       <Title>
         covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot> {getTimeDiff()}
       </Title>
+      <p>
+        Total Cases: {totalCount}
+      </p>
       <SearchInput searchTerm={onSearch} />
       <PatientContainer>
         <Image src={getIcon(patient)} />

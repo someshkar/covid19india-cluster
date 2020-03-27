@@ -11,19 +11,19 @@ const Container = styled.div`
   overflow: auto;
 `
 
-const SidePanel = ({ patient, lastRefreshed }) => {
+const SidePanel = ({ patient, lastRefreshed, totalCount }) => {
 
   return (
     <Container>
-      {patient ? <Header patient={patient} lastRefreshed={lastRefreshed} /> : null}
+      {patient ? <Header patient={patient} lastRefreshed={lastRefreshed} totalCount={totalCount} /> : null}
       {patient ? <DataGrid {...patient} /> : null}
     </Container>
   )
 }
 
 const mapStateToProps = state => {
-  const { patient, lastRefreshed } = state
-  return { patient, lastRefreshed }
+  const { patient, lastRefreshed, totalCount } = state
+  return { patient, lastRefreshed, totalCount }
 }
 
 export default connect(mapStateToProps, null)(SidePanel)
