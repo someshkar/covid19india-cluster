@@ -2,6 +2,8 @@ import hash from 'object-hash'
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
 
+import { oneTo20, twentyTo30, thirtyTo40, fortyTo50, fiftyTo60, sixtyTo70, seventyUp } from '../../images'
+
 export const addAge = (graph, patients) => {
     let ages = {}
 
@@ -18,7 +20,9 @@ export const addAge = (graph, patients) => {
         let node = {
             id: age,
             label: ages[age],
-            size: 30
+            size: 30,
+            shape: 'image',
+            image: ageFiltrationIcons(ages[age])
         }
         graph = dotProp.set(graph, 'nodes', list => [...list, node])
     }
@@ -35,7 +39,7 @@ export const addAge = (graph, patients) => {
             let edge = {
                 from: hash(age),
                 to: patients[patientId].patientId,
-                length: 500,
+                length: 700,
                 dashes: true,
                 arrows: {
                     to: {
@@ -68,7 +72,9 @@ export const removeAge = (graph, patients) => {
         let node = {
             id: age,
             label: ages[age],
-            size: 30
+            size: 30,
+            shape: 'image',
+            image: ageFiltrationIcons(ages[age])
         }
         let index = _.findIndex(dotProp.get(graph, 'nodes'), function (o) {
             return o.id == node.id
@@ -111,4 +117,8 @@ export const removeAge = (graph, patients) => {
 
 const ageFiltration = (age) => {
     return age >= 70 ? "70 up" : age >= 60 ? "60 - 70" : age >= 50 ? "50 - 60" : age >= 40 ? "40 - 50" : age >= 30 ? "30 - 40" : age >= 20 ? "20 - 30" : "1 - 20"
+}
+
+const ageFiltrationIcons = (age) => {
+    return age === "70 up" ? seventyUp : age === "60 - 70" ? sixtyTo70 : age === "50 - 60" ? fiftyTo60 : age === "40 - 50" ? fortyTo50 : age === "30 - 40" ? thirtyTo40 : age === "20 - 30" ? twentyTo30 : oneTo20
 }
