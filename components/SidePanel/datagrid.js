@@ -42,7 +42,7 @@ function Cell({ name, children }) {
     </CellContainer>
   )
 }
-
+//TODO : MAKE THIS PURE COMPONENT calling a lodash function in return is expensive
 export default function DataGrid(patient) {
   const {
     notes,
@@ -75,9 +75,7 @@ export default function DataGrid(patient) {
         {sources
           ? sources.map((source, i) => (
               <div key={i}>
-                <div style={{ display: 'inline-block' }} key={i}>
-                  {i + 1}.&nbsp;
-                </div>
+                <div style={{ display: 'inline-block' }}>{i + 1}.&nbsp;</div>
                 <A
                   href={source}
                   target="_blank"
