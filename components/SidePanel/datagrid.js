@@ -2,6 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import _ from 'lodash'
 
+import CellContainer from './CellContainer';
+import Name from './Name';
+
 const Container = styled.div`
   font-size: 16px;
   display: grid;
@@ -21,20 +24,6 @@ const A = styled.a`
 `
 
 function Cell({ name, children }) {
-  const CellContainer = styled.div`
-    font-family: 'Lato', sans-serif;
-    background: #fff;
-    border-radius: 5px;
-    border: 1px solid #e7e7e7;
-    padding: 15px 20px;
-  `
-
-  const Name = styled.div`
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  `
-
   return (
     <CellContainer>
       <Name>{name}</Name>
@@ -82,7 +71,7 @@ export default function DataGrid(patient) {
                   href={source}
                   target="_blank"
                   rel="noopener noreferer"
-                  key={i}
+                  key={`link_${i}`}
                 >
                   {_.truncate(source, {
                     length: 40,
