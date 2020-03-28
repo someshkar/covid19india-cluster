@@ -13,7 +13,8 @@ const initialState = {
   selected: null,
   graph: null,
   patients: null,
-  searchTerm: '' 
+  searchTerm: '',
+  legendFilter: null
 }
 
 // Export the Device Reducer.
@@ -48,6 +49,10 @@ export default (state = initialState, action) => {
         coords
       }
       return existingPatient ? { ...state, patient } : state
+    }
+    case actionTypes.LEGEND_FILTER: {
+      const { term } = action.payload
+      return { ...state, legendFilter: term }
     }
     default:
       return state

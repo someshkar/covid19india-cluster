@@ -64,5 +64,14 @@ const setSearchTerm = term => (dispatch, getState) => {
   })
 }
 
+const setLegendFilter = term => (dispatch, getState) => {
+  dispatch({
+    type: actionTypes.LEGEND_FILTER,
+    payload: {
+      term
+    }
+  })
+}
+
 // Export the actions.
-export { updateGraph, updatePatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm }
+export { updateGraph, updatePatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, setLegendFilter }

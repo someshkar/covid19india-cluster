@@ -9,7 +9,8 @@ import {
     plane_abroad_node,
     plane_local_node,
 } from '../../images/index'
-
+import { connect, useSelector } from 'react-redux'
+import { setLegendFilter } from '../Redux/actions'
 
 const LegendContainer = styled.div`
     position: absolute;
@@ -45,7 +46,7 @@ const ImageContainer = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 0.5rem;
-
+    cursor: pointer;
 
     & :last-of-type {
         margin-bottom: 0;
@@ -62,36 +63,46 @@ const Label = styled.span`
     }
 `
 
-const NetworkMapLegend = ({ currentFilter }) => {
+const NetworkMapLegend = ({ currentGlobalFilter, setLegendFilter, legendFilter }) => {
+
+
+
+    const legendClickHandler = (term) => {
+        console.log('term in legend component: ', term);
+        if (legendFilter !== term) {
+            setLegendFilter(term);
+        }
+    }
+
     return (
         <LegendContainer>
-            <ImageContainer>
+            <ImageContainer onClick={() => legendClickHandler('Recovered')}>
                 <Image src={male_cured} />
                 <Label>Recovered</Label>
             </ImageContainer>
-            <ImageContainer>
+            <ImageContainer onClick={() => legendClickHandler('Hospitalized')}>
                 <Image src={male_hosp} />
                 <Label>Hospitalized</Label>
             </ImageContainer>
-            <ImageContainer>
+            <ImageContainer onClick={() => legendClickHandler('Deceased')}>
                 <Image src={male_dead} />
                 <Label>Deceased</Label>
             </ImageContainer>
-            {['State', 'City'].includes(currentFilter) ?
+            {['State', 'City'].includes(currentGlobalFilter) ?
                 <ImageContainer>
                     <Image src={state_node} />
                     <Label>State</Label>
                 </ImageContainer>
                 : null
             }
-            {currentFilter === 'City' ?
+            {currentGlobalFilter === 'City' ?
                 <ImageContainer>
                     <Image src={city_node} />
                     <Label>City</Label>
                 </ImageContainer>
                 : null
             }
-            {currentFilter === 'Travel' ?
+            {currentGlobalFilter === 'Travel' ?
                 <>
                     <ImageContainer>
                         <Image src={plane_local_node} />
@@ -108,5 +119,9 @@ const NetworkMapLegend = ({ currentFilter }) => {
     )
 }
 
+const mapStateToProps = state => {
+    let { legendFilter } = state
+    return { legendFilter }
+}
 
-export default NetworkMapLegend;
+export default connect(mapStateToProps, { setLegendFilter })(NetworkMapLegend);
