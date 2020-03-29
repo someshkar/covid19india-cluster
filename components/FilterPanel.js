@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
-import { state, city, abroad, p2p } from '../../images/index'
+import { state, city, abroad, p2p } from '../images/index'
 import {
   addStates,
   removeStates,
@@ -12,8 +12,8 @@ import {
   removeCities,
   addTravel,
   removeTravel,
-} from '../../util/filters'
-import { updateGraph, selectFilter } from '../Redux/actions'
+} from '../util/filters'
+import { updateGraph, selectFilter } from './Redux/actions'
 
 const filters = [
   {

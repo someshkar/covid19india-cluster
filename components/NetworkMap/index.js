@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Graph from 'react-graph-vis'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient } from '../Redux/actions'
+import {
+  updateGraph,
+  updatePatients,
+  updateLastRefreshed,
+  selectPatient,
+} from '../Redux/actions'
 
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
-import DatePicker from '../DatePicker'
-import NetworkMapLegend from '../NetworkMapLegend'
+import NetworkMapLegend from './legend'
 
 const NetworkMap = ({
   filter,
@@ -18,16 +22,16 @@ const NetworkMap = ({
   height,
   width,
 }) => {
-
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
   const { selected, searchTerm } = useSelector(state => ({
     searchTerm: state.searchTerm,
-    selected: state.patient
+    selected: state.patient,
   }))
 
   useEffect(() => {
-    fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
+    // fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
+    fetch('/api/raw', {
       cors: 'no-cors',
       method: 'GET',
       redirect: 'follow',
@@ -44,15 +48,16 @@ const NetworkMap = ({
 
   useEffect(() => {
     // TODO: Figure out a way to make this do-able with patient Id search
-    if (graphRef.current && selected.coords) { // Make sure the ref is ready
+    if (graphRef.current && selected.coords) {
+      // Make sure the ref is ready
       const moveParams = {
         position: selected.coords,
         scale: 1.5,
         offset: { x: 0, y: 0 },
         animation: {
           duration: 500,
-          easingFunction: 'easeInCubic'
-        }
+          easingFunction: 'easeInCubic',
+        },
       }
       graphRef.current.Network.moveTo(moveParams)
     }
@@ -60,7 +65,8 @@ const NetworkMap = ({
 
   useEffect(() => {
     // TODO: Add search by age, district, etc.
-    if (graphRef.current && searchTerm) { // Make sure the ref is ready
+    if (graphRef.current && searchTerm) {
+      // Make sure the ref is ready
       try {
         const nodeKey = letterToCode(`P${searchTerm}`)
         const coordsMap = graphRef.current.Network.getPositions([nodeKey])
@@ -83,8 +89,8 @@ const NetworkMap = ({
       chosen: {
         node: (values, id, selected, hovering) => {
           values.color = selected ? '#000' : 'green'
-        }
-      }
+        },
+      },
     },
     height: height,
     width: width,
@@ -94,7 +100,7 @@ const NetworkMap = ({
   }
 
   const events = {
-    select: function (event) {
+    select: function(event) {
       const selectedNodeId = event.nodes[0]
       const selectedNode = graph.nodes.find(v => v.id === selectedNodeId)
       if (selectedNode) {
@@ -115,9 +121,13 @@ const NetworkMap = ({
     <div style={{ height: '100vh', width: '100vw' }}>
       {isLoading ? null : (
         <>
-          <NetworkMapLegend currentFilter={filter}/>
-          <Graph ref={graphRef} graph={graph} options={options} events={events} />
-          <DatePicker />
+          <NetworkMapLegend currentFilter={filter} />
+          <Graph
+            ref={graphRef}
+            graph={graph}
+            options={options}
+            events={events}
+          />
         </>
       )}
     </div>

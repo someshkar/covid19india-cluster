@@ -72,7 +72,7 @@ export function letterToCode(str) {
 }
 
 export function getIcon(patient) {
-  if (patient.gender === 'male') {
+  if (patient.gender === 'Male') {
     if (patient.status === 'Recovered') {
       return male_cured
     } else if (patient.status === 'Hospitalized') {
@@ -82,7 +82,7 @@ export function getIcon(patient) {
     } else {
       return male_hosp
     }
-  } else if (patient.gender === 'female') {
+  } else if (patient.gender === 'Female') {
     if (patient.status === 'Recovered') {
       return female_cured
     } else if (patient.status === 'Hospitalized') {
@@ -97,7 +97,7 @@ export function getIcon(patient) {
   }
 }
 
-export const codeToLetter = (code) => {
+export const codeToLetter = code => {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const codeStr = code.toString()
 
@@ -119,7 +119,7 @@ export const rowsToGraph = rows => {
       label: 'P' + row.patientId,
       shape: 'image',
       image: getIcon(row),
-      group: 'patient'
+      group: 'patient',
     }
 
     graph = dotProp.set(graph, 'nodes', list => [...list, node])

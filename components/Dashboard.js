@@ -8,11 +8,11 @@ import {
   isBrowser,
 } from 'react-device-detect'
 
-import NetworkMap from '../NetworkMap'
-import SidePanel from '../SidePanel'
-import FilterPanel from '../FilterPanel'
+import NetworkMap from './NetworkMap'
+import SidePanel from './SidePanel'
+import FilterPanel from './FilterPanel'
 import { Provider } from 'react-redux'
-import { store } from '../Redux/store'
+import { store } from './Redux/store'
 
 const Container = styled.div`
   height: 100vh;

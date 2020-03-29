@@ -6,32 +6,19 @@ module.exports = async (req, res) => {
   const sheet = doc.sheetsByIndex[0]
 
   const rawRows = await sheet.getRows()
-  // console.log(rows)
 
   let rows = []
 
   for (let rawRow of rawRows) {
-    if (!rawRow['Date Announced']) {
-      break
-    }
-
-    // Turn M/F to word
-    function processGender(letter) {
-      if (rawRow['Gender'] === 'M') return 'male'
-      else return 'female'
-    }
-
     // Remove empty strings ("")
-    function processSources(sources) {
-      return sources.filter(source => source)
-    }
+    const processSources = sources => sources.filter(source => source)
 
     const row = {
-      patientId: parseInt(rawRow['Patient number']), // Change in frontend, used to be 'P' + rawRow['Patient Number']
+      patientId: parseInt(rawRow['Patient Number']), // Change in frontend, used to be 'P' + rawRow['Patient Number']
       reportedOn: rawRow['Date Announced'],
       onsetEstimate: '',
       ageEstimate: rawRow['Age Bracket'],
-      gender: processGender(rawRow['Gender']), // Change in frontend, used to be 'M'/'F'
+      gender: rawRow['Gender'] === 'M' ? 'Male' : 'Female', // Change in frontend, used to be 'M'/'F'
       city: rawRow['Detected City'],
       state: rawRow['Detected State'],
       district: rawRow['Detected District'],

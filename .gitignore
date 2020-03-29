@@ -28,3 +28,7 @@ yarn-error.log*
 
 # vscode
 .vscode
+
+# Secrets
+pages/api/client_secret.json
+.env
