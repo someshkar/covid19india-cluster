@@ -136,7 +136,7 @@ export const rowsToGraph = rows => {
   return graph
 }
 
-// console.log(letterToCode('P699999'))
-// console.log(codeToLetter(letterToCode('P6')))
+// useLog(letterToCode('P699999'))
+// useLog(codeToLetter(letterToCode('P6')))
 
-// console.log(jsonToGraph(dumpedRows))
+// useLog(jsonToGraph(dumpedRows))

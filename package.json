@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "dot-prop-immutable": "^2.1.0",
@@ -27,5 +29,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^25.2.4"
   }
 }

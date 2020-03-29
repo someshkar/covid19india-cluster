@@ -7,6 +7,7 @@ import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
 import NetworkMapLegend from '../NetworkMapLegend'
+import { useError } from '../../util/logger'
 
 const NetworkMap = ({
   filter,
@@ -58,7 +59,7 @@ const NetworkMap = ({
         updateLastRefreshed(res.data.lastRefreshed)
         setIsLoading(false)
       })
-      .catch(err => console.log('error', err))
+      .catch(err => useError(err))
   }, [isLoading])
 
   useEffect(() => {

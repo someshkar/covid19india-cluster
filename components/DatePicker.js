@@ -5,6 +5,7 @@ import DayPicker from 'react-day-picker'
 import { connect } from 'react-redux'
 import { updateGraph, selectFilter } from './Redux/actions'
 import { rowsToGraph } from '../util/parse'
+import { useLog } from '../util/logger'
 import { isBrowser } from 'react-device-detect'
 
 const Container = styled.div`
@@ -56,7 +57,7 @@ function DatePicker({ updateGraph, selectFilter }) {
     const newDate = formatDate(date)
 
     if (formatDate(selectedDay) !== newDate) {
-      console.log(newDate)
+      useLog(newDate)
       changeSelectedDay(date)
 
       const apiURL =
@@ -70,7 +71,7 @@ function DatePicker({ updateGraph, selectFilter }) {
       })
         .then(resp => resp.json())
         .then(res => {
-          console.log(res)
+          useLog(res)
           // Update the graph only if res.success is true
           if(res.success){
             updateGraph(rowsToGraph(res.data.rawPatientData))
