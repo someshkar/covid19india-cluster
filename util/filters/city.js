@@ -6,7 +6,7 @@ import dotProp from 'dot-prop-immutable'
 function getCityDistrictOrState(patients, patientId) {
     return patients[patientId].city
         ? patients[patientId].city
-        : (patients[patientId].district ? patients[patientId].district : patients[patientId].state);
+        : (patients[patientId].district ? patients[patientId].district : (patients[patientId].state?patients[patientId].state:"No State"));
 }
 
 export const addCities = (graph, patients) => {
@@ -18,7 +18,7 @@ export const addCities = (graph, patients) => {
 
   for (let patientId in patients) {
     let city = getCityDistrictOrState(patients, patientId)
-    if (!states[hash(patients[patientId].state)]) {
+    if (!states[hash((patients[patientId].state ? patients[patientId].state : patients[patientId].state = "No State"))]) {
       states[hash(patients[patientId].state)] = patients[patientId].state
       if (!stateCitiesMap[hash(patients[patientId].state)]) {
         stateCitiesMap[hash(patients[patientId].state)] = {}
