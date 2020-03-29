@@ -148,16 +148,18 @@ const NetworkMap = ({
             events={events}
           />
           <DatePicker />
-          <Tooltip
-            hidden={!toolTipVisible}
-            style={{
-              top: `${(toolTipPosition && toolTipPosition.top) || 0}px`,
-              left: `${(toolTipPosition && toolTipPosition.left) || 0}px`,
-            }}
-          >
-            <TooltipArrow />
-            <TooltipInner>{tooltipContent}</TooltipInner>
-          </Tooltip>
+          {toolTipVisible && (
+            <Tooltip
+              hidden={!toolTipVisible}
+              style={{
+                top: `${(toolTipPosition && toolTipPosition.top) || 0}px`,
+                left: `${(toolTipPosition && toolTipPosition.left) || 0}px`,
+              }}
+            >
+              <TooltipArrow />
+              <TooltipInner>{tooltipContent}</TooltipInner>
+            </Tooltip>
+          )}
         </>
       )}
     </div>
