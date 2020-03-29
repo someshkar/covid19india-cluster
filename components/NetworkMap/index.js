@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Graph from 'react-graph-vis'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient } from '../Redux/actions'
+import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates } from '../Redux/actions'
 
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
@@ -14,9 +14,11 @@ const NetworkMap = ({
   updateGraph,
   updatePatients,
   updateLastRefreshed,
+  updateStates,
   selectPatient,
   height,
   width,
+  states
 }) => {
 
   const graphRef = useRef()
@@ -25,6 +27,23 @@ const NetworkMap = ({
     searchTerm: state.searchTerm,
     selected: state.patient
   }))
+
+  useEffect(() => {
+    if(!states){
+      fetch('https://api.covid19india.org/state_district_wise.json', {
+        cors: 'no-cors',
+        method: 'GET',
+        redirect: 'follow',
+      })
+        .then(resp => resp.json())
+        .then(res => {
+          if(res){
+            let stateNames = Object.keys(res);
+            updateStates(stateNames);
+          }
+        })
+    }
+  })
 
   useEffect(() => {
     fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
@@ -125,13 +144,14 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm, filter } = state
-  return { graph, searchTerm, filter }
+  let { graph, searchTerm, filter, states } = state
+  return { graph, searchTerm, filter, states}
 }
 
 export default connect(mapStateToProps, {
   updateGraph,
   updatePatients,
+  updateStates,
   updateLastRefreshed,
   selectPatient,
 })(NetworkMap)
