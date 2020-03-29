@@ -27,9 +27,10 @@ const filters = [
     },
   },
   { name: 'State', icon: state, add: addStates, remove: removeStates },
-  { name: 'City', icon: city, add: addCities, remove: removeCities },
-  { name: 'Travel', icon: abroad, add: addTravel, remove: removeTravel },
+  { name: 'City', icon: city, add: addCities, remove: removeCities }
 ]
+
+//{ name: 'Travel', icon: abroad, add: addTravel, remove: removeTravel },
 
 const HeaderContainer = styled.div`
   padding-top: 10px;
