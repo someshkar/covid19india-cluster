@@ -2,13 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Graph from 'react-graph-vis'
 import { Tooltip, TooltipArrow, TooltipInner } from 'styled-tooltip-component'
 import { connect, useSelector } from 'react-redux'
-import {
-  updateGraph,
-  updatePatients,
-  updateLastRefreshed,
-  selectPatient,
-} from '../Redux/actions'
-
+import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates } from '../Redux/actions'
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
@@ -20,9 +14,11 @@ const NetworkMap = ({
   updateGraph,
   updatePatients,
   updateLastRefreshed,
+  updateStates,
   selectPatient,
   height,
   width,
+  states
 }) => {
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
@@ -35,6 +31,23 @@ const NetworkMap = ({
     searchTerm: state.searchTerm,
     selected: state.patient,
   }))
+  useEffect(() => {
+    if(!states){
+      fetch('https://api.covid19india.org/state_district_wise.json', {
+        cors: 'no-cors',
+        method: 'GET',
+        redirect: 'follow',
+      })
+        .then(resp => resp.json())
+        .then(res => {
+          if(res){
+            let stateNames = Object.keys(res);
+            updateStates(stateNames);
+          }
+        })
+    }
+  })
+
   useEffect(() => {
     fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
       cors: 'no-cors',
@@ -167,13 +180,14 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm, filter } = state
-  return { graph, searchTerm, filter }
+  let { graph, searchTerm, filter, states } = state
+  return { graph, searchTerm, filter, states}
 }
 
 export default connect(mapStateToProps, {
   updateGraph,
   updatePatients,
+  updateStates,
   updateLastRefreshed,
   selectPatient,
 })(NetworkMap)
