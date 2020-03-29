@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Graph from 'react-graph-vis'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates } from '../Redux/actions'
+import { updateGraph, updatePatients, updateLastRefreshed, selectPatient,
+   updateStates,setSelectedLegend ,updateRawData
+  } from '../Redux/actions'
 
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
@@ -10,12 +12,13 @@ import NetworkMapLegend from '../NetworkMapLegend'
 
 const NetworkMap = ({
   filter,
-  graph,
   updateGraph,
   updatePatients,
   updateLastRefreshed,
   updateStates,
   selectPatient,
+  setSelectedLegend,
+  updateRawData,
   height,
   width,
   states
@@ -23,10 +26,13 @@ const NetworkMap = ({
 
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
-  const { selected, searchTerm } = useSelector(state => ({
+  const { selected, searchTerm , graph } = useSelector(state => {
+    const updatedGraph = rowsToGraph(state.rawData,state.legendType)
+    return {
     searchTerm: state.searchTerm,
-    selected: state.patient
-  }))
+    selected: state.patient,
+    graph : updatedGraph
+  }})
 
   useEffect(() => {
     if(!states){
@@ -53,7 +59,8 @@ const NetworkMap = ({
     })
       .then(resp => resp.json())
       .then(res => {
-        updateGraph(rowsToGraph(res.data.rawPatientData))
+        updateRawData(res.data.rawPatientData)
+        // updateGraph(rowsToGraph(res.data.rawPatientData))
         updatePatients(normalize(res.data.rawPatientData))
         updateLastRefreshed(res.data.lastRefreshed)
         setIsLoading(false)
@@ -134,7 +141,7 @@ const NetworkMap = ({
     <div style={{ height: '100vh', width: '100vw' }}>
       {isLoading ? null : (
         <>
-          <NetworkMapLegend currentFilter={filter}/>
+          <NetworkMapLegend currentFilter={filter} filterGraph={ (id)=>setSelectedLegend(id)}/>
           <Graph ref={graphRef} graph={graph} options={options} events={events} />
           <DatePicker />
         </>
@@ -144,14 +151,16 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm, filter, states } = state
-  return { graph, searchTerm, filter, states}
+  let {  searchTerm, filter, states  } = state
+  return { searchTerm, filter, states}
 }
 
 export default connect(mapStateToProps, {
   updateGraph,
   updatePatients,
+  updateRawData,
   updateStates,
   updateLastRefreshed,
   selectPatient,
+  setSelectedLegend
 })(NetworkMap)
