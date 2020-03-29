@@ -1,6 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import FilterHeader from './FilterHeader';
+import FilterContainer from './FilterContainer';
+import FilterName from './FilterName';
+import FilterIcon from './FilterIcon';
+
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
@@ -64,29 +69,6 @@ const FilterMenuContainer = styled.div`
 `
 
 const FilterCategory = ({ filter, onClick, selected }) => {
-  const FilterContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    height: '20vh';
-    user-select: none;
-    background-color: ${props => (props.selected ? '#d6d6d6' : '#F2F2F2')};
-    transition: all 0.2s ease-out;
-    cursor: pointer;
-    &:hover {
-      background-color: #d7d7d7;
-    }
-  `
-  const FilterName = styled.div`
-    text-transform: uppercase;
-    font-size: 11px;
-  `
-
-  const FilterIcon = styled.img`
-    width: 40px;
-  `
-
   return (
     <FilterContainer onClick={onClick} selected={selected}>
       <FilterIcon src={filter.icon} />
@@ -121,23 +103,13 @@ const FilterPanel = ({
     console.log(newGraph)
     updateGraph(newGraph)
   }
-  const FilterHeader = styled.div`
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 14px;
-
-    @media screen and (max-width: 768px) {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  `
   return (
     <HeaderContainer>
       <FilterHeader>Cluster Filter</FilterHeader>
       <FilterMenuContainer>
         {filters.map(filterItem => (
           <FilterCategory
+            key={filterItem.name}
             filter={filterItem}
             onClick={() => changeGraph(filterItem.name)}
             selected={filter === filterItem.name ? true : false}
