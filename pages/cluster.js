@@ -1,107 +1,110 @@
 import Head from 'next/head'
 
+import Layout from '../components/layout'
 import Dashboard from '../components/Cluster/Dashboard'
 
 const Cluster = () => {
   return (
-    <div className="container">
-      <Head>
-        <title>COVID 19 India Network</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Layout>
+      <div className="cluster-container">
+        <Head>
+          <title>COVID 19 India Network</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      <main>
-        <Dashboard />
-      </main>
+        <main>
+          <Dashboard />
+        </main>
 
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-          overflow: hidden;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-
-        main {
-          height: 100vh;
-          width: 100vw;
-          display: grid;
-          /* grid-template-columns: 5% 25% 70%; */
-        }
-
-        .sidebar {
-          background: green;
-        }
-
-        .panel {
-          background: red;
-        }
-
-        @media screen and (max-width: 768px) {
+        <style jsx global>{`
           html,
           body {
-            overflow: auto;
+            padding: 0;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+              Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+              sans-serif;
+            overflow: hidden;
           }
-        }
-        div.vis-navigation {
-          position: absolute;
-          bottom: 5px;
-          left: 10px;
-        }
-        div.vis-network div.vis-navigation div.vis-button.vis-up,
-        div.vis-network div.vis-navigation div.vis-button.vis-down,
-        div.vis-network div.vis-navigation div.vis-button.vis-left,
-        div.vis-network div.vis-navigation div.vis-button.vis-right,
-        div.vis-network div.vis-navigation div.vis-button.vis-zoomIn,
-        div.vis-network div.vis-navigation div.vis-button.vis-zoomOut,
-        div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
-          background-image: none !important;
-          display: inline-block;
-        }
 
-        div.vis-network div.vis-navigation div.vis-button.vis-zoomIn,
-        div.vis-network div.vis-navigation div.vis-button.vis-zoomOut,
-        div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
-          margin-right: 10px;
-        }
+          * {
+            box-sizing: border-box;
+          }
 
-        div.vis-network div.vis-navigation div.vis-button:hover {
-          box-shadow: none !important;
-        }
+          main {
+            height: 100vh;
+            width: 100vw;
+            display: grid;
+            /* grid-template-columns: 5% 25% 70%; */
+          }
 
-        .vis-button:after {
-          font-size: 1.8em;
-          color: gray;
-        }
+          .sidebar {
+            background: green;
+          }
 
-        .vis-button:hover:after {
-          font-size: 1.8em;
-          color: lightgray;
-        }
+          .panel {
+            background: red;
+          }
 
-        .vis-button.vis-zoomIn:after {
-          content: '+';
-          font-weight: bold;
-        }
+          @media screen and (max-width: 768px) {
+            html,
+            body {
+              overflow: auto;
+            }
+          }
+          div.vis-navigation {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+          }
+          div.vis-network div.vis-navigation div.vis-button.vis-up,
+          div.vis-network div.vis-navigation div.vis-button.vis-down,
+          div.vis-network div.vis-navigation div.vis-button.vis-left,
+          div.vis-network div.vis-navigation div.vis-button.vis-right,
+          div.vis-network div.vis-navigation div.vis-button.vis-zoomIn,
+          div.vis-network div.vis-navigation div.vis-button.vis-zoomOut,
+          div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
+            background-image: none !important;
+            display: inline-block;
+          }
 
-        .vis-button.vis-zoomOut:after {
-          content: '−';
-          font-weight: bold;
-        }
+          div.vis-network div.vis-navigation div.vis-button.vis-zoomIn,
+          div.vis-network div.vis-navigation div.vis-button.vis-zoomOut,
+          div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
+            margin-right: 10px;
+          }
 
-        .vis-button.vis-zoomExtends:after {
-          content: '⤧';
-          font-weight: bold;
-        }
-      `}</style>
-    </div>
+          div.vis-network div.vis-navigation div.vis-button:hover {
+            box-shadow: none !important;
+          }
+
+          .vis-button:after {
+            font-size: 1.8em;
+            color: gray;
+          }
+
+          .vis-button:hover:after {
+            font-size: 1.8em;
+            color: lightgray;
+          }
+
+          .vis-button.vis-zoomIn:after {
+            content: '+';
+            font-weight: bold;
+          }
+
+          .vis-button.vis-zoomOut:after {
+            content: '−';
+            font-weight: bold;
+          }
+
+          .vis-button.vis-zoomExtends:after {
+            content: '⤧';
+            font-weight: bold;
+          }
+        `}</style>
+      </div>
+    </Layout>
   )
 }
 
