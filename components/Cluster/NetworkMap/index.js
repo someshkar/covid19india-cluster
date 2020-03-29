@@ -6,10 +6,10 @@ import {
   updatePatients,
   updateLastRefreshed,
   selectPatient,
-} from '../Redux/actions'
+} from '../../Redux/actions'
 
-import { rowsToGraph, letterToCode } from '../../util/parse'
-import normalize from '../../util/normalize'
+import { rowsToGraph, letterToCode } from '../../../util/parse'
+import normalize from '../../../util/normalize'
 import NetworkMapLegend from './legend'
 
 const NetworkMap = ({

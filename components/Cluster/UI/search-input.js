@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import useDebounce from '../../util/useDebounce'
+import useDebounce from '../../../util/useDebounce'
 
 const Input = styled.input`
   margin: 10px;
