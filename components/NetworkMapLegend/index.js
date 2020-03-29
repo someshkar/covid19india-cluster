@@ -43,6 +43,7 @@ const Image = styled.img`
 
 const ImageContainer = styled.div`
     display: flex;
+    cursor: pointer;
     align-items: center;
     margin-bottom: 0.5rem;
 
@@ -62,48 +63,58 @@ const Label = styled.span`
     }
 `
 
-const NetworkMapLegend = ({ currentFilter }) => {
+const NetworkMapLegend = ({ currentFilter,filterGraph }) => {
+    const legendTypes = [{
+        id:'Recovered',
+        displayName: 'Recovered',
+        imgSrc: male_cured
+    },{
+        id:'Hospitalized',
+        displayName: 'Hospitalized',
+        imgSrc: male_hosp
+    },{
+        id:'Deceased',
+        displayName: 'Deceased',
+        imgSrc: male_dead
+    }]
+    if(currentFilter === 'State' || currentFilter === 'City'){
+        legendTypes.push({
+            id:'State',
+            displayName: 'State',
+            imgSrc: state_node
+        })
+    }
+    if(currentFilter === 'City'){
+        legendTypes.push({
+            id:'City',
+            displayName: 'City',
+            imgSrc: city_node
+        })
+    }
+    if(currentFilter === 'Travel'){
+        legendTypes.push({
+            id:'Domestic',
+            displayName: 'Domestic',
+            imgSrc: plane_local_node
+        })
+        legendTypes.push({
+            id:'International',
+            displayName: 'International',
+            imgSrc: plane_abroad_node
+        })
+    }
+
+    const legends = []
+    legendTypes.map(legend => {
+        legends.push(<ImageContainer onClick={()=>filterGraph(legend.id)}>
+        <Image src={legend.imgSrc} />
+        <Label>{legend.displayName}</Label>
+        </ImageContainer>)
+    })
+
     return (
         <LegendContainer>
-            <ImageContainer>
-                <Image src={male_cured} />
-                <Label>Recovered</Label>
-            </ImageContainer>
-            <ImageContainer>
-                <Image src={male_hosp} />
-                <Label>Hospitalized</Label>
-            </ImageContainer>
-            <ImageContainer>
-                <Image src={male_dead} />
-                <Label>Deceased</Label>
-            </ImageContainer>
-            {['State', 'City'].includes(currentFilter) ?
-                <ImageContainer>
-                    <Image src={state_node} />
-                    <Label>State</Label>
-                </ImageContainer>
-                : null
-            }
-            {currentFilter === 'City' ?
-                <ImageContainer>
-                    <Image src={city_node} />
-                    <Label>City</Label>
-                </ImageContainer>
-                : null
-            }
-            {currentFilter === 'Travel' ?
-                <>
-                    <ImageContainer>
-                        <Image src={plane_local_node} />
-                        <Label>Domestic</Label>
-                    </ImageContainer>
-                    <ImageContainer>
-                        <Image src={plane_abroad_node} />
-                        <Label>International</Label>
-                    </ImageContainer>
-                </>
-                : null
-            }
+            {legends}
         </LegendContainer>
     )
 }

@@ -17,12 +17,32 @@ const updateGraph = graph => (dispatch, getState) => {
   })
 }
 
+const updateRawData = rawData => (dispatch, getState) => {
+  // Dispatch the result.
+  dispatch({
+    type: actionTypes.UPDATE_RAW_DATA,
+    payload: {
+      rawData: rawData,
+    },
+  })
+}
+
 const updatePatients = patients => (dispatch, getState) => {
   // Dispatch the result.
   dispatch({
     type: actionTypes.UPDATE_PATIENTS,
     payload: {
       patients: patients,
+    },
+  })
+}
+
+const setSelectedLegend = type => (dispatch, getState) => {
+  // Dispatch the result.
+  dispatch({
+    type: actionTypes.SELECTED_LEGEND,
+    payload: {
+      legendType: type,
     },
   })
 }
@@ -75,4 +95,6 @@ const updateStates = states => (dispatch, getState) => {
 }
 
 // Export the actions.
-export { updateGraph, updatePatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, updateStates}
+export { updateGraph, updatePatients, updateLastRefreshed,
+   selectPatient, selectFilter, setSearchTerm,setSelectedLegend,
+    updateStates, updateRawData}

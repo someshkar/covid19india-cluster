@@ -106,13 +106,19 @@ export const codeToLetter = (code) => {
   return letters[letterPos - 10] + codeStr.substring(2)
 }
 
-export const rowsToGraph = rows => {
+export const rowsToGraph = (rows,legendType) => {
   let graph = {
     nodes: [],
     edges: [],
   }
 
-  rows.forEach(row => {
+  for(const i in rows) {
+    const row = rows[i]
+    // if legend is not set then return all rows else if
+    // return rows for selected legend
+    if(legendType !== "" &&  legendType !== row.status){
+      continue
+    }
     const patientCode = letterToCode('P' + row.patientId)
     let node = {
       id: patientCode,
@@ -132,7 +138,7 @@ export const rowsToGraph = rows => {
 
       graph = dotProp.set(graph, 'edges', list => [...list, edge])
     }
-  })
+  }
   return graph
 }
 

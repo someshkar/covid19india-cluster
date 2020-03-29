@@ -13,9 +13,11 @@ const initialState = {
   filter: 'P2P',
   selected: null,
   graph: null,
+  rawData: null,
   patients: null,
   searchTerm: '',
-  states: null
+  states: null,
+  legendType : ''
 }
 
 // Export the Device Reducer.
@@ -29,9 +31,17 @@ export default (state = initialState, action) => {
       const { term } = action.payload
       return { ...state, searchTerm: term }
     }
+    case actionTypes.SELECTED_LEGEND: {
+      const { legendType } = action.payload
+      return { ...state, legendType: legendType }
+    }
     case actionTypes.UPDATE_GRAPH: {
       const { graph } = action.payload
       return { ...state, graph: graph }
+    }
+    case actionTypes.UPDATE_RAW_DATA: {
+      const { rawData } = action.payload
+      return { ...state, rawData: rawData }
     }
     case actionTypes.UPDATE_PATIENTS: {
       const { patients } = action.payload
