@@ -3,29 +3,29 @@ import { state_node } from '../../images'
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
 
-export const addStates = (graph, patients) => {
-  let states = {}
-
-  for (let patientId in patients) {
-    if (!states[hash(patients[patientId].state)]) {
-      states[hash(patients[patientId].state)] = patients[patientId].state
+export const addStates = (graph, patients, states) => {
+  
+  for (const stateName in states) {
+    if (states.hasOwnProperty(stateName)) {
+      const stateKey = states[stateName];
+      let node = {
+        id: stateKey,
+        label: stateName,
+        size: 40,
+        shape: 'image',
+        image: state_node,
+      }
+      graph = dotProp.set(graph, 'nodes', list => [...list, node])
     }
   }
 
-  for (var key in states) {
-    let node = {
-      id: key,
-      label: states[key],
-      size: 40,
-      shape: 'image',
-      image: state_node,
-    }
-    graph = dotProp.set(graph, 'nodes', list => [...list, node])
-  }
-
   for (let patientId in patients) {
+    if(!patients[patientId].state){
+      console.log(patients[patientId]);
+      continue;
+    }
     let edge = {
-      from: hash(patients[patientId].state),
+      from: states[patients[patientId].state],
       to: patients[patientId].patientId,
       length: 250,
       dashes: true,
@@ -42,23 +42,11 @@ export const addStates = (graph, patients) => {
   return graph
 }
 
-export const removeStates = (graph, patients) => {
-  let states = {}
-  for (let patientId in patients) {
-    if (!states[hash(patients[patientId].state)]) {
-      states[hash(patients[patientId].state)] = patients[patientId].state
-    }
-  }
-  for (var key in states) {
-    let node = {
-      id: key,
-      label: states[key],
-      size: 40,
-      shape: 'image',
-      image: state_node,
-    }
+export const removeStates = (graph, patients, states) => {
+  
+  for (var stateName in states) {
     let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
-      return o.id == node.id
+      return o.id == states[stateName]
     })
 
     if (index !== -1) {
@@ -67,20 +55,13 @@ export const removeStates = (graph, patients) => {
   }
 
   for (let patientId in patients) {
-    let edge = {
-      from: hash(patients[patientId].state),
-      to: patients[patientId].patientId,
-      length: 250,
-      dashes: true,
-      arrows: {
-        to: {
-          enabled: false,
-        },
-      },
-      color: { opacity: '0.3' },
-    }
+    
+    if(!patients[patientId].state) continue;
+
+    let edgeFrom = states[patients[patientId].state];
+    let edgeTo =  patients[patientId].patientId;
     let edgeIndex = _.findIndex(graph.edges, function(o) {
-      return o.to == edge.to && o.from === edge.from
+      return o.to == edgeTo && o.from === edgeFrom
     })
 
     graph = dotProp.delete(graph, `edges.${edgeIndex}`)
