@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Graph from 'react-graph-vis'
+import { Tooltip, TooltipArrow, TooltipInner } from 'styled-tooltip-component'
 import { connect, useSelector } from 'react-redux'
+
 import {
   updateGraph,
   updatePatients,
@@ -27,10 +29,16 @@ const NetworkMap = ({
 }) => {
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
+  const [toolTipPosition, setToolTipPosition] = useState(null)
+  const [tooltipContent, setToolTipContent] = useState('')
+  const toolTipVisible = useMemo(() => {
+    return toolTipPosition !== null
+  }, [toolTipPosition])
   const { selected, searchTerm } = useSelector(state => ({
     searchTerm: state.searchTerm,
     selected: state.patient,
   }))
+
 
   async function fetchStateWiseData() {
     const data = await getAPIData(
@@ -123,6 +131,7 @@ const NetworkMap = ({
     width: width,
     interaction: {
       navigationButtons: true,
+      hover: true,
     },
   }
 
@@ -142,6 +151,19 @@ const NetworkMap = ({
         }
       }
     },
+    hoverNode: function(e) {
+      const { node, event } = e
+      const selectedNode = graph.nodes.find(v => v.id === node)
+      setToolTipContent(selectedNode.label)
+      setToolTipPosition({
+        top: event.pageY,
+        left: event.pageX,
+      })
+    },
+    blurNode: function(event) {
+      setToolTipContent('')
+      setToolTipPosition(null)
+    },
   }
 
   return (
@@ -156,6 +178,18 @@ const NetworkMap = ({
             events={events}
           />
           <DatePicker />
+          {toolTipVisible && (
+            <Tooltip
+              hidden={!toolTipVisible}
+              style={{
+                top: `${(toolTipPosition && toolTipPosition.top) || 0}px`,
+                left: `${(toolTipPosition && toolTipPosition.left) || 0}px`,
+              }}
+            >
+              <TooltipArrow />
+              <TooltipInner>{tooltipContent}</TooltipInner>
+            </Tooltip>
+          )}
         </>
       )}
     </div>

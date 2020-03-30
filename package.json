@@ -27,7 +27,8 @@
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "styled-components": "^5.0.1"
+    "styled-components": "^5.0.1",
+    "styled-tooltip-component": "^4.0.0"
   },
   "devDependencies": {
     "jest": "^25.2.4",

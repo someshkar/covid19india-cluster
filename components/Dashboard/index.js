@@ -30,24 +30,24 @@ const Dashboard = () => {
   return (
     <Provider store={store}>
       <Container>
-        {isMobile ? (
+        {isMobile && (
           <NoSSR>
             <NetworkMap
               height={isMobile ? '50%' : '100%'}
               width={isMobile ? '100%' : '70%'}
             />
           </NoSSR>
-        ) : null}
+        )}
         <FilterPanel />
         <SidePanel />
-        {isBrowser ? (
+        {isBrowser && (
           <NoSSR>
             <NetworkMap
               height={isMobile ? '50%' : '100%'}
               width={isMobile ? '100%' : '70%'}
             />
           </NoSSR>
-        ) : null}
+        )}
       </Container>
     </Provider>
   )
