@@ -8,6 +8,13 @@ import {
     city_node,
     plane_abroad_node,
     plane_local_node,
+    oneTo20,
+    twentyTo30,
+    thirtyTo40,
+    fortyTo50,
+    fiftyTo60,
+    sixtyTo70,
+    seventyUp
 } from '../../images/index'
 
 
@@ -100,6 +107,35 @@ const NetworkMapLegend = ({ currentFilter }) => {
                     <ImageContainer>
                         <Image src={plane_abroad_node} />
                         <Label>International</Label>
+                    </ImageContainer>
+                </>
+                : null
+            }
+            {currentFilter === 'Age' ?
+                <>
+                    <ImageContainer>
+                        <Image src={oneTo20} />
+                        <Label>01 - 20 Age</Label>
+                    </ImageContainer>
+                    <ImageContainer>
+                        <Image src={twentyTo30} />
+                        <Label>20 - 30 Age</Label>
+                    </ImageContainer>
+                    <ImageContainer>
+                        <Image src={thirtyTo40} />
+                        <Label>30 - 40 Age</Label>
+                    </ImageContainer>
+                    <ImageContainer>
+                        <Image src={fiftyTo60} />
+                        <Label>40 - 50 Age</Label>
+                    </ImageContainer>
+                    <ImageContainer>
+                        <Image src={sixtyTo70} />
+                        <Label>60 - 70 Age</Label>
+                    </ImageContainer>
+                    <ImageContainer>
+                        <Image src={seventyUp} />
+                        <Label>70 up Age</Label>
                     </ImageContainer>
                 </>
                 : null

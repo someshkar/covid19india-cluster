@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
-import { state, city, abroad, p2p } from '../../images/index'
+import { state, city, abroad, p2p, age } from '../../images/index'
 import {
   addStates,
   removeStates,
@@ -12,6 +12,8 @@ import {
   removeCities,
   addTravel,
   removeTravel,
+  addAge,
+  removeAge
 } from '../../util/filters'
 import { updateGraph, selectFilter } from '../Redux/actions'
 
@@ -29,6 +31,7 @@ const filters = [
   { name: 'State', icon: state, add: addStates, remove: removeStates },
   { name: 'City', icon: city, add: addCities, remove: removeCities },
   { name: 'Travel', icon: abroad, add: addTravel, remove: removeTravel },
+  { name: 'Age', icon: age, add: addAge, remove: removeAge },
 ]
 
 //{ name: 'Travel', icon: abroad, add: addTravel, remove: removeTravel },
@@ -52,7 +55,7 @@ const HeaderContainer = styled.div`
 
 const FilterMenuContainer = styled.div`
   display: grid;
-  grid-template-rows: 10% 10% 10% 10% 60%;
+  grid-template-rows: 10% 10% 10% 10% 10% 60%;
   overflow: auto;
   font-family: 'Lato', sans-serif;
   color: #7c7a7a;
