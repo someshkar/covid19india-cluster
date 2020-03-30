@@ -4,6 +4,7 @@ import {
     male_hosp,
     male_cured,
     male_dead,
+    male_hosp_new,
     state_node,
     city_node,
     plane_abroad_node,
@@ -76,6 +77,10 @@ const NetworkMapLegend = ({ currentFilter }) => {
             <ImageContainer>
                 <Image src={male_dead} />
                 <Label>Deceased</Label>
+            </ImageContainer>
+            <ImageContainer>
+                <Image src={male_hosp_new} />
+                <Label> New case (last 3 days)</Label>
             </ImageContainer>
             {['State', 'City'].includes(currentFilter) ?
                 <ImageContainer>
