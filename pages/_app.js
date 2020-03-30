@@ -21,7 +21,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
-import 'react-day-picker/lib/style.css'
 
 library.add(
   faArrowCircleRight,

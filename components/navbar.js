@@ -1,88 +1,51 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
+import styled from 'styled-components'
 
-function Navbar(props) {
-  const [view, setView] = useState('Home')
+const links = [
+  {
+    name: 'Home',
+    href: '/',
+  },
+  {
+    name: 'Cluster',
+    href: '/cluster',
+  },
+]
 
-  // HTML Properties for each of the links in UI
-  const navLinkProps = (path, animationDelay) => ({
-    className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
-    style: {
-      animationDelay: `${animationDelay}s`,
-    },
-  })
-  if (typeof window !== `undefined`) {
-    return (
-      <div
-        className="Navbar"
-        style={{
-          animationDelay: '0.5s',
-          height: view === 'Clusters' ? '2.5rem' : '',
-          transition: 'all 0.3s ease-in-out',
-        }}
-      >
-        <img
-          className="fadeInUp logo"
-          alt="India COVID-19 Tracker"
-          src="/icon.png"
-          style={{
-            animationDelay: '0.0s',
-            width: view === 'Clusters' ? '1.5rem' : '',
-            height: view === 'Clusters' ? '1.5rem' : '',
-            transition: 'all 0.3s ease-in-out',
-          }}
-        />
+const Container = styled.div`
+  width: 100vw;
+  height: 5vh;
+  background-color: #e7e7e7;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+`
 
-        <div className="navbar-left">
-          <Link
-            href="/"
-            onClick={() => {
-              setView('Home')
-            }}
-          >
-            <span {...navLinkProps('/', 0.2)}>Home</span>
-          </Link>
-
-          {/* <Link to="/updates" onClick={()=>{
-            setView('Updates');
-          }}>
-            <span className={`fadeInUp ${view==='Updates' ? 'focused' : ''}`} style={{animationDelay: '0.2s'}}>Updates</span>
-          </Link>*/}
-
-          <Link
-            href="/cluster"
-            onClick={() => {
-              setView('Clusters')
-            }}
-          >
-            <span {...navLinkProps('/clusters', 0.3)}>Cluster</span>
-          </Link>
-
-          <Link
-            href="/links"
-            onClick={() => {
-              setView('Helpful Links')
-            }}
-          >
-            <span {...navLinkProps('/links', 0.4)}>Helpful Links</span>
-          </Link>
-
-          <Link
-            href="/faq"
-            onClick={() => {
-              setView('FAQs')
-            }}
-          >
-            <span {...navLinkProps('/faq', 0.4)}>FAQ</span>
-          </Link>
-        </div>
-
-        <div className="navbar-right"></div>
-      </div>
-    )
-  } else {
-    return <div></div>
+const NavItem = styled.div`
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 14px;
+  color: grey;
+  margin-left: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+  &:hover {
+    color: #888;
+    transform: translateY(-1px);
   }
+`
+
+function Navbar() {
+  return (
+    <Container>
+      {links.map(link => (
+        <Link href={link.href}>
+          <NavItem>{link.name}</NavItem>
+        </Link>
+      ))}
+    </Container>
+  )
 }
 
 export default Navbar

@@ -12,7 +12,7 @@ import {
 
 const LegendContainer = styled.div`
     position: absolute;
-    top: 0;
+    top: 6.8vh;
     left: 30%;
     display: flex;
     flex-direction: column;
