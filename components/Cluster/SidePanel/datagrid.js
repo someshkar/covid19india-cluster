@@ -49,8 +49,15 @@ export default function DataGrid(patient) {
     gender,
     ageEstimate,
     state,
+    phone,
+    name,
     city,
     district,
+    health,
+    quarantine,
+    hospital,
+    facility,
+    address,
     status,
     reportedOn,
     sources,
@@ -61,38 +68,20 @@ export default function DataGrid(patient) {
   return (
     <Container>
       <DoubleCell>
+        <Cell name="Name">{name ? name : '-'}</Cell>
+        <Cell name="Phone">{phone ? phone : '-'}</Cell>
+      </DoubleCell>
+      <DoubleCell>
         <Cell name="Gender">{gender ? genderInitCap : '-'}</Cell>
         <Cell name="Age">{ageEstimate ? ageEstimate : '-'}</Cell>
       </DoubleCell>
+      <Cell name="Health Status">{health}</Cell>
+      <Cell name="Quarantined Status">{quarantine}</Cell>
       <DoubleCell>
-        <Cell name="State">{state ? state : '-'}</Cell>
-        <Cell name="District/City">{city ? city : district}</Cell>
+        <Cell name="Hospital">{hospital ? hospital : '-'}</Cell>
+        <Cell name="Facility">{facility ? facility : '-'}</Cell>
       </DoubleCell>
-      <Cell name="Status">{status}</Cell>
-      <Cell name="Reported On">{reportedOn}</Cell>
-      <Cell name="Notes">{notes}</Cell>
-      <Cell name="Sources">
-        {sources
-          ? sources.map((source, i) => (
-              <div key={i}>
-                <div style={{ display: 'inline-block' }} key={i}>
-                  {i + 1}.&nbsp;
-                </div>
-                <A
-                  href={source}
-                  target="_blank"
-                  rel="noopener noreferer"
-                  key={i}
-                >
-                  {_.truncate(source, {
-                    length: 40,
-                    separator: /,? +/,
-                  })}
-                </A>
-              </div>
-            ))
-          : null}
-      </Cell>
+      <Cell name="Address">{address ? address : '-'}</Cell>
     </Container>
   )
 }

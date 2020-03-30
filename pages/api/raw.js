@@ -11,25 +11,23 @@ module.exports = async (req, res) => {
 
   for (let rawRow of rawRows) {
     // Remove empty strings ("")
-    const processSources = sources => sources.filter(source => source)
+    // const processSources = sources => sources.filter(source => source)
 
     const row = {
       patientId: parseInt(rawRow['Patient Number']), // Change in frontend, used to be 'P' + rawRow['Patient Number']
       reportedOn: rawRow['Date Announced'],
       onsetEstimate: '',
-      ageEstimate: rawRow['Age Bracket'],
+      name: rawRow['Name'],
+      ageEstimate: rawRow['Age'],
       gender: rawRow['Gender'] === 'M' ? 'Male' : 'Female', // Change in frontend, used to be 'M'/'F'
-      city: rawRow['Detected City'],
-      state: rawRow['Detected State'],
-      district: rawRow['Detected District'],
-      status: rawRow['Current Status'],
+      phone: rawRow['Phone Number'],
+      hospital: rawRow['Hospital'],
+      facility: rawRow['Facility'],
+      health: rawRow['Health Status'],
+      quarantine: rawRow['Quarantine Status'],
+      address: rawRow['Address'],
       notes: rawRow['Notes'],
       contractedFrom: rawRow['Contracted from which Patient (Suspected)'],
-      sources: processSources([
-        rawRow['Source_1'],
-        rawRow['Source_2'],
-        rawRow['Source_3'],
-      ]),
     }
 
     rows.push(row)

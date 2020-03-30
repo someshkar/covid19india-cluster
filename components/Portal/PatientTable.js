@@ -132,7 +132,7 @@ function Table({ columns, data }) {
 
       <div className="row align-items-baseline border-top p-2 justify-content-center">
         <div className="col-12 col-md-4 text-center text-md-left">
-          Go to page{' '}
+          Go to page
           <input
             type="number"
             defaultValue={pageIndex + 1}
@@ -220,7 +220,11 @@ function PatientTable({ patients }) {
         accessor: 'patientId',
       },
       {
-        Header: 'Announced on',
+        Header: 'Name',
+        accessor: 'name',
+      },
+      {
+        Header: 'Reported on',
         accessor: 'reportedOn',
       },
       {
@@ -232,20 +236,28 @@ function PatientTable({ patients }) {
         accessor: 'gender',
       },
       {
-        Header: 'City',
-        accessor: 'city',
+        Header: 'Address',
+        accessor: 'address',
       },
       {
-        Header: 'District',
-        accessor: 'district',
+        Header: 'Phone',
+        accessor: 'phone',
       },
       {
-        Header: 'State',
-        accessor: 'state',
+        Header: 'Hospital?',
+        accessor: 'hospital',
       },
       {
-        Header: 'Status',
-        accessor: 'status',
+        Header: 'Facility?',
+        accessor: 'facility',
+      },
+      {
+        Header: 'Health Status',
+        accessor: 'health',
+      },
+      {
+        Header: 'Quarantine Status',
+        accessor: 'quarantine',
       },
     ],
     []
