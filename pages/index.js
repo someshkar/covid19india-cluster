@@ -34,7 +34,10 @@ function Home(props) {
 
   return (
     <Layout>
-      <div className="container">
+      <div
+        className="container"
+        style={{ maxWidth: '90vw', marginTop: '40px' }}
+      >
         {error ? <div className="alert alert-danger">{error}</div> : ''}
         <PatientTable patients={patients} />
         {/* <DownloadBlock patients={patients} /> */}
