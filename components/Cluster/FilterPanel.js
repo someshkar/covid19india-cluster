@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
-import { state, city, abroad, p2p } from '../images/index'
+import { state, city, abroad, p2p } from '../../images/index'
 import {
   addStates,
   removeStates,
@@ -12,8 +12,8 @@ import {
   removeCities,
   addTravel,
   removeTravel,
-} from '../util/filters'
-import { updateGraph, selectFilter } from './Redux/actions'
+} from '../../util/filters'
+import { updateGraph, selectFilter } from '../Redux/actions'
 
 const filters = [
   {
@@ -26,9 +26,6 @@ const filters = [
       return graph
     },
   },
-  { name: 'State', icon: state, add: addStates, remove: removeStates },
-  { name: 'City', icon: city, add: addCities, remove: removeCities },
-  { name: 'Travel', icon: abroad, add: addTravel, remove: removeTravel },
 ]
 
 const HeaderContainer = styled.div`

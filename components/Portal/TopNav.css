@@ -1,0 +1,24 @@
+.navbar-nav {
+    margin-top: 0.7rem;
+    margin-bottom: 0.7rem;
+    margin-left: 1rem;
+}
+.navbar-nav > .nav-item {
+    font-size: 14px;
+    font-weight: 800;
+    margin-right: 1rem;
+}
+.navbar-nav > .nav-item > .nav-link {
+    color: #aaa;
+
+}
+
+
+
+.navbar-nav > .nav-item:hover {
+
+}
+.navbar-brand > img {
+    margin-left: 4rem;
+}
+

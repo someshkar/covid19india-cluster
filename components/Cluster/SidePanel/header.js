@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 
-import { getIcon } from '../../util/parse'
+import { getIcon } from '../../../util/parse'
 import { SearchInput } from '../UI/search-input'
-import { setSearchTerm } from '../Redux/actions'
+import { setSearchTerm } from '../../Redux/actions'
 
 const Container = styled.div`
   font-family: 'Lato', sans-serif;
@@ -46,21 +46,25 @@ const Name = styled.div`
 `
 
 function Header({ patient, lastRefreshed, setSearchTerm }) {
-  const onSearch = (term) => {
-  let _serchTerm = term.toUpperCase().replace(/P/g, "").trim();
+  const onSearch = term => {
+    let _serchTerm = term
+      .toUpperCase()
+      .replace(/P/g, '')
+      .trim()
     setSearchTerm(parseInt(_serchTerm))
-
   }
 
   const getTimeDiff = () => {
-    const dateNow = new Date();
-    const dateRefresh = new Date(lastRefreshed);
-    const minDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60));
-    const hourDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60 * 60));
-    const dayDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60 * 60 * 24));
-    return minDiff < 60 ? `${minDiff}M ago` 
-            : hourDiff < 24 ? `${hourDiff}H ago`
-              : `${dayDiff}D ago`;
+    const dateNow = new Date()
+    const dateRefresh = new Date(lastRefreshed)
+    const minDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60))
+    const hourDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60 * 60))
+    const dayDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60 * 60 * 24))
+    return minDiff < 60
+      ? `${minDiff}M ago`
+      : hourDiff < 24
+      ? `${hourDiff}H ago`
+      : `${dayDiff}D ago`
   }
 
   const { patientId } = patient
@@ -68,7 +72,8 @@ function Header({ patient, lastRefreshed, setSearchTerm }) {
   return (
     <Container>
       <Title>
-        covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot> {getTimeDiff()}
+        covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot>{' '}
+        {getTimeDiff()}
       </Title>
       <SearchInput searchTerm={onSearch} />
       <PatientContainer>
@@ -80,5 +85,5 @@ function Header({ patient, lastRefreshed, setSearchTerm }) {
 }
 
 export default connect(null, {
-  setSearchTerm
+  setSearchTerm,
 })(Header)
