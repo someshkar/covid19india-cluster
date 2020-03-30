@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import NoSSR from 'react-no-ssr'
 import {
@@ -27,6 +27,14 @@ const Container = styled.div`
 `
 
 const Dashboard = () => {
+  const [hideSidePanelFlag, setHideSidePanelFlag] = useState(false)
+
+    const onFilterSelect = (name) => {
+      if (name === 'Hide') {
+        setHideSidePanelFlag(!hideSidePanelFlag)
+      }
+    }
+
   return (
     <Provider store={store}>
       <Container>
@@ -38,8 +46,8 @@ const Dashboard = () => {
             />
           </NoSSR>
         ) : null}
-        <FilterPanel />
-        <SidePanel />
+        <FilterPanel onFilterSelect={onFilterSelect}/>
+        <SidePanel hideSidePanel={hideSidePanelFlag}/>
         {isBrowser ? (
           <NoSSR>
             <NetworkMap
