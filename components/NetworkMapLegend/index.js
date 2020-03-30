@@ -113,7 +113,7 @@ const NetworkMapLegend = ({ globalFilter, updateLegendFilter, updateGraph, updat
 
 
     const legendClickHandler = (term) => {
-        if (legendFilter !== term && !['Domestic', 'International'].includes(term)) {
+        if (legendFilter !== term && ['Recovered', 'Hospitalized', 'Deceased'].includes(term)) {
 
             let newGraph = filterPatients(graph, patients.byId, term, globalFilter)
             updateGraph(newGraph)
