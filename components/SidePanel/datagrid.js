@@ -42,7 +42,7 @@ function Cell({ name, children }) {
     </CellContainer>
   )
 }
-
+//TODO : MAKE THIS PURE COMPONENT calling a lodash function in return is expensive
 export default function DataGrid(patient) {
   const {
     notes,

@@ -82,6 +82,15 @@ const updateSidePanelPatient = patientId => (dispatch, getState) => {
     }
   })
 }
+const updateStates = states => (dispatch, getState) => {
+  console.log('Action updateStates', states);
+  dispatch({
+    type: actionTypes.UPDATE_STATES,
+    payload: {
+      states,
+    },
+  })
+}
 
 // Export the actions.
-export { updateGraph, updatePatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, updateLegendFilter, updateSidePanelPatient }
+export { updateGraph, updatePatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, updateLegendFilter, updateSidePanelPatient, updateStates }

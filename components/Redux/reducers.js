@@ -6,6 +6,7 @@
 
 // Action Types
 import actionTypes from './actionTypes'
+import hash from 'object-hash'
 
 // Setup initial state with an fleet info object.
 const initialState = {
@@ -14,7 +15,8 @@ const initialState = {
   graph: null,
   patients: null,
   searchTerm: '',
-  legendFilter: null
+  legendFilter: null,
+  states: null
 }
 
 // Export the Device Reducer.
@@ -58,6 +60,13 @@ export default (state = initialState, action) => {
       const { patients } = state
       const { patientId } = action.payload
       return { ...state, patient: patients.byId[patientId] }
+    }
+    case actionTypes.UPDATE_STATES: {
+      let states = action.payload.states.reduce((accumulator, currentValue) => {
+        accumulator[currentValue] = hash(currentValue);
+        return accumulator;
+      }, {});
+      return { ...state, states: states }
     }
     default:
       return state

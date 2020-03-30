@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Graph from 'react-graph-vis'
+import { Tooltip, TooltipArrow, TooltipInner } from 'styled-tooltip-component'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateSidePanelPatient, updateLegendFilter } from '../Redux/actions'
+import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates,updateSidePanelPatient, updateLegendFilter } from '../Redux/actions'
 
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
@@ -13,18 +14,39 @@ const NetworkMap = ({
   updateGraph,
   updatePatients,
   updateLastRefreshed,
+  updateStates,
   selectPatient,
   height,
   width,
-  legendFilter,
+  states
 }) => {
-
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
+  const [toolTipPosition, setToolTipPosition] = useState(null)
+  const [tooltipContent, setToolTipContent] = useState('')
+  const toolTipVisible = useMemo(() => {
+    return toolTipPosition !== null
+  }, [toolTipPosition])
   const { selected, searchTerm } = useSelector(state => ({
     searchTerm: state.searchTerm,
-    selected: state.patient
+    selected: state.patient,
   }))
+  useEffect(() => {
+    if(!states){
+      fetch('https://api.covid19india.org/state_district_wise.json', {
+        cors: 'no-cors',
+        method: 'GET',
+        redirect: 'follow',
+      })
+        .then(resp => resp.json())
+        .then(res => {
+          if(res){
+            let stateNames = Object.keys(res);
+            updateStates(stateNames);
+          }
+        })
+    }
+  })
 
   useEffect(() => {
     fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
@@ -52,8 +74,8 @@ const NetworkMap = ({
         offset: { x: 0, y: 0 },
         animation: {
           duration: 500,
-          easingFunction: 'easeInCubic'
-        }
+          easingFunction: 'easeInCubic',
+        },
       }
       graphRef.current.Network.moveTo(moveParams)
     }
@@ -62,7 +84,8 @@ const NetworkMap = ({
   // This effect handles zoom behaviour when search term is changed
   useEffect(() => {
     // TODO: Add search by age, district, etc.
-    if (graphRef.current && searchTerm) { // Make sure the ref is ready
+    if (graphRef.current && searchTerm) {
+      // Make sure the ref is ready
       try {
         const nodeKey = letterToCode(`P${searchTerm}`)
         const coordsMap = graphRef.current.Network.getPositions([nodeKey])
@@ -73,14 +96,6 @@ const NetworkMap = ({
       }
     }
   }, [searchTerm])
-
-
-  useEffect(() => {
-    if (graphRef.current) {
-      console.log('redrawing!!!!!!!!!!')
-      graphRef.current.Network.fit()
-    }
-  }, [legendFilter])
 
   const options = {
     layout: {
@@ -93,18 +108,19 @@ const NetworkMap = ({
       chosen: {
         node: (values, id, selected, hovering) => {
           values.color = selected ? '#000' : 'green'
-        }
-      }
+        },
+      },
     },
     height: height,
     width: width,
     interaction: {
       navigationButtons: true,
+      hover: true,
     },
   }
 
   const events = {
-    select: function (event) {
+    select: function(event) {
       const selectedNodeId = event.nodes[0]
       const selectedNode = graph.nodes.find(v => v.id === selectedNodeId)
       if (selectedNode) {
@@ -119,6 +135,19 @@ const NetworkMap = ({
         }
       }
     },
+    hoverNode: function(e) {
+      const { node, event } = e
+      const selectedNode = graph.nodes.find(v => v.id === node)
+      setToolTipContent(selectedNode.label)
+      setToolTipPosition({
+        top: event.pageY,
+        left: event.pageX,
+      })
+    },
+    blurNode: function(event) {
+      setToolTipContent('')
+      setToolTipPosition(null)
+    },
   }
 
   return (
@@ -126,9 +155,25 @@ const NetworkMap = ({
       {isLoading ? null : (
         <>
           <NetworkMapLegend />
-          <div style={{ position: 'absolute', left: '50%', fontWeight: 'bold' }}>{legendFilter}</div>
-          <Graph ref={graphRef} graph={graph} options={options} events={events} />
+          <Graph
+            ref={graphRef}
+            graph={graph}
+            options={options}
+            events={events}
+          />
           <DatePicker />
+          {toolTipVisible && (
+            <Tooltip
+              hidden={!toolTipVisible}
+              style={{
+                top: `${(toolTipPosition && toolTipPosition.top) || 0}px`,
+                left: `${(toolTipPosition && toolTipPosition.left) || 0}px`,
+              }}
+            >
+              <TooltipArrow />
+              <TooltipInner>{tooltipContent}</TooltipInner>
+            </Tooltip>
+          )}
         </>
       )}
     </div>
@@ -136,13 +181,14 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm, legendFilter } = state
-  return { graph, searchTerm, legendFilter }
+  let { graph, searchTerm, states } = state
+  return { graph, searchTerm, states}
 }
 
 export default connect(mapStateToProps, {
   updateGraph,
   updatePatients,
+  updateStates,
   updateLastRefreshed,
   selectPatient,
 })(NetworkMap)

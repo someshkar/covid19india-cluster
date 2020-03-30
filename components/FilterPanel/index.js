@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
 import { connect } from 'react-redux'
@@ -30,6 +30,8 @@ const filters = [
   { name: 'City', icon: city, add: addCities, remove: removeCities },
   { name: 'Travel', icon: abroad, add: addTravel, remove: removeTravel },
 ]
+
+//{ name: 'Travel', icon: abroad, add: addTravel, remove: removeTravel },
 
 const HeaderContainer = styled.div`
   padding-top: 10px;
@@ -100,6 +102,7 @@ const FilterPanel = ({
   updateGraph,
   selectFilter,
   filter,
+  states
 }) => {
   // const [selected, selectCategory] = React.useState('P2P')
 
@@ -112,10 +115,10 @@ const FilterPanel = ({
       return o.name === name
     })
 
-    let newGraph = currentFilter.remove(graph, patients.byId)
+    let newGraph = currentFilter.remove(graph, patients.byId, states)
 
     selectFilter(name)
-    newGraph = choosenFilter.add(newGraph, patients.byId)
+    newGraph = choosenFilter.add(newGraph, patients.byId, states)
     console.log(newGraph)
     updateGraph(newGraph)
   }
@@ -148,8 +151,8 @@ const FilterPanel = ({
 }
 
 const mapStateToProps = state => {
-  const { patients, graph, filter } = state
-  return { graph, patients, filter }
+  const { patients, graph, filter, states } = state
+  return { graph, patients, filter, states}
 }
 
 export default connect(mapStateToProps, { updateGraph, selectFilter })(

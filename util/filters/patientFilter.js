@@ -44,10 +44,6 @@ export const filterPatients = (graph, patients, status, globalFilter) => {
 
     }
 
-
-    console.log('gloabl filter in patient filter: ', globalFilter)
-
-
     if (['State', 'City', 'Travel'].includes(globalFilter)) {
         graph.nodes.forEach(node => {
             if (node.group !== 'patient') {
