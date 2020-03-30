@@ -74,15 +74,15 @@ export default function DataGrid(patient) {
       <Cell name="Sources">
         {sources
           ? sources.map((source, i) => (
-              <div key={i}>
-                <div style={{ display: 'inline-block' }} key={i}>
+              <div key={`div-${i}`}>
+                <div style={{ display: 'inline-block' }} key={`inner-div-${i}`}>
                   {i + 1}.&nbsp;
                 </div>
                 <A
                   href={source}
                   target="_blank"
                   rel="noopener noreferer"
-                  key={i}
+                  key={`A-${i}`}
                 >
                   {_.truncate(source, {
                     length: 40,

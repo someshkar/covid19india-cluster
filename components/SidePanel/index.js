@@ -16,7 +16,7 @@ const SidePanel = ({ patient, lastRefreshed }) => {
   return (
     <Container>
       {patient ? <Header patient={patient} lastRefreshed={lastRefreshed} /> : null}
-      {patient ? <DataGrid {...patient} /> : null}
+      {patient ? <DataGrid {...patient} /> : <strong>NULL PATIENT</strong>}
     </Container>
   )
 }

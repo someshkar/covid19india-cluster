@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Graph from 'react-graph-vis'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient } from '../Redux/actions'
+import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateSidePanelPatient, updateLegendFilter } from '../Redux/actions'
 
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
@@ -9,7 +9,6 @@ import DatePicker from '../DatePicker'
 import NetworkMapLegend from '../NetworkMapLegend'
 
 const NetworkMap = ({
-  filter,
   graph,
   updateGraph,
   updatePatients,
@@ -17,7 +16,7 @@ const NetworkMap = ({
   selectPatient,
   height,
   width,
-  legendFilter
+  legendFilter,
 }) => {
 
   const graphRef = useRef()
@@ -26,7 +25,6 @@ const NetworkMap = ({
     searchTerm: state.searchTerm,
     selected: state.patient
   }))
-  const [rawResponseData, setRawResponseData] = useState(null)
 
   useEffect(() => {
     fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
@@ -36,7 +34,6 @@ const NetworkMap = ({
     })
       .then(resp => resp.json())
       .then(res => {
-        setRawResponseData(res.data.rawPatientData)
         updateGraph(rowsToGraph(res.data.rawPatientData))
         updatePatients(normalize(res.data.rawPatientData))
         updateLastRefreshed(res.data.lastRefreshed)
@@ -70,7 +67,6 @@ const NetworkMap = ({
         const nodeKey = letterToCode(`P${searchTerm}`)
         const coordsMap = graphRef.current.Network.getPositions([nodeKey])
         graphRef.current.Network.selectNodes([nodeKey])
-        console.log("SELECT PATIENT IN SEARCH TERM EFFECT")
         selectPatient({ id: nodeKey, coords: coordsMap[nodeKey] })
       } catch (e) {
         // None found. TODO: Add a UI response
@@ -79,20 +75,10 @@ const NetworkMap = ({
   }, [searchTerm])
 
 
-  // THis effect handles filtering when a legend item is clicked
   useEffect(() => {
-    console.log('legend filter in neterok map component: ', legendFilter)
-    if (graph) {
-      console.log('CURRENT GRAPH: ', graph)
-      let filteredResult = rawResponseData.filter(item => item.status === legendFilter)
-      updateGraph(rowsToGraph(filteredResult))
-      updatePatients(normalize(filteredResult))
-      console.log('FILTERED RESULT: ', filteredResult)
-      console.log('patientID: ', filteredResult[0].patientId)
-      // const nodeKey = letterToCode(`P${filteredResult[0].patientId}`)
-      // const coordsMap = graphRef.current.Network.getPositions([nodeKey])
-      // graphRef.current.Network.selectNodes([nodeKey])
-      // selectPatient({ id: nodeKey, coords: coordsMap[nodeKey] })
+    if (graphRef.current) {
+      console.log('redrawing!!!!!!!!!!')
+      graphRef.current.Network.fit()
     }
   }, [legendFilter])
 
@@ -126,7 +112,6 @@ const NetworkMap = ({
           case 'patient':
             // As per the vis.js API, event.pointer.canvas points to the selected node within the canvas
             // which in our case is the patient. Inject this into the update logic.
-        console.log("SELECT PATIENT IN SELECT EVENT")
             selectPatient({ id: selectedNode.id, coords: event.pointer.canvas })
             break
           case 'city':
@@ -140,7 +125,7 @@ const NetworkMap = ({
     <div style={{ height: '100vh', width: '100vw' }}>
       {isLoading ? null : (
         <>
-          <NetworkMapLegend currentGlobalFilter={filter} />
+          <NetworkMapLegend />
           <div style={{ position: 'absolute', left: '50%', fontWeight: 'bold' }}>{legendFilter}</div>
           <Graph ref={graphRef} graph={graph} options={options} events={events} />
           <DatePicker />
@@ -151,8 +136,8 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm, filter, legendFilter } = state
-  return { graph, searchTerm, filter, legendFilter }
+  let { graph, searchTerm, legendFilter } = state
+  return { graph, searchTerm, legendFilter }
 }
 
 export default connect(mapStateToProps, {

@@ -19,6 +19,7 @@ export const addStates = (graph, patients) => {
       size: 40,
       shape: 'image',
       image: state_node,
+      group: 'state'
     }
     graph = dotProp.set(graph, 'nodes', list => [...list, node])
   }
@@ -56,6 +57,7 @@ export const removeStates = (graph, patients) => {
       size: 40,
       shape: 'image',
       image: state_node,
+      group: 'state'
     }
     let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
       return o.id == node.id

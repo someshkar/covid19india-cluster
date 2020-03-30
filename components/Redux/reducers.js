@@ -54,6 +54,11 @@ export default (state = initialState, action) => {
       const { term } = action.payload
       return { ...state, legendFilter: term }
     }
+    case actionTypes.UPDATE_SIDEPANEL_PATIENT: {
+      const { patients } = state
+      const { patientId } = action.payload
+      return { ...state, patient: patients.byId[patientId] }
+    }
     default:
       return state
   }

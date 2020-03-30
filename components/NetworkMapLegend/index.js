@@ -10,7 +10,8 @@ import {
     plane_local_node,
 } from '../../images/index'
 import { connect, useSelector } from 'react-redux'
-import { setLegendFilter } from '../Redux/actions'
+import { updateLegendFilter, updateGraph, updateSidePanelPatient } from '../Redux/actions'
+import { filterPatients } from '../../util/filters'
 
 const LegendContainer = styled.div`
     position: absolute;
@@ -63,65 +64,90 @@ const Label = styled.span`
     }
 `
 
-const NetworkMapLegend = ({ currentGlobalFilter, setLegendFilter, legendFilter }) => {
+const patientTypes = [
+    {
+        label: 'Recovered',
+        image: male_cured,
+        forGlobalFilters: ['All']
+    },
+    {
+        label: 'Hospitalized',
+        image: male_hosp,
+        forGlobalFilters: ['All']
+    },
+    {
+        label: 'Deceased',
+        image: male_dead,
+        forGlobalFilters: ['All']
+    },
+    {
+        label: 'State',
+        image: state_node,
+        forGlobalFilters: ['State', 'City']
+    },
+    {
+        label: 'City',
+        image: city_node,
+        forGlobalFilters: ['City']
+    },
+    {
+        label: 'Domestic',
+        image: plane_local_node,
+        forGlobalFilters: ['Travel']
+    },
+    {
+        label: 'International',
+        image: plane_abroad_node,
+        forGlobalFilters: ['Travel']
+    },
+]
+
+
+
+
+
+
+
+const NetworkMapLegend = ({ globalFilter, updateLegendFilter, updateGraph, updateSidePanelPatient, legendFilter, graph, patients }) => {
 
 
 
     const legendClickHandler = (term) => {
-        console.log('term in legend component: ', term);
         if (legendFilter !== term) {
-            setLegendFilter(term);
+
+            let newGraph = filterPatients(graph, patients.byId, term, globalFilter)
+            updateGraph(newGraph)
+            console.log('NEW GRAPH: ', newGraph);
+
+            updateLegendFilter(term)
+            // update side panel patient to show the correct patient(patient should be one from the visible list of nodes)
+            updateSidePanelPatient(newGraph.nodes[0].id)
+
         }
     }
 
+    const patientLegend = (item) => {
+        if (item.forGlobalFilters.includes('All') || item.forGlobalFilters.includes(globalFilter)) {
+            return (
+                <ImageContainer onClick={() => legendClickHandler(item.label)}>
+                    <Image src={item.image} />
+                    <Label style={{fontWeight: item.label === legendFilter ? 'bold' : 'normal'}}>{item.label}</Label>
+                </ImageContainer>
+            )
+        }
+    }
+
+
     return (
         <LegendContainer>
-            <ImageContainer onClick={() => legendClickHandler('Recovered')}>
-                <Image src={male_cured} />
-                <Label>Recovered</Label>
-            </ImageContainer>
-            <ImageContainer onClick={() => legendClickHandler('Hospitalized')}>
-                <Image src={male_hosp} />
-                <Label>Hospitalized</Label>
-            </ImageContainer>
-            <ImageContainer onClick={() => legendClickHandler('Deceased')}>
-                <Image src={male_dead} />
-                <Label>Deceased</Label>
-            </ImageContainer>
-            {['State', 'City'].includes(currentGlobalFilter) ?
-                <ImageContainer>
-                    <Image src={state_node} />
-                    <Label>State</Label>
-                </ImageContainer>
-                : null
-            }
-            {currentGlobalFilter === 'City' ?
-                <ImageContainer>
-                    <Image src={city_node} />
-                    <Label>City</Label>
-                </ImageContainer>
-                : null
-            }
-            {currentGlobalFilter === 'Travel' ?
-                <>
-                    <ImageContainer>
-                        <Image src={plane_local_node} />
-                        <Label>Domestic</Label>
-                    </ImageContainer>
-                    <ImageContainer>
-                        <Image src={plane_abroad_node} />
-                        <Label>International</Label>
-                    </ImageContainer>
-                </>
-                : null
-            }
+            {patientTypes.map(item => patientLegend(item))}
         </LegendContainer>
     )
 }
 
 const mapStateToProps = state => {
-    let { legendFilter } = state
-    return { legendFilter }
+    let { legendFilter, graph, patients, filter } = state
+    return { legendFilter, graph, patients, globalFilter: filter }
 }
 
-export default connect(mapStateToProps, { setLegendFilter })(NetworkMapLegend);
+export default connect(mapStateToProps, { updateLegendFilter, updateGraph, updateSidePanelPatient })(NetworkMapLegend);
