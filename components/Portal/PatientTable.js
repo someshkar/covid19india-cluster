@@ -241,10 +241,6 @@ function PatientTable({ patients }) {
         Header: 'Status',
         accessor: 'status',
       },
-      {
-        Header: 'Details',
-        accessor: 'patientId',
-      },
     ],
     []
   )
