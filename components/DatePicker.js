@@ -32,7 +32,13 @@ function DatePicker({ updateGraph, selectFilter }) {
 
   const toggleDayPickerVisibility = () => changeDayPickerVisibility(!isDayPickerVisible);
 
-  function handleDayClick(date) {
+  function handleDayClick(date, modifiers) {
+
+    // Do not proceed with click action if the date is disabled
+    if(modifiers.disabled){
+      return;
+    }
+
     toggleDayPickerVisibility();
 
     function formatDate(date) {
@@ -65,8 +71,11 @@ function DatePicker({ updateGraph, selectFilter }) {
         .then(resp => resp.json())
         .then(res => {
           console.log(res)
-          updateGraph(rowsToGraph(res.data.rawPatientData))
-          selectFilter('P2P')
+          // Update the graph only if res.success is true
+          if(res.success){
+            updateGraph(rowsToGraph(res.data.rawPatientData))
+            selectFilter('P2P');
+          }
         })
     }
   }
@@ -74,7 +83,7 @@ function DatePicker({ updateGraph, selectFilter }) {
   const renderDayPicker = () => isDayPickerVisible ? (
     <DayPicker
       selectedDays={selectedDay}
-      onDayClick={day => handleDayClick(day)}
+      onDayClick={handleDayClick}
       disabledDays={[
         {
           before: new Date(2020, 2, 23),

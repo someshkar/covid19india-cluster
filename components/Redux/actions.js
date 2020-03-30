@@ -27,6 +27,16 @@ const updatePatients = patients => (dispatch, getState) => {
   })
 }
 
+const updateLastRefreshed = lastRefreshed => (dispatch, getState) => {
+  // Dispatch the result.
+  dispatch({
+    type: actionTypes.UPDATE_LAST_REFRESHED,
+    payload: {
+      lastRefreshed: lastRefreshed,
+    },
+  })
+}
+
 const selectPatient = patient => (dispatch, getState) => {
   // Dispatch the result.
   dispatch({
@@ -54,5 +64,15 @@ const setSearchTerm = term => (dispatch, getState) => {
   })
 }
 
+const updateStates = states => (dispatch, getState) => {
+  console.log('Action updateStates', states);
+  dispatch({
+    type: actionTypes.UPDATE_STATES,
+    payload: {
+      states,
+    },
+  })
+}
+
 // Export the actions.
-export { updateGraph, updatePatients, selectPatient, selectFilter, setSearchTerm }
+export { updateGraph, updatePatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, updateStates}
