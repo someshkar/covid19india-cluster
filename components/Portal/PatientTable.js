@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 
 import { useTable, useFilters, useSortBy, usePagination } from 'react-table'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -83,6 +83,7 @@ function Table({ columns, data }) {
                 </i>
               </th>
             ))}
+            <th>Details</th>
           </tr>
         </thead>
         <tbody {...getTableBodyProps()}>
@@ -106,11 +107,16 @@ function Table({ columns, data }) {
                       <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     )
                   })}
+                  <td>
+                    <Link href={`/patient/${row.original.patientId}`}>
+                      Details
+                    </Link>
+                  </td>
                 </tr>
                 {openCard === row.values.patientnumber ? (
                   <tr className="detail-row">
                     <td colSpan={9}>
-                      {/* <ExtraDetails
+                      {/* <Extra
                         patient={data.find(
                           p => p.patientnumber == row.values.patientnumber
                         )}
