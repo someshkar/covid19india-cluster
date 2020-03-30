@@ -1,5 +1,6 @@
 import { letterToCode } from './parse'
-const normalize = array => {
+
+export const normalize = array => {
   const newArray = {
     byId: {},
     allIds: [],
@@ -13,5 +14,3 @@ const normalize = array => {
   })
   return newArray
 }
-
-export default normalize

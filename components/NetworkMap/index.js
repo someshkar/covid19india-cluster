@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Graph from 'react-graph-vis'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates } from '../Redux/actions'
+import {
+  updateGraph,
+  updatePatients,
+  updateLastRefreshed,
+  selectPatient,
+  updateStates,
+} from '../Redux/actions'
 
-import { rowsToGraph, letterToCode } from '../../util/parse'
-import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
-import NetworkMapLegend from '../NetworkMapLegend'
-import { useError } from '../../util/logger'
+import NetworkMapLegend from './Legend'
+import { useError, useLog, getAPIData, rowsToGraph, letterToCode, normalize } from '../../util'
 
 const NetworkMap = ({
   filter,
@@ -19,60 +23,67 @@ const NetworkMap = ({
   selectPatient,
   height,
   width,
-  states
+  states,
 }) => {
-
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
   const { selected, searchTerm } = useSelector(state => ({
     searchTerm: state.searchTerm,
-    selected: state.patient
+    selected: state.patient,
   }))
 
+  async function fetchStateWiseData() {
+    const data = await getAPIData(
+      'https://api.covid19india.org/state_district_wise.json')
+    if (data) { 
+      updateStates(Object.keys(data)) 
+    }
+  }
+
+  async function fetchUnofficialData() {
+    const data = await getAPIData(
+      'https://api.rootnet.in/covid19-in/unofficial/covid19india.org')
+    if (data) {
+      const _rawPatientData = data.rawPatientData
+      updateGraph(rowsToGraph(_rawPatientData))
+      updatePatients(normalize(_rawPatientData))
+      updateLastRefreshed(data.lastRefreshed)
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
-    if(!states){
-      fetch('https://api.covid19india.org/state_district_wise.json', {
-        cors: 'no-cors',
-        method: 'GET',
-        redirect: 'follow',
-      })
-        .then(resp => resp.json())
-        .then(res => {
-          if(res){
-            let stateNames = Object.keys(res);
-            updateStates(stateNames);
-          }
-        })
+    if (!states) {
+      try {
+        fetchStateWiseData()
+      } catch (error) {
+        useError(error)
+      }
     }
   })
 
   useEffect(() => {
-    fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
-      cors: 'no-cors',
-      method: 'GET',
-      redirect: 'follow',
-    })
-      .then(resp => resp.json())
-      .then(res => {
-        updateGraph(rowsToGraph(res.data.rawPatientData))
-        updatePatients(normalize(res.data.rawPatientData))
-        updateLastRefreshed(res.data.lastRefreshed)
-        setIsLoading(false)
-      })
-      .catch(err => useError(err))
+    if (!states) {
+      try {
+        fetchUnofficialData()
+      } catch (error) {
+        useError(error)
+      }
+    }
   }, [isLoading])
 
   useEffect(() => {
     // TODO: Figure out a way to make this do-able with patient Id search
-    if (graphRef.current && selected.coords) { // Make sure the ref is ready
+    if (graphRef.current && selected.coords) {
+      // Make sure the ref is ready
       const moveParams = {
         position: selected.coords,
         scale: 1.5,
         offset: { x: 0, y: 0 },
         animation: {
           duration: 500,
-          easingFunction: 'easeInCubic'
-        }
+          easingFunction: 'easeInCubic',
+        },
       }
       graphRef.current.Network.moveTo(moveParams)
     }
@@ -80,7 +91,8 @@ const NetworkMap = ({
 
   useEffect(() => {
     // TODO: Add search by age, district, etc.
-    if (graphRef.current && searchTerm) { // Make sure the ref is ready
+    if (graphRef.current && searchTerm) {
+      // Make sure the ref is ready
       try {
         const nodeKey = letterToCode(`P${searchTerm}`)
         const coordsMap = graphRef.current.Network.getPositions([nodeKey])
@@ -88,6 +100,7 @@ const NetworkMap = ({
         selectPatient({ id: nodeKey, coords: coordsMap[nodeKey] })
       } catch (e) {
         // None found. TODO: Add a UI response
+        useError(e)
       }
     }
   }, [searchTerm])
@@ -103,8 +116,8 @@ const NetworkMap = ({
       chosen: {
         node: (values, id, selected, hovering) => {
           values.color = selected ? '#000' : 'green'
-        }
-      }
+        },
+      },
     },
     height: height,
     width: width,
@@ -114,7 +127,7 @@ const NetworkMap = ({
   }
 
   const events = {
-    select: function (event) {
+    select: function(event) {
       const selectedNodeId = event.nodes[0]
       const selectedNode = graph.nodes.find(v => v.id === selectedNodeId)
       if (selectedNode) {
@@ -135,8 +148,13 @@ const NetworkMap = ({
     <div style={{ height: '100vh', width: '100vw' }}>
       {isLoading ? null : (
         <>
-          <NetworkMapLegend currentFilter={filter}/>
-          <Graph ref={graphRef} graph={graph} options={options} events={events} />
+          <NetworkMapLegend currentFilter={filter} />
+          <Graph
+            ref={graphRef}
+            graph={graph}
+            options={options}
+            events={events}
+          />
           <DatePicker />
         </>
       )}
@@ -146,7 +164,7 @@ const NetworkMap = ({
 
 const mapStateToProps = state => {
   let { graph, searchTerm, filter, states } = state
-  return { graph, searchTerm, filter, states}
+  return { graph, searchTerm, filter, states }
 }
 
 export default connect(mapStateToProps, {

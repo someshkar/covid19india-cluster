@@ -12,9 +12,9 @@ import {
   removeCities,
   addTravel,
   removeTravel,
-} from '../../util/filters'
+  useLog
+} from '../../util'
 import { updateGraph, selectFilter } from '../Redux/actions'
-import { useLog } from '../../util/logger'
 
 const filters = [
   {
