@@ -6,7 +6,7 @@ import { getIcon, letterToCode, codeToLetter } from '../parse'
 export const filterPatients = (graph, patients, status, globalFilter) => {
 
 
-    console.log('GRAPH IN PATIENT FILTER: ', graph)
+    // console.log('GRAPH IN PATIENT FILTER: ', graph)
 
     // let filteredPatients = []
 
@@ -101,7 +101,7 @@ export const filterPatients = (graph, patients, status, globalFilter) => {
 
 
 
-    console.log('GRAPH IN FITLER FUNCTION: ', newGraph)
+    // console.log('GRAPH IN FITLER FUNCTION: ', newGraph)
 
 
     return newGraph;

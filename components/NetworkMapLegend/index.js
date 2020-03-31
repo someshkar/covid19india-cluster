@@ -117,7 +117,6 @@ const NetworkMapLegend = ({ globalFilter, updateLegendFilter, updateGraph, updat
 
             let newGraph = filterPatients(graph, patients.byId, term, globalFilter)
             updateGraph(newGraph)
-            console.log('NEW GRAPH: ', newGraph);
 
             updateLegendFilter(term)
             // update side panel patient to show the correct patient(patient should be one from the visible list of nodes)

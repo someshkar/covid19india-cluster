@@ -74,7 +74,6 @@ const updateLegendFilter = term => (dispatch, getState) => {
 }
 
 const updateSidePanelPatient = patientId => (dispatch, getState) => {
-  console.log('PATIENT ID IN SIDEPANEL: ', patientId)
   dispatch({
     type: actionTypes.UPDATE_SIDEPANEL_PATIENT,
     payload: {
