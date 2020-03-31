@@ -129,7 +129,7 @@ const NetworkMapLegend = ({ globalFilter, updateLegendFilter, updateGraph, updat
     const patientLegend = (item) => {
         if (item.forGlobalFilters.includes('All') || item.forGlobalFilters.includes(globalFilter)) {
             return (
-                <ImageContainer onClick={() => legendClickHandler(item.label)}>
+                <ImageContainer key={item.label} onClick={() => legendClickHandler(item.label)}>
                     <Image src={item.image} />
                     <Label style={{fontWeight: item.label === legendFilter ? 'bold' : 'normal'}}>{item.label}</Label>
                 </ImageContainer>
