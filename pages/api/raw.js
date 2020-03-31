@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
       quarantine: rawRow['Quarantine Status'],
       address: rawRow['Address'],
       notes: rawRow['Notes'],
-      contractedFrom: rawRow['Contracted from which Patient (Suspected)'],
+      contractedFrom: rawRow['ContractedFrom'],
     }
 
     rows.push(row)
@@ -46,6 +46,8 @@ module.exports = async (req, res) => {
     lastRefreshed: new Date(),
     lastOriginUpdate: new Date(),
   }
+
+  console.log('Response:', resp.data.rawPatientData[0])
 
   res.json(resp)
 }

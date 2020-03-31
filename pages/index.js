@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import ReactLoading from 'react-loading'
 import axios from 'axios'
 
@@ -7,6 +8,8 @@ import PatientTable from '../components/Portal/PatientTable'
 import DownloadBlock from '../components/Portal/PatientTable'
 
 function Home(props) {
+  const router = useRouter()
+
   const [fetched, setFetched] = useState(false)
   const [patients, setPatients] = useState([])
   const [loading, setLoading] = useState(true)
@@ -55,7 +58,7 @@ function Home(props) {
             <ReactLoading type="spin" color="#000" />
           </div>
         ) : (
-          <PatientTable patients={patients} />
+          <PatientTable patients={patients} search={router.query.search} />
         )}
 
         {/* <DownloadBlock patients={patients} /> */}

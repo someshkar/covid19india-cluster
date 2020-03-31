@@ -1,15 +1,8 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 
-import {
-  useTable,
-  useFilters,
-  useGlobalFilter,
-  useSortBy,
-  usePagination,
-} from 'react-table'
+import { useTable, useFilters, useSortBy, usePagination } from 'react-table'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import matchSorter from 'match-sorter'
 import {
   faChevronRight,
   faAngleDoubleRight,
@@ -18,99 +11,12 @@ import {
   faSort,
   faSortAmountDown,
   faSortAmountDownAlt,
-  faSearch,
   faCaretRight,
   faCaretDown,
 } from '@fortawesome/free-solid-svg-icons'
 // import ExtraDetails from './extradetails'
 
-// Define a default UI for filtering
-const GlobalFilter = ({
-  preGlobalFilteredRows,
-  globalFilter,
-  setGlobalFilter,
-  search,
-}) => {
-  const count = preGlobalFilteredRows.length
-  console.log('Search:', search)
-  React.useEffect(() => {
-    setGlobalFilter(search ? search : undefined)
-  }, [setGlobalFilter])
-  return (
-    <span>
-      <FontAwesomeIcon
-        icon={faSearch}
-        className="text-orange"
-        style={{ marginRight: '10px' }}
-      />
-      Search:{' '}
-      <input
-        value={globalFilter || ''}
-        onChange={e => {
-          setGlobalFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
-        }}
-        placeholder={`${count} records...`}
-        style={{
-          fontSize: '1.1rem',
-          border: '0',
-        }}
-      />
-    </span>
-  )
-}
-
-// Define a default UI for filtering
-const DefaultColumnFilter = ({
-  column: { filterValue, preFilteredRows, setFilter },
-}) => {
-  const count = preFilteredRows.length
-
-  return (
-    <input
-      value={filterValue || ''}
-      onChange={e => {
-        setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
-      }}
-      placeholder={`Search ${count} records...`}
-    />
-  )
-}
-
-const fuzzyTextFilterFn = (rows, id, filterValue) => {
-  return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
-}
-
-// Let the table remove the filter if the string is empty
-fuzzyTextFilterFn.autoRemove = val => !val
-
-const Table = ({ columns, data, search }) => {
-  const filterTypes = React.useMemo(
-    () => ({
-      // Add a new fuzzyTextFilterFn filter type.
-      fuzzyText: fuzzyTextFilterFn,
-      // Or, override the default text filter to use
-      // "startWith"
-      text: (rows, id, filterValue) => {
-        return rows.filter(row => {
-          const rowValue = row.values[id]
-          return rowValue !== undefined
-            ? String(rowValue)
-                .toLowerCase()
-                .startsWith(String(filterValue).toLowerCase())
-            : true
-        })
-      },
-    }),
-    []
-  )
-
-  const defaultColumn = React.useMemo(
-    () => ({
-      // Let's set up our default Filter UI
-      Filter: DefaultColumnFilter,
-    }),
-    []
-  )
+function Table({ columns, data, locationType }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -126,23 +32,15 @@ const Table = ({ columns, data, search }) => {
     canNextPage,
     pageCount,
     setPageSize,
-    preGlobalFilteredRows,
-    setGlobalFilter,
-    visibleColumns,
-    state,
   } = useTable(
     {
       columns,
       data,
       initialState: {
-        sortBy: [{ id: 'reportedOn', desc: true }],
-        pageSize: 10,
+        sortBy: [{ id: 'diagnosed_date', desc: true }],
+        pageSize: 20,
       },
-      defaultColumn, // Be sure to pass the defaultColumn option
-      filterTypes,
     },
-    useFilters,
-    useGlobalFilter,
     useSortBy,
     usePagination
   )
@@ -161,21 +59,6 @@ const Table = ({ columns, data, search }) => {
     <div className="table-responsive">
       <table {...getTableProps()} className="table">
         <thead>
-          <tr>
-            <th
-              colSpan={visibleColumns.length}
-              style={{
-                textAlign: 'left',
-              }}
-            >
-              <GlobalFilter
-                preGlobalFilteredRows={preGlobalFilteredRows}
-                globalFilter={state.globalFilter}
-                setGlobalFilter={setGlobalFilter}
-                search={search}
-              />
-            </th>
-          </tr>
           <tr>
             <th></th>
             {headers.map(column => (
@@ -219,11 +102,8 @@ const Table = ({ columns, data, search }) => {
                     )
                   })}
                   <td>
-                    <Link
-                      href={`/patient/[id]`}
-                      as={`/patient/${row.original.patientId}`}
-                    >
-                      <a>Details</a>
+                    <Link href={`/?search=${row.original[locationType]}`}>
+                      <a>View Patients</a>
                     </Link>
                   </td>
                 </tr>
@@ -326,71 +206,11 @@ const Table = ({ columns, data, search }) => {
   )
 }
 
-function PatientTable({ patients, search }) {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'ID',
-        accessor: 'patientId',
-      },
-      {
-        Header: 'Name',
-        accessor: 'name',
-      },
-      {
-        Header: 'Age',
-        accessor: 'ageEstimate',
-      },
-      {
-        Header: 'Gender',
-        accessor: 'gender',
-      },
-      {
-        Header: 'Home Address',
-        accessor: 'address',
-      },
-      {
-        Header: 'Phone Number',
-        accessor: 'phone',
-      },
-      {
-        Header: 'Quarantine Status',
-        accessor: 'quarantine',
-      },
+function LocationTable({ entries, schema, locationType }) {
+  const columns = React.useMemo(() => schema, [schema])
+  const data = React.useMemo(() => entries, [entries])
 
-      {
-        Header: 'Hospital?',
-        accessor: 'hospital',
-      },
-      {
-        Header: 'Facility?',
-        accessor: 'facility',
-      },
-      {
-        Header: 'Health Status',
-        accessor: 'health',
-      },
-      {
-        Header: 'Reported on',
-        accessor: 'reportedOn',
-      },
-    ],
-    []
-  )
-  const data = React.useMemo(() => patients, [patients])
-
-  return <Table columns={columns} data={data} search={search} />
+  return <Table columns={columns} data={data} locationType={locationType} />
 }
 
-export default PatientTable
-
-// <td
-//                     className="expand"
-//                     onClick={() => toggleCard(row.values.patientnumber)}
-//                   >
-//                     {openCard === row.values.patientnumber ? (
-//                       <FontAwesomeIcon icon={faCaretDown} />
-//                     ) : (
-//                       <FontAwesomeIcon icon={faCaretRight} />
-//                     )}
-//                   </td>
+export default LocationTable

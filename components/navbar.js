@@ -11,6 +11,10 @@ const links = [
     name: 'Cluster',
     href: '/cluster',
   },
+  {
+    name: 'Hospitals',
+    href: '/hospitals',
+  },
 ]
 
 const Container = styled.div`
