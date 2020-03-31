@@ -27,36 +27,31 @@ export const generateHospitalTable = patients => {
       if (!hospitals[keyHash]) {
         hospitals[keyHash] = {
           hospital: patient.hospital,
-          total: 0,
+          total: 1,
           inTreatment: 0,
           recovered: 0,
           deceased: 0,
         }
+        if (patient.health === 'Recovered') {
+          hospitals[keyHash].recovered += 1
+        } else if (patient.health === 'Deceased') {
+          hospitals[keyHash].deceased += 1
+        } else if (patient.health === 'In Treatment') {
+          hospitals[keyHash].inTreatment += 1
+        }
       } else {
         hospitals[keyHash].total += 1
-        switch (patient.health) {
-          case 'Recovered': {
-            hospitals[keyHash].recovered += 1
-          }
-          case 'In Treatment': {
-            hospitals[keyHash].inTreatment += 1
-          }
-          case 'Deceased': {
-            hospitals[keyHash].deceased += 1
-          }
+        console.log(patient.health)
+        if (patient.health === 'Recovered') {
+          hospitals[keyHash].recovered += 1
+        } else if (patient.health === 'Deceased') {
+          hospitals[keyHash].deceased += 1
+        } else if (patient.health === 'In Treatment') {
+          hospitals[keyHash].inTreatment += 1
         }
       }
     }
   })
-
-  //   patients.forEach(patient => {
-  //     if (patient.hospital) {
-  //       let keyHash = hash(patient.hospital)
-  //       if (!hospitals[keyHash]) {
-  //         hospitals[keyHash] = patient.hospital
-  //       }
-  //     }
-  //   })
 
   var hospitalList = []
 
@@ -65,4 +60,54 @@ export const generateHospitalTable = patients => {
   }
 
   return hospitalList
+}
+
+export const generateFacilityTable = patients => {
+  const facilities = {}
+
+  patients.forEach(patient => {
+    if (patient.facility) {
+      let keyHash = hash(patient.facility)
+      if (!facilities[keyHash]) {
+        facilities[keyHash] = {
+          facility: patient.facility,
+          total: 1,
+          inQuarantine: 0,
+          recovered: 0,
+          deceased: 0,
+        }
+        if (patient.health === 'Recovered') {
+          facilities[keyHash].recovered += 1
+        } else if (patient.health === 'Deceased') {
+          facilities[keyHash].deceased += 1
+        } else if (
+          patient.health === 'In Quarantine' &&
+          patient.quarantine === 'Quarantined at facility'
+        ) {
+          facilities[keyHash].inQuarantine += 1
+        }
+      } else {
+        facilities[keyHash].total += 1
+        console.log(patient.health)
+        if (patient.health === 'Recovered') {
+          facilities[keyHash].recovered += 1
+        } else if (patient.health === 'Deceased') {
+          facilities[keyHash].deceased += 1
+        } else if (
+          patient.health === 'In Quarantine' &&
+          patient.quarantine === 'Quarantined at facility'
+        ) {
+          facilities[keyHash].inQuarantine += 1
+        }
+      }
+    }
+  })
+
+  var facilitiesList = []
+
+  for (var facility in facilities) {
+    facilitiesList.push(facilities[facility])
+  }
+
+  return facilitiesList
 }
