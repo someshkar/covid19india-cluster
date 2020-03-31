@@ -2,7 +2,13 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Graph from 'react-graph-vis'
 import { Tooltip, TooltipArrow, TooltipInner } from 'styled-tooltip-component'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates } from '../Redux/actions'
+import {
+  updateGraph,
+  updatePatients,
+  updateLastRefreshed,
+  selectPatient,
+  updateStates,
+} from '../Redux/actions'
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
@@ -18,7 +24,7 @@ const NetworkMap = ({
   selectPatient,
   height,
   width,
-  states
+  states,
 }) => {
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
@@ -32,7 +38,7 @@ const NetworkMap = ({
     selected: state.patient,
   }))
   useEffect(() => {
-    if(!states){
+    if (!states) {
       fetch('https://api.covid19india.org/state_district_wise.json', {
         cors: 'no-cors',
         method: 'GET',
@@ -40,9 +46,9 @@ const NetworkMap = ({
       })
         .then(resp => resp.json())
         .then(res => {
-          if(res){
-            let stateNames = Object.keys(res);
-            updateStates(stateNames);
+          if (res) {
+            let stateNames = Object.keys(res)
+            updateStates(stateNames)
           }
         })
     }
@@ -73,7 +79,7 @@ const NetworkMap = ({
         scale: 1.5,
         offset: { x: 0, y: 0 },
         animation: {
-          duration: 500,
+          duration: 250,
           easingFunction: 'easeInCubic',
         },
       }
@@ -99,9 +105,13 @@ const NetworkMap = ({
   const options = {
     layout: {
       hierarchical: false,
+      improvedLayout: true,
     },
     edges: {
       color: '#000000',
+      smooth: {
+        type: 'continuous'
+      },
     },
     nodes: {
       chosen: {
@@ -116,6 +126,10 @@ const NetworkMap = ({
       navigationButtons: true,
       hover: true,
     },
+    physics: {
+      enabled: true
+    },
+    autoResize: true
   }
 
   const events = {
@@ -181,7 +195,7 @@ const NetworkMap = ({
 
 const mapStateToProps = state => {
   let { graph, searchTerm, filter, states } = state
-  return { graph, searchTerm, filter, states}
+  return { graph, searchTerm, filter, states }
 }
 
 export default connect(mapStateToProps, {

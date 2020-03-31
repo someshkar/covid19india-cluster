@@ -20,21 +20,21 @@ const A = styled.a`
   padding-bottom: 10px;
 `
 
+const CellContainer = styled.div`
+font-family: 'Lato', sans-serif;
+background: #fff;
+border-radius: 5px;
+border: 1px solid #e7e7e7;
+padding: 15px 20px;
+`
+
+const Name = styled.div`
+font-weight: 600;
+text-transform: uppercase;
+margin-bottom: 10px;
+`
+
 function Cell({ name, children }) {
-  const CellContainer = styled.div`
-    font-family: 'Lato', sans-serif;
-    background: #fff;
-    border-radius: 5px;
-    border: 1px solid #e7e7e7;
-    padding: 15px 20px;
-  `
-
-  const Name = styled.div`
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  `
-
   return (
     <CellContainer>
       <Name>{name}</Name>
