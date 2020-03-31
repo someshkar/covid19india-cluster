@@ -9,6 +9,7 @@ import abroad from './filter/abroad.png'
 import state from './filter/state.png'
 import city from './filter/city.png'
 import p2p from './filter/p2p.png'
+import hide from './filter/hide.png'
 
 import state_node from './nodes/state.png'
 import city_node from './nodes/city.png'
@@ -26,6 +27,7 @@ export {
   city,
   state_node,
   p2p,
+  hide,
   city_node,
   abroad,
   plane_abroad_node,

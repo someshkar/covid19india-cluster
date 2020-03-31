@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import styled from 'styled-components'
 import {
     male_hosp,
@@ -12,7 +11,6 @@ import {
 
 
 const LegendContainer = styled.div`
-    position: absolute;
     top: 0;
     left: 30%;
     display: flex;
@@ -24,7 +22,7 @@ const LegendContainer = styled.div`
     margin-left: 5px;
     margin-top: 5px;
     z-index: 2;
-    
+    width: 105px;
     
     @media screen and (max-width: 768px) {
         padding: 4px;
