@@ -20,26 +20,27 @@ const initialState = {
 
 // Export the Device Reducer.
 export default (state = initialState, action) => {
+  const type = action.type
   switch (action.type) {
     case actionTypes.SELECT_FILTER: {
       const { filter } = action.payload
-      return { ...state, filter: filter }
+      return { ...state, filter, type }
     }
     case actionTypes.SEARCH: {
       const { term } = action.payload
-      return { ...state, searchTerm: term }
+      return { ...state, searchTerm: term, type }
     }
     case actionTypes.UPDATE_GRAPH: {
       const { graph } = action.payload
-      return { ...state, graph: graph }
+      return { ...state, graph, type }
     }
     case actionTypes.UPDATE_PATIENTS: {
       const { patients } = action.payload
-      return { ...state, patients: patients, patient: patients.byId[251] } // `P1` in code
+      return { ...state, patients, patient: patients.byId[251], type } // `P1` in code
     }
     case actionTypes.UPDATE_LAST_REFRESHED: {
       const { lastRefreshed } = action.payload
-      return { ...state, lastRefreshed: lastRefreshed }
+      return { ...state, lastRefreshed, type }
     }
     case actionTypes.SELECT_PATIENT: {
       const { id, coords } = action.payload
@@ -49,14 +50,14 @@ export default (state = initialState, action) => {
         ...patients.byId[id],
         coords
       }
-      return existingPatient ? { ...state, patient } : state
+      return existingPatient ? { ...state, patient, type } : {...state, type}
     }
     case actionTypes.UPDATE_STATES: {
       let states = action.payload.states.reduce((accumulator, currentValue) => {
         accumulator[currentValue] = hash(currentValue);
         return accumulator;
       },{});
-      return {...state, states: states}
+      return {...state, states, type}
     }
     default:
       return state

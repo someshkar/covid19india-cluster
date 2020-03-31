@@ -65,7 +65,6 @@ const setSearchTerm = term => (dispatch, getState) => {
 }
 
 const updateStates = states => (dispatch, getState) => {
-  console.log('Action updateStates', states);
   dispatch({
     type: actionTypes.UPDATE_STATES,
     payload: {

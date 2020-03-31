@@ -22,7 +22,6 @@ const LoadContainer = styled.div`
   height: ${props =>
     props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px;
   position: relative;
-  /* overflow: hidden; */
   > div:nth-child(1) {
     height: calc(
       ${props =>
@@ -180,8 +179,8 @@ const HalfCircle = styled.div`
         0.05
     )
     solid transparent;
-  border-top-color: ${props => props.color || '#00adb5'};
-  border-left-color: ${props => props.color || '#00adb5'};
+  border-top-color: ${props => props.color || '#201AA2'};
+  border-left-color: ${props => props.color || '#201AA2'};
 `
 
 const Loader = ({ style = commonStyle, color, speed, size = 'default' }) => {
