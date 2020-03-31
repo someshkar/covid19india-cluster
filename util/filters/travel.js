@@ -8,8 +8,9 @@ export const addTravel = (graph, patients) => {
   let locations = {}
 
   for (let patientId in patients) {
-    if (patients[patientId].place_attributes !== null) {
-      patients[patientId].place_attributes.forEach(loc => {
+    const place_attributes = patients[patientId].place_attributes
+    if (place_attributes && place_attributes.length) {
+      place_attributes.forEach(loc => {
         if (!locations[hash(loc.place)]) {
           locations[hash(loc.place)] = loc
         }
@@ -30,11 +31,9 @@ export const addTravel = (graph, patients) => {
 
   // Add edges from patient to location
   for (let patientId in patients) {
-    if (
-      patients[patientId].place_attributes !== null &&
-      patients[patientId].place_attributes[0]
-    ) {
-      patients[patientId].place_attributes.forEach(loc => {
+    const place_attributes = patients[patientId].place_attributes
+    if (place_attributes && place_attributes[0]) {
+      place_attributes.forEach(loc => {
         let edge = {
           from: hash(loc.place),
           to: patients[patientId].patientId,
@@ -86,11 +85,9 @@ export const removeTravel = (graph, patients) => {
   }
 
   for (let patientId in patients) {
-    if (
-      patients[patientId].place_attributes !== null &&
-      patients[patientId].place_attributes[0]
-    ) {
-      patients[patientId].place_attributes.forEach(loc => {
+    const place_attributes = patients[patientId].place_attributes
+    if (place_attributes && place_attributes[0]) {
+      place_attributes.forEach(loc => {
         let edge = {
           from: hash(loc.place),
           to: patients[patientId].patientId,
