@@ -59,8 +59,9 @@ export const removeTravel = (graph, patients) => {
   let locations = {}
 
   for (let patientId in patients) {
-    if (patients[patientId].place_attributes !== null) {
-      patients[patientId].place_attributes.forEach(loc => {
+    const place_attributes = patients[patientId].place_attributes
+    if (place_attributes && place_attributes.length) {
+      place_attributes.forEach(loc => {
         if (!locations[hash(loc.place)]) {
           locations[hash(loc.place)] = loc
         }
