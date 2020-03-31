@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import ReactLoading from 'react-loading'
 import axios from 'axios'
 
 import Layout from '../components/layout'
@@ -8,6 +9,7 @@ import DownloadBlock from '../components/Portal/PatientTable'
 function Home(props) {
   const [fetched, setFetched] = useState(false)
   const [patients, setPatients] = useState([])
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -21,6 +23,7 @@ function Home(props) {
         console.log(response.data)
         setPatients(response.data.data.rawPatientData)
         setFetched(true)
+        setLoading(false)
       } else {
         setError("Couldn't fetch patient data. Try again after sometime.")
         console.log(response)
@@ -39,7 +42,22 @@ function Home(props) {
         style={{ maxWidth: '90vw', marginTop: '40px' }}
       >
         {error ? <div className="alert alert-danger">{error}</div> : ''}
-        <PatientTable patients={patients} />
+        {loading ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ReactLoading type="spin" color="#000" />
+          </div>
+        ) : (
+          <PatientTable patients={patients} />
+        )}
+
         {/* <DownloadBlock patients={patients} /> */}
       </div>
     </Layout>

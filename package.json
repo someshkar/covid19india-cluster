@@ -35,6 +35,7 @@
     "react-ga": "^2.7.0",
     "react-github-fork-ribbon": "^0.6.0",
     "react-graph-vis": "^1.0.5",
+    "react-loading": "^2.0.3",
     "react-no-ssr": "^1.1.0",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",

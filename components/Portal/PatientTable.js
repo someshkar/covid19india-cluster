@@ -108,8 +108,11 @@ function Table({ columns, data }) {
                     )
                   })}
                   <td>
-                    <Link href={`/patient/${row.original.patientId}`}>
-                      Details
+                    <Link
+                      href={`/patient/[id]`}
+                      as={`/patient/${row.original.patientId}`}
+                    >
+                      <a>Details</a>
                     </Link>
                   </td>
                 </tr>
