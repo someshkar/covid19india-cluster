@@ -16,9 +16,11 @@ export const filterPatients = (graph, patients, status, globalFilter) => {
         edges: []
     }
 
+    // looping through each key in the patients object
     for (let patientId in patients) {
         // console.log('PATIENT ID: ', patientId)
 
+        // find the correct patients for the selected patient type
         if (patients[patientId].status === status) {
             let node = {
                 id: letterToCode(patientId),
@@ -28,9 +30,10 @@ export const filterPatients = (graph, patients, status, globalFilter) => {
                 group: 'patient'
             }
 
-
+            // adding patients as nodes to the new graph
             newGraph = dotProp.set(newGraph, 'nodes', list => [...list, node])
 
+            // adding edges for contractedFrom of the fitlered patient
             if (patients[patientId].contractedFrom) {
                 let edge = {
                     from: letterToCode(patients[patientId].contractedFrom),
@@ -44,6 +47,7 @@ export const filterPatients = (graph, patients, status, globalFilter) => {
 
     }
 
+    // adding the other nodes in the array as per the global filter
     if (['State', 'City', 'Travel'].includes(globalFilter)) {
         graph.nodes.forEach(node => {
             if (node.group !== 'patient') {
