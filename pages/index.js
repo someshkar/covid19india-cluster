@@ -39,7 +39,7 @@ function Home(props) {
     <Layout>
       <div
         className="container"
-        style={{ maxWidth: '90vw', marginTop: '40px' }}
+        style={{ maxWidth: '100vw', marginTop: '40px' }}
       >
         {error ? <div className="alert alert-danger">{error}</div> : ''}
         {loading ? (

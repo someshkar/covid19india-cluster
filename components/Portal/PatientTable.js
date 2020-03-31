@@ -95,13 +95,7 @@ function Table({ columns, data }) {
                   <td
                     className="expand"
                     onClick={() => toggleCard(row.values.patientnumber)}
-                  >
-                    {openCard === row.values.patientnumber ? (
-                      <FontAwesomeIcon icon={faCaretDown} />
-                    ) : (
-                      <FontAwesomeIcon icon={faCaretRight} />
-                    )}
-                  </td>
+                  ></td>
                   {row.cells.map(cell => {
                     return (
                       <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
@@ -271,3 +265,14 @@ function PatientTable({ patients }) {
 }
 
 export default PatientTable
+
+// <td
+//                     className="expand"
+//                     onClick={() => toggleCard(row.values.patientnumber)}
+//                   >
+//                     {openCard === row.values.patientnumber ? (
+//                       <FontAwesomeIcon icon={faCaretDown} />
+//                     ) : (
+//                       <FontAwesomeIcon icon={faCaretRight} />
+//                     )}
+//                   </td>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Graph from 'react-graph-vis'
 import { connect, useSelector } from 'react-redux'
+import ReactLoading from 'react-loading'
 import {
   updateGraph,
   updatePatients,
@@ -119,7 +120,19 @@ const NetworkMap = ({
 
   return (
     <div style={{ height: '100vh', width: '100vw' }}>
-      {isLoading ? null : (
+      {isLoading ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            marginLeft: '5vw',
+            marginTop: '5vw',
+            height: '100vh',
+          }}
+        >
+          <ReactLoading type="spin" color="#000" />
+        </div>
+      ) : (
         <>
           <NetworkMapLegend currentFilter={filter} />
           <Graph
