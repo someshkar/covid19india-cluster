@@ -63,8 +63,10 @@ import {
   female_cured,
   female_hosp,
   female_dead,
+  cluster_node,
 } from '../images/index'
 import dotProp from 'dot-prop-immutable'
+import { clustersList } from './clusterCenters'
 
 export function letterToCode(str) {
   const letterPos = parseInt(str[0], 36)
@@ -97,7 +99,7 @@ export function getIcon(patient) {
   }
 }
 
-export const codeToLetter = (code) => {
+export const codeToLetter = code => {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const codeStr = code.toString()
 
@@ -112,6 +114,20 @@ export const rowsToGraph = rows => {
     edges: [],
   }
 
+  // Add Cluster Centres
+
+  for (var clusterKey in clustersList) {
+    const patientCode = letterToCode(clusterKey)
+    let clusterNode = {
+      id: patientCode,
+      label: clustersList[clusterKey],
+      shape: 'image',
+      size: 60,
+      image: cluster_node,
+    }
+    graph = dotProp.set(graph, 'nodes', list => [...list, clusterNode])
+  }
+
   rows.forEach(row => {
     const patientCode = letterToCode('P' + row.patientId)
     let node = {
@@ -119,15 +135,25 @@ export const rowsToGraph = rows => {
       label: 'P' + row.patientId,
       shape: 'image',
       image: getIcon(row),
-      group: 'patient'
+      group: 'patient',
     }
 
     graph = dotProp.set(graph, 'nodes', list => [...list, node])
 
     if (row.contractedFrom) {
-      let edge = {
-        from: letterToCode(row.contractedFrom),
-        to: patientCode,
+      let edge = {}
+      if (clustersList[row.contractedFrom]) {
+        edge = {
+          from: letterToCode(row.contractedFrom),
+          to: patientCode,
+          length: 500,
+          dashes: true,
+        }
+      } else {
+        edge = {
+          from: letterToCode(row.contractedFrom),
+          to: patientCode,
+        }
       }
 
       graph = dotProp.set(graph, 'edges', list => [...list, edge])
