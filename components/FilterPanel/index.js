@@ -32,11 +32,7 @@ const filters = [
 ]
 
 const HeaderContainer = styled.div`
-  padding-top: 10px;
-  background-color: #f2f2f2;
-  display: grid;
-  grid-template-rows: 7% 93%;
-  overflow: auto;
+  margin: 30px 0px;
   font-family: 'Lato', sans-serif;
   color: #7c7a7a;
   font-weight: bold;
@@ -49,9 +45,6 @@ const HeaderContainer = styled.div`
 `
 
 const FilterMenuContainer = styled.div`
-  display: grid;
-  grid-template-rows: 10% 10% 10% 10% 60%;
-  overflow: auto;
   font-family: 'Lato', sans-serif;
   color: #7c7a7a;
   font-weight: bold;
@@ -63,13 +56,13 @@ const FilterMenuContainer = styled.div`
 `
 
 const FilterContainer = styled.div`
+  padding: 5px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
   height: '20vh';
-  user-select: none;
-  background-color: ${props => (props.selected ? '#d6d6d6' : '#F2F2F2')};
+  background-color: ${props => (props.selected ? '#d7d7d7' : 'transparent')};
   transition: all 0.2s ease-out;
   cursor: pointer;
   &:hover {
@@ -84,18 +77,6 @@ const FilterName = styled.div`
 
 const FilterIcon = styled.img`
   width: 40px;
-`
-
-const FilterHeader = styled.div`
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 14px;
-
-  @media screen and (max-width: 768px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 `
 
 const FilterCategory = ({ filter, onClick, selected }) => {
@@ -136,7 +117,6 @@ const FilterPanel = ({
 
   return (
     <HeaderContainer>
-      <FilterHeader>Cluster Filter</FilterHeader>
       <FilterMenuContainer>
         {filters.map((filterItem, filterIndex) => (
           <Fragment key={filterIndex}>

@@ -137,7 +137,7 @@ const NetworkMap = ({
         }
         if (showLoader) {
           const timeout = setTimeout(() => {
-            setShowLoader(false)
+            // setShowLoader(false)
           }, 500)
           return () => {
             clearTimeout(timeout)

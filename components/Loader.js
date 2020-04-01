@@ -1,196 +1,132 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
-const commonStyle = {
-  margin: 'auto',
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: 0,
-  bottom: 0,
+const rotateBall = props => keyframes`
+    ${(((props.size / 2 / props.countBalls) * (props.index - 1)) / props.size) *
+      100}% {
+        opacity: 0;
+    }
+    ${(((props.size / 2 / props.countBalls + 0.0001) * (props.index - 1)) /
+      props.size) *
+      100}% {
+        opacity: 1;
+        transform: ${`rotate(${0 -
+          (360 / props.countBalls) * (props.index - 2)}deg)`};
+    }
+    ${(((props.size / 2 / props.countBalls) * (props.index - 0) + 2) /
+      props.size) *
+      100}% {
+        transform: ${`rotate(${0 -
+          (360 / props.countBalls) * (props.index - 1)}deg)`};
+    }
+    ${((props.size / 2 +
+      (props.size / 2 / props.countBalls) * (props.index - 0) +
+      2) /
+      props.size) *
+      100}% {
+        transform: ${`rotate(${0 -
+          (360 / props.countBalls) * (props.index - 1)}deg)`};
+    }
+    100% {
+        transform: ${`rotate(${0 -
+          (360 / props.countBalls) * (props.countBalls - 1)}deg)`};
+        opacity: 1;
+    }
+`
+
+const getBalls = ({
+  countBalls,
+  radius,
+  angle,
+  color,
+  size,
+  ballSize,
+  sizeUnit,
+}) => {
+  const balls = []
+  const offset = ballSize / 2
+  for (let i = 0; i < countBalls; i++) {
+    const y = Math.sin(angle * i * (Math.PI / 180)) * radius - offset
+    const x = Math.cos(angle * i * (Math.PI / 180)) * radius - offset
+    balls.push(
+      <Ball
+        countBalls={countBalls}
+        color={color}
+        ballSize={ballSize}
+        size={size}
+        sizeUnit={sizeUnit}
+        x={y}
+        y={x}
+        key={i.toString()}
+        index={i + 1}
+      />
+    )
+  }
+  return balls
 }
 
 const rotate = keyframes`
-  50% {
-    transform: rotate(360deg) scale(0.7);
-  }
+    0% {
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(-360deg);
+    }
 `
 
-const LoadContainer = styled.div`
-  width: ${props =>
-    props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px;
-  height: ${props =>
-    props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px;
-  position: relative;
-  > div:nth-child(1) {
-    height: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px -
-        ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.2 * 0
-    );
-    width: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px -
-        ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.2 * 0
-    );
-    top: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.1 * 0
-    );
-    left: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.1 * 0
-    );
-    animation: ${rotate} ${props => props.speed || 2}s infinite;
-    animation-delay: calc(${props => props.speed || 2}s * 0.1 * 4);
-    z-index: 5;
-  }
-  > div:nth-child(2) {
-    height: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px -
-        ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.2 * 1
-    );
-    width: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px -
-        ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.2 * 1
-    );
-    top: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.1 * 1
-    );
-    left: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.1 * 1
-    );
-    animation: ${rotate} ${props => props.speed || 2}s infinite;
-    animation-delay: calc(${props => props.speed || 2}s * 0.1 * 3);
-    z-index: 4;
-  }
-  > div:nth-child(3) {
-    height: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px -
-        ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.2 * 2
-    );
-    width: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px -
-        ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.2 * 2
-    );
-    top: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.1 * 2
-    );
-    left: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.1 * 2
-    );
-    animation: ${rotate} ${props => props.speed || 2}s infinite;
-    animation-delay: calc(${props => props.speed || 2}s * 0.1 * 2);
-    z-index: 3;
-  }
-  > div:nth-child(4) {
-    height: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px -
-        ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.2 * 3
-    );
-    width: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px -
-        ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.2 * 3
-    );
-    top: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.1 * 3
-    );
-    left: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.1 * 3
-    );
-    animation: ${rotate} ${props => props.speed || 2}s infinite;
-    animation-delay: calc(${props => props.speed || 2}s * 0.1 * 1);
-    z-index: 2;
-  }
-  > div:nth-child(5) {
-    height: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px -
-        ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.2 * 4
-    );
-    width: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px -
-        ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.2 * 4
-    );
-    top: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.1 * 4
-    );
-    left: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.1 * 4
-    );
-    animation: ${rotate} ${props => props.speed || 2}s infinite;
-    animation-delay: calc(${props => props.speed || 2}s * 0.1 * 0);
-    z-index: 1;
-  }
+const Wrapper = styled.div`
+  left: 20px;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  width: ${props => `${props.size}${props.sizeUnit}`};
+  height: ${props => `${props.size}${props.sizeUnit}`};
+  animation: ${rotate} 3s infinite ease-in;
 `
 
-const HalfCircle = styled.div`
-  box-sizing: border-box;
-  border-radius: 50%;
+const Ball = styled.div`
   position: absolute;
-  border: calc(
-      ${props =>
-          props.size === 'small' ? 40 : props.size === 'large' ? 60 : 50}px *
-        0.05
-    )
-    solid transparent;
-  border-top-color: ${props => props.color || '#201AA2'};
-  border-left-color: ${props => props.color || '#201AA2'};
+  width: ${props => `${props.size}${props.sizeUnit}`};
+  height: ${props => `${props.size}${props.sizeUnit}`};
+  animation: ${rotateBall} 2s infinite linear;
+  transform: ${props => `rotate(${(360 / props.countBalls) * props.index}deg)`};
+  opacity: 0;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0%;
+    width: ${props => `${props.ballSize}${props.sizeUnit}`};
+    height: ${props => `${props.ballSize}${props.sizeUnit}`};
+    background-color: ${props => `${props.color}`};
+    transform: translateX(-50%);
+    border-radius: 50%;
+  }
 `
 
-const Loader = ({ style = commonStyle, color, speed, size = 'default' }) => {
+export default function Loader({
+  size = 30,
+  color = '#201AA2',
+  loading = true,
+  sizeUnit = 'px',
+}) {
+  const radius = size / 2
+  const countBalls = 9
+  const ballSize = size / 8
+  const angle = 360 / countBalls
   return (
-    <LoadContainer style={style} speed={speed} size={size}>
-      {Array.from(Array(5)).map((item, index) => (
-        <HalfCircle color={color} speed={speed} size={size} key={index} />
-      ))}
-    </LoadContainer>
+    loading && (
+      <Wrapper size={size} sizeUnit={sizeUnit}>
+        {getBalls({
+          countBalls,
+          radius,
+          angle,
+          color,
+          size,
+          ballSize,
+          sizeUnit,
+        })}
+      </Wrapper>
+    )
   )
 }
-
-export default Loader
