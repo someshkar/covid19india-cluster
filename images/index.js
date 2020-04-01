@@ -1,19 +1,17 @@
-import male_cured from './male/cured.png'
-import male_dead from './male/dead.png'
-import male_hosp from './male/hospitalized.png'
-import female_cured from './female/cured.png'
-import female_dead from './female/dead.png'
-import female_hosp from './female/hospitalized.png'
+import male_cured from './svg/male/cured.svg'
+import male_dead from './svg/male/dead.svg'
+import male_hosp from './svg/male/hospitalized.svg'
 
-import abroad from './filter/abroad.png'
-import state from './filter/state.png'
-import city from './filter/city.png'
-import p2p from './filter/p2p.png'
+import female_cured from './svg/female/cured.svg'
+import female_dead from './svg/female/dead.svg'
+import female_hosp from './svg/female/hospitalized.svg'
 
-import state_node from './nodes/state.png'
-import city_node from './nodes/city.png'
-import plane_abroad_node from './nodes/plane.png'
-import plane_local_node from './nodes/plane_local.png'
+import p2p from './svg/p2p.svg'
+import state from './svg/state.svg'
+import city from './svg/city.svg'
+import abroad from './svg/abroad.svg'
+import plane_abroad from './svg/plane.svg'
+import plane_local from './svg/plane_local.svg'
 
 export {
   male_cured,
@@ -24,10 +22,8 @@ export {
   female_hosp,
   state,
   city,
-  state_node,
   p2p,
-  city_node,
   abroad,
-  plane_abroad_node,
-  plane_local_node,
+  plane_abroad,
+  plane_local,
 }

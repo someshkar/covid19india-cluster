@@ -1,5 +1,5 @@
 import hash from 'object-hash'
-import { state_node } from '../../images'
+import { state } from '../../images'
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
 
@@ -13,7 +13,7 @@ export const addStates = (graph, patients, states) => {
         label: stateName,
         size: 40,
         shape: 'image',
-        image: state_node,
+        image: state,
       }
       graph = dotProp.set(graph, 'nodes', list => [...list, node])
     }

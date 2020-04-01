@@ -2,7 +2,7 @@ import hash from 'object-hash'
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
 
-import { plane_abroad_node, plane_local_node } from '../../images'
+import { plane_abroad, plane_local } from '../../images'
 
 export const addTravel = (graph, patients) => {
   let locations = {}
@@ -24,7 +24,7 @@ export const addTravel = (graph, patients) => {
       label: locations[loc].place,
       size: 30,
       shape: 'image',
-      image: locations[loc].is_foreign ? plane_abroad_node : plane_local_node,
+      image: locations[loc].is_foreign ? plane_abroad : plane_local,
     }
     graph = dotProp.set(graph, 'nodes', list => [...list, node])
   }
@@ -75,7 +75,7 @@ export const removeTravel = (graph, patients) => {
       label: locations[loc].place,
       size: 30,
       shape: 'image',
-      image: locations[loc].is_foreign ? plane_abroad_node : plane_local_node,
+      image: locations[loc].is_foreign ? plane_abroad : plane_local,
     }
     let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
       return o.id == node.id
