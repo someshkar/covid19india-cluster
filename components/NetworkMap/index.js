@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Graph from 'react-graph-vis'
 import { Tooltip, TooltipArrow, TooltipInner } from 'styled-tooltip-component'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates } from '../Redux/actions'
+import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates, updateSidePanelPatient, updateLegendFilter } from '../Redux/actions'
+
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
 import NetworkMapLegend from '../NetworkMapLegend'
 
 const NetworkMap = ({
-  filter,
   graph,
   updateGraph,
   updatePatients,
@@ -22,6 +22,10 @@ const NetworkMap = ({
 }) => {
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
+  const [graphData, setGraphData] = useState({
+    nodes: [],
+    edges: []
+  })
   const [toolTipPosition, setToolTipPosition] = useState(null)
   const [tooltipContent, setToolTipContent] = useState('')
   const toolTipVisible = useMemo(() => {
@@ -32,7 +36,7 @@ const NetworkMap = ({
     selected: state.patient,
   }))
   useEffect(() => {
-    if(!states){
+    if (!states) {
       fetch('https://api.covid19india.org/state_district_wise.json', {
         cors: 'no-cors',
         method: 'GET',
@@ -40,7 +44,7 @@ const NetworkMap = ({
       })
         .then(resp => resp.json())
         .then(res => {
-          if(res){
+          if (res) {
             let stateNames = Object.keys(res);
             updateStates(stateNames);
           }
@@ -64,10 +68,10 @@ const NetworkMap = ({
       .catch(err => console.log('error', err))
   }, [isLoading])
 
+  // This effect handles zoom behaviour when a patient node is clicked
   useEffect(() => {
     // TODO: Figure out a way to make this do-able with patient Id search
-    if (graphRef.current && selected.coords) {
-      // Make sure the ref is ready
+    if (graphRef.current && selected && selected.coords) { // Make sure the ref is ready
       const moveParams = {
         position: selected.coords,
         scale: 1.5,
@@ -81,6 +85,7 @@ const NetworkMap = ({
     }
   }, [selected])
 
+  // This effect handles zoom behaviour when search term is changed
   useEffect(() => {
     // TODO: Add search by age, district, etc.
     if (graphRef.current && searchTerm) {
@@ -96,9 +101,18 @@ const NetworkMap = ({
     }
   }, [searchTerm])
 
+
+  useEffect(() => {
+    // setGraphData(graph)
+    if (graphRef.current) {
+      graphRef.current.Network.setData(graph)
+    }
+  }, [graph])
+
   const options = {
     layout: {
       hierarchical: false,
+      clusterThreshold: 1300
     },
     edges: {
       color: '#000000',
@@ -116,10 +130,22 @@ const NetworkMap = ({
       navigationButtons: true,
       hover: true,
     },
+    physics: {
+      solver: 'forceAtlas2Based',
+      forceAtlas2Based: {
+        avoidOverlap: 1
+      }
+      // stabilization: true,
+      // barnesHut: {
+      //   // gravitationalConstant: -80000,
+      //   springConstant: 0.001,
+      //   springLength: 200
+      // }
+    },
   }
 
   const events = {
-    select: function(event) {
+    select: function (event) {
       const selectedNodeId = event.nodes[0]
       const selectedNode = graph.nodes.find(v => v.id === selectedNodeId)
       if (selectedNode) {
@@ -134,7 +160,7 @@ const NetworkMap = ({
         }
       }
     },
-    hoverNode: function(e) {
+    hoverNode: function (e) {
       const { node, event } = e
       const selectedNode = graph.nodes.find(v => v.id === node)
       setToolTipContent(selectedNode.label)
@@ -143,20 +169,30 @@ const NetworkMap = ({
         left: event.pageX,
       })
     },
-    blurNode: function(event) {
+    blurNode: function (event) {
       setToolTipContent('')
       setToolTipPosition(null)
     },
+    // stabilizationProgress: function (e) {
+    //   document.getElementById('graph-loader').style.display = 'block'
+    // },
+    // stabilizationIterationsDone: function (e) {
+    //   document.getElementById('graph-loader').style.display = 'none'
+    // }
+
   }
 
   return (
     <div style={{ height: '100vh', width: '100vw' }}>
       {isLoading ? null : (
         <>
-          <NetworkMapLegend currentFilter={filter} />
+          {/* <div id="graph-loader" style={{ display: 'none', position: 'absolute', top: '50%', left: '50%', height: '100%', width: '100%', backgroundColor: 'white' }}>
+            Loading....
+          </div> */}
+          <NetworkMapLegend />
           <Graph
             ref={graphRef}
-            graph={graph}
+            graph={graphData}
             options={options}
             events={events}
           />
@@ -180,8 +216,8 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm, filter, states } = state
-  return { graph, searchTerm, filter, states}
+  let { graph, searchTerm, states } = state
+  return { graph, searchTerm, states }
 }
 
 export default connect(mapStateToProps, {

@@ -15,6 +15,7 @@ const initialState = {
   graph: null,
   patients: null,
   searchTerm: '',
+  legendFilter: null,
   states: null
 }
 
@@ -51,12 +52,21 @@ export default (state = initialState, action) => {
       }
       return existingPatient ? { ...state, patient } : state
     }
+    case actionTypes.LEGEND_FILTER: {
+      const { term } = action.payload
+      return { ...state, legendFilter: term }
+    }
+    case actionTypes.UPDATE_SIDEPANEL_PATIENT: {
+      const { patients } = state
+      const { patientId } = action.payload
+      return { ...state, patient: patients.byId[patientId] }
+    }
     case actionTypes.UPDATE_STATES: {
       let states = action.payload.states.reduce((accumulator, currentValue) => {
         accumulator[currentValue] = hash(currentValue);
         return accumulator;
-      },{});
-      return {...state, states: states}
+      }, {});
+      return { ...state, states: states }
     }
     default:
       return state

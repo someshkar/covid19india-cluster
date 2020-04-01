@@ -64,6 +64,23 @@ const setSearchTerm = term => (dispatch, getState) => {
   })
 }
 
+const updateLegendFilter = term => (dispatch, getState) => {
+  dispatch({
+    type: actionTypes.LEGEND_FILTER,
+    payload: {
+      term
+    }
+  })
+}
+
+const updateSidePanelPatient = patientId => (dispatch, getState) => {
+  dispatch({
+    type: actionTypes.UPDATE_SIDEPANEL_PATIENT,
+    payload: {
+      patientId
+    }
+  })
+}
 const updateStates = states => (dispatch, getState) => {
   console.log('Action updateStates', states);
   dispatch({
@@ -75,4 +92,4 @@ const updateStates = states => (dispatch, getState) => {
 }
 
 // Export the actions.
-export { updateGraph, updatePatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, updateStates}
+export { updateGraph, updatePatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, updateLegendFilter, updateSidePanelPatient, updateStates }

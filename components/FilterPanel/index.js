@@ -108,10 +108,10 @@ const FilterPanel = ({
 
   const changeGraph = name => {
     // console.log('Changegraph', graph, patients.byId)
-    let currentFilter = _.find(filters, function(o) {
+    let currentFilter = _.find(filters, function (o) {
       return o.name === filter
     })
-    let choosenFilter = _.find(filters, function(o) {
+    let choosenFilter = _.find(filters, function (o) {
       return o.name === name
     })
 
@@ -137,14 +137,13 @@ const FilterPanel = ({
     <HeaderContainer>
       <FilterHeader>Cluster Filter</FilterHeader>
       <FilterMenuContainer>
-        {filters.map((filterItem, filterIndex) => (
-          <Fragment key={filterIndex}>
-            <FilterCategory
-              filter={filterItem}
-              onClick={() => changeGraph(filterItem.name)}
-              selected={filter === filterItem.name ? true : false}
-            />
-          </Fragment>
+        {filters.map((filterItem, index) => (
+          <FilterCategory
+            key={index}
+            filter={filterItem}
+            onClick={() => changeGraph(filterItem.name)}
+            selected={filter === filterItem.name ? true : false}
+          />
         ))}
       </FilterMenuContainer>
     </HeaderContainer>

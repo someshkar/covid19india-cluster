@@ -107,8 +107,9 @@ export const removeTravel = (graph, patients) => {
         let edgeIndex = _.findIndex(graph.edges, function(o) {
           return o.to == edge.to && o.from === edge.from
         })
-
-        graph = dotProp.delete(graph, `edges.${edgeIndex}`)
+        if (edgeIndex !== -1) {
+          graph = dotProp.delete(graph, `edges.${edgeIndex}`)
+        }
       })
     }
   }
