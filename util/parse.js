@@ -145,7 +145,7 @@ export const rowsToGraph = rows => {
 
     if (row.contractedFrom) {
       let edge = {}
-      if (clusters[row.contractedFrom]) {
+      if (row.contractedFrom[0] === 'E') {
         edge = {
           from: letterToCode(row.contractedFrom),
           to: patientCode,
