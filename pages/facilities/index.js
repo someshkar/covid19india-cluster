@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import ReactLoading from 'react-loading'
 import axios from 'axios'
 
+import { parseCookies } from '../../util/parse'
+
 import Layout from '../../components/layout'
 import LocationTable from '../../components/LocationTable/Table'
 import { generateFacilityTable } from '../../components/LocationTable/utils'
@@ -84,6 +86,23 @@ function FacilityTable(props) {
       </div>
     </Layout>
   )
+}
+
+FacilityTable.getInitialProps = ({ req, res }) => {
+  const cookies = parseCookies(req)
+
+  if (res && !cookies.auth) {
+    res.writeHead(302, { Location: '/login' })
+    res.end()
+
+    return {
+      auth: false,
+    }
+  }
+
+  return {
+    auth: cookies.auth,
+  }
 }
 
 export default FacilityTable
