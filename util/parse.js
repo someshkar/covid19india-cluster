@@ -1,61 +1,3 @@
-// const graph = {
-//   nodes: [
-//     {
-//       id: 1,
-//       label: 'Node 1',
-//       title: 'node 1 tootip text',
-//       shape: 'circularImage',
-//       image: 'https://avatars2.githubusercontent.com/u/14039437?v=4',
-//     },
-//     { id: 2, label: 'Node 2', title: 'node 2 tootip text' },
-//     { id: 3, label: 'Node 3', title: 'node 3 tootip text' },
-//     { id: 4, label: 'Node 4', title: 'node 4 tootip text' },
-//     { id: 5, label: 'Node 5', title: 'node 5 tootip text' },
-//     { id: 6, label: 'Node 6', title: 'node 6 tootip text' },
-//   ],
-//   edges: [
-//     { from: 1, to: 2 },
-//     { from: 1, to: 3 },
-//     { from: 2, to: 4 },
-//     { from: 2, to: 5 },
-//   ],
-// }
-
-// OLD, don't use this schema
-// const row = {
-//       patientId: 'P' + rawRow['Patient number'],
-//       dateAnnounced: rawRow['Date Announced'],
-//       ageEstimate: rawRow['Age Bracket'],
-//       gender: rawRow['Gender'],
-//       city: rawRow['Detected City'],
-//       district: rawRow['Detected District'],
-//       state: rawRow['Detected State'],
-//       status: rawRow['Current Status'],
-//       notes: rawRow['Notes'],
-//       contractedFrom: rawRow['Contracted from which Patient (Suspected)'],
-//       sources: [rawRow['Source_1'], rawRow['Source_2'], rawRow['Source_3']],
-//     }
-
-// New schema
-// const row = {
-//       patientId: parseInt(rawRow['Patient number']), // Change in frontend, used to be 'P' + rawRow['Patient Number']
-//       reportedOn: rawRow['Date Announced'],
-//       onsetEstimate: '',
-//       ageEstimate: rawRow['Age Bracket'],
-//       gender: processGender(rawRow['Gender']), // Change in frontend, used to be 'M'/'F'
-//       city: rawRow['Detected City'],
-//       state: rawRow['Detected State'],
-//       district: rawRow['Detected District'],
-//       status: rawRow['Current Status'],
-//       notes: rawRow['Notes'],
-//       contractedFrom: rawRow['Contracted from which Patient (Suspected)'],
-//       sources: processSources([
-//         rawRow['Source_1'],
-//         rawRow['Source_2'],
-//         rawRow['Source_3'],
-//       ]),
-//     }
-
 import {
   male_hosp,
   male_cured,
@@ -135,8 +77,3 @@ export const rowsToGraph = rows => {
   })
   return graph
 }
-
-// console.log(letterToCode('P699999'))
-// console.log(codeToLetter(letterToCode('P6')))
-
-// console.log(jsonToGraph(dumpedRows))

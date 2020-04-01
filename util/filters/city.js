@@ -1,5 +1,5 @@
 import hash from 'object-hash'
-import { state_node, city_node } from '../../images'
+import { state, city } from '../../images'
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
 
@@ -40,7 +40,7 @@ export const addCities = (graph, patients) => {
       label: states[key],
       size: 30,
       shape: 'image',
-      image: state_node,
+      image: state,
     }
     let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
       return o.id == node.id
@@ -58,7 +58,7 @@ export const addCities = (graph, patients) => {
         label: stateCitiesMap[key][cityKey],
         size: 20,
         shape: 'image',
-        image: city_node,
+        image: city,
       }
 
       let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
@@ -139,7 +139,7 @@ export const removeCities = (graph, patients) => {
       label: states[key],
       size: 30,
       shape: 'image',
-      image: state_node,
+      image: state,
     }
     let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
       return o.id == node.id
@@ -157,7 +157,7 @@ export const removeCities = (graph, patients) => {
         label: stateCitiesMap[key][cityKey],
         size: 40,
         shape: 'image',
-        image: city_node,
+        image: city,
       }
 
       let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
@@ -230,7 +230,7 @@ export const removeCities = (graph, patients) => {
 //       label: states[key],
 //       size: 40,
 //       shape: 'image',
-//       image: state_node,
+//       image: state,
 //     }
 //     let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
 //       return o.id == key

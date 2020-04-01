@@ -4,10 +4,10 @@ import {
     male_hosp,
     male_cured,
     male_dead,
-    state_node,
-    city_node,
-    plane_abroad_node,
-    plane_local_node,
+    state,
+    city,
+    plane_abroad,
+    plane_local,
 } from '../../images/index'
 
 
@@ -79,14 +79,14 @@ const NetworkMapLegend = ({ currentFilter }) => {
             </ImageContainer>
             {['State', 'City'].includes(currentFilter) ?
                 <ImageContainer>
-                    <Image src={state_node} />
+                    <Image src={state} />
                     <Label>State</Label>
                 </ImageContainer>
                 : null
             }
             {currentFilter === 'City' ?
                 <ImageContainer>
-                    <Image src={city_node} />
+                    <Image src={city} />
                     <Label>City</Label>
                 </ImageContainer>
                 : null
@@ -94,11 +94,11 @@ const NetworkMapLegend = ({ currentFilter }) => {
             {currentFilter === 'Travel' ?
                 <>
                     <ImageContainer>
-                        <Image src={plane_local_node} />
+                        <Image src={plane_local} />
                         <Label>Domestic</Label>
                     </ImageContainer>
                     <ImageContainer>
-                        <Image src={plane_abroad_node} />
+                        <Image src={plane_abroad} />
                         <Label>International</Label>
                     </ImageContainer>
                 </>

@@ -2,14 +2,15 @@ import hash from 'object-hash'
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
 
-import { plane_abroad_node, plane_local_node } from '../../images'
+import { plane_abroad, plane_local } from '../../images'
 
 export const addTravel = (graph, patients) => {
   let locations = {}
 
   for (let patientId in patients) {
-    if (patients[patientId].place_attributes !== null) {
-      patients[patientId].place_attributes.forEach(loc => {
+    const place_attributes = patients[patientId].place_attributes
+    if (place_attributes && place_attributes.length) {
+      place_attributes.forEach(loc => {
         if (!locations[hash(loc.place)]) {
           locations[hash(loc.place)] = loc
         }
@@ -23,18 +24,16 @@ export const addTravel = (graph, patients) => {
       label: locations[loc].place,
       size: 30,
       shape: 'image',
-      image: locations[loc].is_foreign ? plane_abroad_node : plane_local_node,
+      image: locations[loc].is_foreign ? plane_abroad : plane_local,
     }
     graph = dotProp.set(graph, 'nodes', list => [...list, node])
   }
 
   // Add edges from patient to location
   for (let patientId in patients) {
-    if (
-      patients[patientId].place_attributes !== null &&
-      patients[patientId].place_attributes[0]
-    ) {
-      patients[patientId].place_attributes.forEach(loc => {
+    const place_attributes = patients[patientId].place_attributes
+    if (place_attributes && place_attributes[0]) {
+      place_attributes.forEach(loc => {
         let edge = {
           from: hash(loc.place),
           to: patients[patientId].patientId,
@@ -60,8 +59,9 @@ export const removeTravel = (graph, patients) => {
   let locations = {}
 
   for (let patientId in patients) {
-    if (patients[patientId].place_attributes !== null) {
-      patients[patientId].place_attributes.forEach(loc => {
+    const place_attributes = patients[patientId].place_attributes
+    if (place_attributes && place_attributes.length) {
+      place_attributes.forEach(loc => {
         if (!locations[hash(loc.place)]) {
           locations[hash(loc.place)] = loc
         }
@@ -75,7 +75,7 @@ export const removeTravel = (graph, patients) => {
       label: locations[loc].place,
       size: 30,
       shape: 'image',
-      image: locations[loc].is_foreign ? plane_abroad_node : plane_local_node,
+      image: locations[loc].is_foreign ? plane_abroad : plane_local,
     }
     let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
       return o.id == node.id
@@ -86,11 +86,9 @@ export const removeTravel = (graph, patients) => {
   }
 
   for (let patientId in patients) {
-    if (
-      patients[patientId].place_attributes !== null &&
-      patients[patientId].place_attributes[0]
-    ) {
-      patients[patientId].place_attributes.forEach(loc => {
+    const place_attributes = patients[patientId].place_attributes
+    if (place_attributes && place_attributes[0]) {
+      place_attributes.forEach(loc => {
         let edge = {
           from: hash(loc.place),
           to: patients[patientId].patientId,
@@ -107,8 +105,9 @@ export const removeTravel = (graph, patients) => {
         let edgeIndex = _.findIndex(graph.edges, function(o) {
           return o.to == edge.to && o.from === edge.from
         })
-
-        graph = dotProp.delete(graph, `edges.${edgeIndex}`)
+        if (edgeIndex !== -1) {
+          graph = dotProp.delete(graph, `edges.${edgeIndex}`)
+        }
       })
     }
   }

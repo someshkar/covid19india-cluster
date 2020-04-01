@@ -2,7 +2,16 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Graph from 'react-graph-vis'
 import { Tooltip, TooltipArrow, TooltipInner } from 'styled-tooltip-component'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates } from '../Redux/actions'
+import {
+  updateGraph,
+  updatePatients,
+  updateLastRefreshed,
+  selectPatient,
+  updateStates,
+} from '../Redux/actions'
+import { store } from '../Redux/store'
+import Loader from '../Loader'
+import actionTypes from '../Redux/actionTypes'
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
@@ -18,10 +27,10 @@ const NetworkMap = ({
   selectPatient,
   height,
   width,
-  states
+  states,
 }) => {
   const graphRef = useRef()
-  const [isLoading, setIsLoading] = useState(true)
+  const [showLoader, setShowLoader] = useState(true)
   const [toolTipPosition, setToolTipPosition] = useState(null)
   const [tooltipContent, setToolTipContent] = useState('')
   const toolTipVisible = useMemo(() => {
@@ -31,77 +40,17 @@ const NetworkMap = ({
     searchTerm: state.searchTerm,
     selected: state.patient,
   }))
-  useEffect(() => {
-    if(!states){
-      fetch('https://api.covid19india.org/state_district_wise.json', {
-        cors: 'no-cors',
-        method: 'GET',
-        redirect: 'follow',
-      })
-        .then(resp => resp.json())
-        .then(res => {
-          if(res){
-            let stateNames = Object.keys(res);
-            updateStates(stateNames);
-          }
-        })
-    }
-  })
-
-  useEffect(() => {
-    fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
-      cors: 'no-cors',
-      method: 'GET',
-      redirect: 'follow',
-    })
-      .then(resp => resp.json())
-      .then(res => {
-        updateGraph(rowsToGraph(res.data.rawPatientData))
-        updatePatients(normalize(res.data.rawPatientData))
-        updateLastRefreshed(res.data.lastRefreshed)
-        setIsLoading(false)
-      })
-      .catch(err => console.log('error', err))
-  }, [isLoading])
-
-  useEffect(() => {
-    // TODO: Figure out a way to make this do-able with patient Id search
-    if (graphRef.current && selected.coords) {
-      // Make sure the ref is ready
-      const moveParams = {
-        position: selected.coords,
-        scale: 1.5,
-        offset: { x: 0, y: 0 },
-        animation: {
-          duration: 500,
-          easingFunction: 'easeInCubic',
-        },
-      }
-      graphRef.current.Network.moveTo(moveParams)
-    }
-  }, [selected])
-
-  useEffect(() => {
-    // TODO: Add search by age, district, etc.
-    if (graphRef.current && searchTerm) {
-      // Make sure the ref is ready
-      try {
-        const nodeKey = letterToCode(`P${searchTerm}`)
-        const coordsMap = graphRef.current.Network.getPositions([nodeKey])
-        graphRef.current.Network.selectNodes([nodeKey])
-        selectPatient({ id: nodeKey, coords: coordsMap[nodeKey] })
-      } catch (e) {
-        // None found. TODO: Add a UI response
-      }
-    }
-  }, [searchTerm])
 
   const options = {
     layout: {
       hierarchical: false,
+      improvedLayout: true,
     },
     edges: {
       color: '#000000',
+      smooth: {
+        type: 'continuous',
+      },
     },
     nodes: {
       chosen: {
@@ -116,7 +65,88 @@ const NetworkMap = ({
       navigationButtons: true,
       hover: true,
     },
+    physics: {
+      enabled: true,
+    },
+    autoResize: true,
   }
+
+  useEffect(() => {
+    if (!states) {
+      fetch('https://api.covid19india.org/state_district_wise.json', {
+        cors: 'no-cors',
+        method: 'GET',
+        redirect: 'follow',
+      })
+        .then(resp => resp.json())
+        .then(res => {
+          if (res) {
+            let stateNames = Object.keys(res)
+            updateStates(stateNames)
+          }
+        })
+    }
+
+    fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
+      cors: 'no-cors',
+      method: 'GET',
+      redirect: 'follow',
+    })
+      .then(resp => resp.json())
+      .then(res => {
+        updateGraph(rowsToGraph(res.data.rawPatientData))
+        updatePatients(normalize(res.data.rawPatientData))
+        updateLastRefreshed(res.data.lastRefreshed)
+      })
+      .catch(err => console.log('error', err))
+  }, [])
+
+  useEffect(() => {
+    // TODO: Figure out a way to make this do-able with patient Id search
+    if (graphRef.current && selected.coords) {
+      // Make sure the ref is ready
+      const moveParams = {
+        position: selected.coords,
+        scale: 1.5,
+        offset: { x: 0, y: 0 },
+        animation: {
+          duration: 250,
+          easingFunction: 'easeInCubic',
+        },
+      }
+      graphRef.current.Network.moveTo(moveParams)
+    }
+    // TODO: Add search by age, district, etc.
+    if (graphRef.current && searchTerm) {
+      // Make sure the ref is ready
+      try {
+        const nodeKey = letterToCode(`P${searchTerm}`)
+        const coordsMap = graphRef.current.Network.getPositions([nodeKey])
+        graphRef.current.Network.selectNodes([nodeKey])
+        selectPatient({ id: nodeKey, coords: coordsMap[nodeKey] })
+      } catch (e) {
+        // None found. TODO: Add a UI response
+      }
+    }
+
+    const unsubscribe = store.subscribe(() => {
+      const { type } = store.getState()
+      if (type === actionTypes.UPDATE_GRAPH) {
+        if (!showLoader) {
+          setShowLoader(true)
+        }
+        if (showLoader) {
+          const timeout = setTimeout(() => {
+            // setShowLoader(false)
+          }, 500)
+          return () => {
+            clearTimeout(timeout)
+            unsubscribe()
+          }
+        }
+      }
+    })
+  }, [selected, searchTerm, showLoader])
 
   const events = {
     select: function(event) {
@@ -148,18 +178,22 @@ const NetworkMap = ({
       setToolTipPosition(null)
     },
   }
-
+  
   return (
     <div style={{ height: '100vh', width: '100vw' }}>
-      {isLoading ? null : (
+      {showLoader ? (
+        <Loader />
+      ) : (
         <>
           <NetworkMapLegend currentFilter={filter} />
-          <Graph
-            ref={graphRef}
-            graph={graph}
-            options={options}
-            events={events}
-          />
+          {graph && (
+            <Graph
+              ref={graphRef}
+              graph={graph}
+              options={options}
+              events={events}
+            />
+          )}
           <DatePicker />
           {toolTipVisible && (
             <Tooltip
@@ -181,7 +215,7 @@ const NetworkMap = ({
 
 const mapStateToProps = state => {
   let { graph, searchTerm, filter, states } = state
-  return { graph, searchTerm, filter, states}
+  return { graph, searchTerm, filter, states }
 }
 
 export default connect(mapStateToProps, {
