@@ -67,7 +67,6 @@ import {
 } from '../images/index'
 import hash from 'object-hash'
 import dotProp from 'dot-prop-immutable'
-import { clustersList } from './clusterCenters'
 
 export function letterToCode(str) {
   const letterPos = parseInt(str[0], 36)
@@ -118,20 +117,6 @@ export const rowsToGraph = rows => {
   }
 
   let clusters = {}
-
-  // Add Cluster Centres
-
-  // for (var clusterKey in clustersList) {
-  //   const patientCode = letterToCode(clusterKey)
-  //   let clusterNode = {
-  //     id: patientCode,
-  //     label: clustersList[clusterKey],
-  //     shape: 'image',
-  //     size: 60,
-  //     image: cluster_node,
-  //   }
-  //   graph = dotProp.set(graph, 'nodes', list => [...list, clusterNode])
-  // }
 
   rows.forEach(row => {
     const patientCode = letterToCode('P' + row.patientId)
