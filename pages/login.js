@@ -6,18 +6,33 @@ const Big = styled.div`
   height: 100vh;
   width: 100vw;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #e7e7e7;
+  background-color: #fcfcfc;
 `
 
 const Container = styled.div`
   /* height: 30vh; */
   width: 21vw;
-  border-radius: 10px;
+  border-radius: 5px;
   border: 1px solid #f5f5f5;
   padding: 20px;
   background-color: white;
+  box-shadow: 0 10px 10px -5px #efefef;
+`
+
+const TextContainer = styled.div`
+  /* height: 30vh; */
+  width: 40vw;
+  font-size: 50px;
+  border-radius: 3px;
+  font-family: Lato, sans-serif;
+  padding: 20px;
+  text-align: center;
+  font-weight: 500;
+  color: #616161;
+  margin-bottom: 30px;
 `
 
 const Input = styled.input`
@@ -26,8 +41,9 @@ const Input = styled.input`
   margin: 10px 0;
   padding: 10px;
   box-shadow: none;
-  border: 1px solid #d2cfcf;
-  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
+  font-family: Lato, sans-serif;
   &:focus {
     outline: none;
   }
@@ -45,7 +61,7 @@ const Button = styled.button`
   background: #2977f5;
   cursor: pointer;
   margin-top: 20px;
-  color: #eaeaef;
+  color: #fff;
   border: none;
   box-shadow: 0px 5px 0px 0px #194791;
   transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease,
@@ -86,6 +102,7 @@ function Login() {
 
   return (
     <Big>
+      <TextContainer>COVID-19 Tracker Dashboard</TextContainer>
       <Container>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input

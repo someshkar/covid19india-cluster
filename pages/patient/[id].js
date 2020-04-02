@@ -64,7 +64,12 @@ function PatientDetail({ id }) {
       ) : (
         <main
           className="container"
-          style={{ minHeight: '80vh', marginTop: '3vh', fontFamily: 'Lato' }}
+          style={{
+            minHeight: '80vh',
+            marginTop: '3vh',
+            fontFamily: 'Lato, sans-serif',
+            color: '#585858',
+          }}
         >
           <div className="row">
             <div className="col-12">

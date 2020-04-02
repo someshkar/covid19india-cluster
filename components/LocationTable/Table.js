@@ -57,7 +57,11 @@ function Table({ columns, data, locationType }) {
 
   return (
     <div className="table-responsive">
-      <table {...getTableProps()} className="table">
+      <table
+        {...getTableProps()}
+        className="table"
+        style={{ fontFamily: 'Lato, sans-serif', color: '#585858' }}
+      >
         <thead>
           <tr>
             <th></th>
