@@ -56,6 +56,9 @@
 //       ]),
 //     }
 
+import cookie from 'cookie'
+import dotProp from 'dot-prop-immutable'
+
 import {
   male_hosp,
   male_cured,
@@ -64,7 +67,6 @@ import {
   female_hosp,
   female_dead,
 } from '../images/index'
-import dotProp from 'dot-prop-immutable'
 
 export function letterToCode(str) {
   const letterPos = parseInt(str[0], 36)
@@ -134,6 +136,10 @@ export const rowsToGraph = rows => {
     }
   })
   return graph
+}
+
+export function parseCookies(req) {
+  return cookie.parse(req ? req.headers.cookie || '' : document.cookie)
 }
 
 // console.log(letterToCode('P699999'))

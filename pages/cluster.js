@@ -1,5 +1,7 @@
 import Head from 'next/head'
 
+import { parseCookies } from '../util/parse'
+
 import Layout from '../components/layout'
 import Dashboard from '../components/Cluster/Dashboard'
 
@@ -106,6 +108,23 @@ const Cluster = () => {
       </div>
     </Layout>
   )
+}
+
+Cluster.getInitialProps = ({ req, res }) => {
+  const cookies = parseCookies(req)
+
+  if (res && !cookies.auth) {
+    res.writeHead(302, { Location: '/login' })
+    res.end()
+
+    return {
+      auth: false,
+    }
+  }
+
+  return {
+    auth: cookies.auth,
+  }
 }
 
 export default Cluster

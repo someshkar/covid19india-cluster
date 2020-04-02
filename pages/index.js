@@ -3,12 +3,16 @@ import { useRouter } from 'next/router'
 import ReactLoading from 'react-loading'
 import axios from 'axios'
 
+import { parseCookies } from '../util/parse'
+
 import Layout from '../components/layout'
 import PatientTable from '../components/Portal/PatientTable'
 import DownloadBlock from '../components/Portal/PatientTable'
 
 function Home(props) {
   const router = useRouter()
+
+  useEffect(() => console.log(props.auth), [])
 
   const [fetched, setFetched] = useState(false)
   const [patients, setPatients] = useState([])
@@ -65,6 +69,23 @@ function Home(props) {
       </div>
     </Layout>
   )
+}
+
+Home.getInitialProps = ({ req, res }) => {
+  const cookies = parseCookies(req)
+
+  if (res && !cookies.auth) {
+    res.writeHead(302, { Location: '/login' })
+    res.end()
+
+    return {
+      auth: false,
+    }
+  }
+
+  return {
+    auth: cookies.auth,
+  }
 }
 
 export default Home
