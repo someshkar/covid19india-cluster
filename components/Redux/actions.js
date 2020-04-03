@@ -6,6 +6,7 @@
 
 // Action Types
 import actionTypes from './actionTypes'
+import { useLog } from '../../util/logger'
 
 const updateGraph = graph => (dispatch, getState) => {
   // Dispatch the result.
@@ -65,7 +66,7 @@ const setSearchTerm = term => (dispatch, getState) => {
 }
 
 const updateStates = states => (dispatch, getState) => {
-  console.log('Action updateStates', states);
+  useLog('Action updateStates', states);
   dispatch({
     type: actionTypes.UPDATE_STATES,
     payload: {

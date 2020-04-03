@@ -14,6 +14,7 @@ import {
   removeTravel,
 } from '../../util/filters'
 import { updateGraph, selectFilter } from '../Redux/actions'
+import { useLog } from '../../util/logger'
 
 const filters = [
   {
@@ -107,7 +108,7 @@ const FilterPanel = ({
   // const [selected, selectCategory] = React.useState('P2P')
 
   const changeGraph = name => {
-    // console.log('Changegraph', graph, patients.byId)
+    // useLog('Changegraph', graph, patients.byId)
     let currentFilter = _.find(filters, function(o) {
       return o.name === filter
     })
@@ -119,7 +120,7 @@ const FilterPanel = ({
 
     selectFilter(name)
     newGraph = choosenFilter.add(newGraph, patients.byId, states)
-    console.log(newGraph)
+    useLog(newGraph)
     updateGraph(newGraph)
   }
   const FilterHeader = styled.div`

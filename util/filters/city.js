@@ -2,6 +2,7 @@ import hash from 'object-hash'
 import { state_node, city_node } from '../../images'
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
+import {useLog} from '../logger';
 
 function getCityDistrictOrState(patients, patientId) {
     return patients[patientId].city
@@ -32,8 +33,8 @@ export const addCities = (graph, patients) => {
     }
   }
 
-  console.log('State map', states, 'State Cities Map:', stateCitiesMap)
-
+  useLog('State map', states, 'State Cities Map:', stateCitiesMap);
+  
   for (key in states) {
     let node = {
       id: key + 1,
@@ -132,7 +133,7 @@ export const removeCities = (graph, patients) => {
     }
   }
 
-  console.log('State map', states, 'State Cities Map:', stateCitiesMap)
+  useLog('State map', states, 'State Cities Map:', stateCitiesMap)
   for (key in states) {
     let node = {
       id: key + 1,
@@ -260,7 +261,7 @@ export const removeCities = (graph, patients) => {
 //   //         o.from === hash(patients[patientId].state)
 //   //       )
 //   //     })
-//   //     console.log('edge', edgeIndex)
+//   //     useLog('edge', edgeIndex)
 //   //     graph = dotProp.delete(graph, `edges.${edgeIndex}`)
 //   //   }
 

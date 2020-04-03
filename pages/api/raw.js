@@ -1,4 +1,5 @@
 const { doc, creds } = require('./db')
+const { useLog } = require('../../util/logger');
 
 module.exports = async (req, res) => {
   await doc.useServiceAccountAuth(creds)
@@ -6,7 +7,7 @@ module.exports = async (req, res) => {
   const sheet = doc.sheetsByIndex[0]
 
   const rawRows = await sheet.getRows()
-  // console.log(rows)
+  useLog(rows)
 
   let rows = []
 
