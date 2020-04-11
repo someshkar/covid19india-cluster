@@ -62,7 +62,7 @@ const NetworkMap = ({
         setIsLoading(false)
       })
       .catch(err => console.log('error', err))
-  }, [isLoading])
+  }, [])
 
   useEffect(() => {
     // TODO: Figure out a way to make this do-able with patient Id search
