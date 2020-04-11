@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
 import { connect } from 'react-redux'
@@ -27,7 +27,8 @@ const filters = [
     },
   },
   { name: 'State', icon: state, add: addStates, remove: removeStates },
-  { name: 'City', icon: city, add: addCities, remove: removeCities }
+  { name: 'City', icon: city, add: addCities, remove: removeCities },
+  { name: 'Travel', icon: abroad, add: addTravel, remove: removeTravel },
 ]
 
 //{ name: 'Travel', icon: abroad, add: addTravel, remove: removeTravel },
@@ -136,12 +137,14 @@ const FilterPanel = ({
     <HeaderContainer>
       <FilterHeader>Cluster Filter</FilterHeader>
       <FilterMenuContainer>
-        {filters.map(filterItem => (
-          <FilterCategory
-            filter={filterItem}
-            onClick={() => changeGraph(filterItem.name)}
-            selected={filter === filterItem.name ? true : false}
-          />
+        {filters.map((filterItem, filterIndex) => (
+          <Fragment key={filterIndex}>
+            <FilterCategory
+              filter={filterItem}
+              onClick={() => changeGraph(filterItem.name)}
+              selected={filter === filterItem.name ? true : false}
+            />
+          </Fragment>
         ))}
       </FilterMenuContainer>
     </HeaderContainer>

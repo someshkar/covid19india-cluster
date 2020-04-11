@@ -14,6 +14,7 @@ import state_node from './nodes/state.png'
 import city_node from './nodes/city.png'
 import plane_abroad_node from './nodes/plane.png'
 import plane_local_node from './nodes/plane_local.png'
+import cluster_node from './nodes/cluster.png'
 
 export {
   male_cured,
@@ -30,4 +31,5 @@ export {
   abroad,
   plane_abroad_node,
   plane_local_node,
+  cluster_node,
 }
