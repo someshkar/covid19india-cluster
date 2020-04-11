@@ -110,7 +110,7 @@ export const codeToLetter = code => {
 
 const extractEvents = rows => {}
 
-export const rowsToGraph = rows => {
+export const rowsToGraph = (rows, addPInPatientId) => {
   let graph = {
     nodes: [],
     edges: [],
@@ -119,7 +119,11 @@ export const rowsToGraph = rows => {
   let clusters = {}
 
   rows.forEach(row => {
-    const patientCode = letterToCode('P' + row.patientId)
+    let patientCode = row.patientId;
+    if(addPInPatientId)
+    {
+      patientCode = letterToCode('P' + row.patientId)
+    }
     let node = {
       id: patientCode,
       label: 'P' + row.patientId,

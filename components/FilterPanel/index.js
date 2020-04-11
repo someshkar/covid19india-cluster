@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { connect } from 'react-redux'
 import _ from 'lodash'
-
+import normalize from '../../util/normalize'
 import { state, city, abroad, p2p } from '../../images/index'
 import {
   addStates,
@@ -13,7 +13,8 @@ import {
   addTravel,
   removeTravel,
 } from '../../util/filters'
-import { updateGraph, selectFilter } from '../Redux/actions'
+import { updateGraph, selectFilter, updatePatients } from '../Redux/actions'
+import { rowsToGraph } from '../../util/parse'
 
 const filters = [
   {
@@ -98,11 +99,11 @@ const FilterCategory = ({ filter, onClick, selected }) => {
 
 const FilterPanel = ({
   graph,
-  patients,
   updateGraph,
   selectFilter,
   filter,
-  states
+  states,
+  rawPatients
 }) => {
   // const [selected, selectCategory] = React.useState('P2P')
 
@@ -114,14 +115,17 @@ const FilterPanel = ({
     let choosenFilter = _.find(filters, function(o) {
       return o.name === name
     })
-
-    let newGraph = currentFilter.remove(graph, patients.byId, states)
-
     selectFilter(name)
-    newGraph = choosenFilter.add(newGraph, patients.byId, states)
-    console.log(newGraph)
-    updateGraph(newGraph)
+      if(name != 'State')
+      {
+        var newGraph = rowsToGraph(rawPatients, false);
+        let allPatients = normalize(rawPatients, false);
+        newGraph = choosenFilter.add(newGraph, allPatients.byId, states);
+        updateGraph(newGraph)
+      }
   }
+
+  
   const FilterHeader = styled.div`
     text-align: center;
     text-transform: uppercase;
@@ -152,8 +156,8 @@ const FilterPanel = ({
 }
 
 const mapStateToProps = state => {
-  const { patients, graph, filter, states } = state
-  return { graph, patients, filter, states}
+  const { patients, graph, filter, states,rawPatients } = state
+  return { graph, patients, filter, states, rawPatients}
 }
 
 export default connect(mapStateToProps, { updateGraph, selectFilter })(

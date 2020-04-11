@@ -6,9 +6,8 @@ import { plane_abroad_node, plane_local_node } from '../../images'
 
 export const addTravel = (graph, patients) => {
   let locations = {}
-
   for (let patientId in patients) {
-    if (patients[patientId].place_attributes !== null) {
+    if (patients[patientId].place_attributes) {
       patients[patientId].place_attributes.forEach(loc => {
         if (!locations[hash(loc.place)]) {
           locations[hash(loc.place)] = loc
@@ -30,10 +29,7 @@ export const addTravel = (graph, patients) => {
 
   // Add edges from patient to location
   for (let patientId in patients) {
-    if (
-      patients[patientId].place_attributes !== null &&
-      patients[patientId].place_attributes[0]
-    ) {
+    if (patients[patientId].place_attributes) {
       patients[patientId].place_attributes.forEach(loc => {
         let edge = {
           from: hash(loc.place),
@@ -60,7 +56,7 @@ export const removeTravel = (graph, patients) => {
   let locations = {}
 
   for (let patientId in patients) {
-    if (patients[patientId].place_attributes !== null) {
+    if (patients[patientId].place_attributes) {
       patients[patientId].place_attributes.forEach(loc => {
         if (!locations[hash(loc.place)]) {
           locations[hash(loc.place)] = loc
@@ -86,10 +82,7 @@ export const removeTravel = (graph, patients) => {
   }
 
   for (let patientId in patients) {
-    if (
-      patients[patientId].place_attributes !== null &&
-      patients[patientId].place_attributes[0]
-    ) {
+    if (patients[patientId].place_attributes ) {
       patients[patientId].place_attributes.forEach(loc => {
         let edge = {
           from: hash(loc.place),
