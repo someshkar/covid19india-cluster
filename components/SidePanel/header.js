@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 
-import { getIcon } from '../../util/parse'
+import {getIcon, rowsToGraph} from '../../util/parse'
 import { SearchInput } from '../UI/search-input'
-import { setSearchTerm } from '../Redux/actions'
+import {selectFilter, setSearchTerm, updateGraph} from '../Redux/actions'
 
 const Container = styled.div`
   font-family: 'Lato', sans-serif;
@@ -45,7 +45,8 @@ const Name = styled.div`
   font-size: 40px;
 `
 
-function Header({ patient, lastRefreshed, setSearchTerm }) {
+function Header({ patient, lastRefreshed, setSearchTerm, selectFilter, updateGraph }) {
+  const [removeLeafNode, toggleRemoveLeafNode] = useState(false)
   const onSearch = (term) => {
   let _serchTerm = term.toUpperCase().replace(/P/g, "").trim();
     setSearchTerm(parseInt(_serchTerm))
@@ -58,9 +59,27 @@ function Header({ patient, lastRefreshed, setSearchTerm }) {
     const minDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60));
     const hourDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60 * 60));
     const dayDiff = Math.ceil((dateNow - dateRefresh) / (1000 * 60 * 60 * 24));
-    return minDiff < 60 ? `${minDiff}M ago` 
+    return minDiff < 60 ? `${minDiff}M ago`
             : hourDiff < 24 ? `${hourDiff}H ago`
               : `${dayDiff}D ago`;
+  }
+
+  useEffect(() => {
+    fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
+        cors: 'no-cors',
+        method: 'GET',
+        redirect: 'follow',
+    })
+      .then(resp => resp.json())
+      .then(res => {
+          updateGraph(rowsToGraph(res.data.rawPatientData, removeLeafNode))
+          selectFilter('P2P')
+      })
+      .catch(err => console.log('error', err))
+  }, [removeLeafNode])
+
+  const onChecked = (isEdgeNodeFilterChecked) => {
+      toggleRemoveLeafNode(isEdgeNodeFilterChecked)
   }
 
   const { patientId } = patient
@@ -70,7 +89,7 @@ function Header({ patient, lastRefreshed, setSearchTerm }) {
       <Title>
         covid19india.org Tracker Live <Dot>&nbsp;&middot;&nbsp;</Dot> {getTimeDiff()}
       </Title>
-      <SearchInput searchTerm={onSearch} />
+      <SearchInput searchTerm={onSearch} edgeNodeFilter={onChecked} />
       <PatientContainer>
         <Image src={getIcon(patient)} />
         <Name>P {patientId.toString().substring(2)}</Name>
@@ -80,5 +99,5 @@ function Header({ patient, lastRefreshed, setSearchTerm }) {
 }
 
 export default connect(null, {
-  setSearchTerm
+  setSearchTerm, updateGraph, selectFilter
 })(Header)
