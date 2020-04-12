@@ -73,7 +73,6 @@ export function letterToCode(str) {
 }
 
 export function getIcon(patient) {
-  console.log('entered getIcon')
   switch (patient.status) {
     case 'Recovered':
       return patient.gender === 'male' ? male_cured : female_cured
