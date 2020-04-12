@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import {getIcon, rowsToGraph} from '../../util/parse'
 import { SearchInput } from '../UI/search-input'
-import {selectFilter, setSearchTerm, updateGraph} from '../Redux/actions'
+import {selectFilter, setSearchTerm, updateGraph, updateIsLoading} from '../Redux/actions'
 
 const Container = styled.div`
   font-family: 'Lato', sans-serif;
@@ -45,7 +45,8 @@ const Name = styled.div`
   font-size: 40px;
 `
 
-function Header({ patient, lastRefreshed, setSearchTerm, selectFilter, updateGraph }) {
+function Header({ patient, lastRefreshed, setSearchTerm, selectFilter, updateGraph, updateIsLoading }) {
+  const [isMounting, toggleIsMounting] = useState(true)
   const [removeLeafNode, toggleRemoveLeafNode] = useState(false)
   const onSearch = (term) => {
   let _serchTerm = term.toUpperCase().replace(/P/g, "").trim();
@@ -65,6 +66,11 @@ function Header({ patient, lastRefreshed, setSearchTerm, selectFilter, updateGra
   }
 
   useEffect(() => {
+    if (isMounting) {
+      toggleIsMounting(false)
+      return
+    }
+    updateIsLoading(true)
     fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
         cors: 'no-cors',
         method: 'GET',
@@ -99,5 +105,5 @@ function Header({ patient, lastRefreshed, setSearchTerm, selectFilter, updateGra
 }
 
 export default connect(null, {
-  setSearchTerm, updateGraph, selectFilter
+  setSearchTerm, updateGraph, selectFilter, updateIsLoading,
 })(Header)

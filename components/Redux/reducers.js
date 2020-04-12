@@ -15,7 +15,8 @@ const initialState = {
   graph: null,
   patients: null,
   searchTerm: '',
-  states: null
+  states: null,
+  isLoading: true,
 }
 
 // Export the Device Reducer.
@@ -31,7 +32,7 @@ export default (state = initialState, action) => {
     }
     case actionTypes.UPDATE_GRAPH: {
       const { graph } = action.payload
-      return { ...state, graph: graph }
+      return { ...state, graph: graph, isLoading: false }
     }
     case actionTypes.UPDATE_PATIENTS: {
       const { patients } = action.payload
@@ -57,6 +58,9 @@ export default (state = initialState, action) => {
         return accumulator;
       },{});
       return {...state, states: states}
+    }
+    case actionTypes.UPDATE_IS_LOADING: {
+      return {...state, isLoading: action.payload}
     }
     default:
       return state

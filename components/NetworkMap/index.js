@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Graph from 'react-graph-vis'
 import { Tooltip, TooltipArrow, TooltipInner } from 'styled-tooltip-component'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates } from '../Redux/actions'
+import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates, updateIsLoading } from '../Redux/actions'
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
@@ -18,7 +18,8 @@ const NetworkMap = ({
   selectPatient,
   height,
   width,
-  states
+  states,
+  isLoading: isGraphLoading,
 }) => {
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
@@ -154,12 +155,14 @@ const NetworkMap = ({
       {isLoading ? null : (
         <>
           <NetworkMapLegend currentFilter={filter} />
-          <Graph
+          {!isGraphLoading && (
+            <Graph
             ref={graphRef}
             graph={graph}
             options={options}
             events={events}
           />
+          )}
           <DatePicker />
           {toolTipVisible && (
             <Tooltip
@@ -180,8 +183,8 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm, filter, states } = state
-  return { graph, searchTerm, filter, states}
+  let { graph, searchTerm, filter, states, isLoading } = state
+  return { graph, searchTerm, filter, states, isLoading}
 }
 
 export default connect(mapStateToProps, {
