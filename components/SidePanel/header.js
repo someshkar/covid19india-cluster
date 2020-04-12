@@ -65,6 +65,8 @@ function Header({ patient, lastRefreshed, setSearchTerm, selectFilter, updateGra
   }
 
   useEffect(() => {
+    if(removeLeafNode)
+    {
     fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
         cors: 'no-cors',
         method: 'GET',
@@ -72,10 +74,11 @@ function Header({ patient, lastRefreshed, setSearchTerm, selectFilter, updateGra
     })
       .then(resp => resp.json())
       .then(res => {
-          updateGraph(rowsToGraph(res.data.rawPatientData, removeLeafNode))
+          updateGraph(rowsToGraph(res.data.rawPatientData, removeLeafNode, false))
           selectFilter('P2P')
       })
       .catch(err => console.log('error', err))
+    }
   }, [removeLeafNode])
 
   const onChecked = (isEdgeNodeFilterChecked) => {

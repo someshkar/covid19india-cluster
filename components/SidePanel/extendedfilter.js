@@ -4,6 +4,7 @@ import { updateRawPatients, updatePatients, updateGraph } from '../Redux/actions
 import { connect } from 'react-redux'
 import normalize from '../../util/normalize'
 import { rowsToGraph } from '../../util/parse'
+import Select from 'react-select';
 import {
   addStates,
   removeStates,
@@ -22,6 +23,9 @@ function filterByObject(obj, filters) {
     });
   });
 }
+const mystyle = {
+  dislay: "None"
+};
 
 const ExtendedFilter = ({rawPatients,
 updateGraph,
@@ -31,6 +35,9 @@ patients,
 states
 }) => 
  {
+  const [stateOptions, setstateOptions] = useState([]);
+  const [districtOptions, setdistrictOptions] = useState([]);  
+  const [cityOptions, setCityOptions] = useState([]);
   const Title = styled.div`
   text-transform: uppercase;
   font-weight: bold;
@@ -56,28 +63,25 @@ states
       if (label === 'state') {
         const district = document.getElementById('district');
         const city = document.getElementById('city');
-        const lbldistrict = document.getElementById('lbldistrict');
-        const lblcity = document.getElementById('lblcity');
         // Hide boxes
         if (value === '') 
         {
           district.style.display = 'none';
-          lbldistrict.style.display = 'none';
         }
         else 
         {
           district.style.display = 'inline';
-          lbldistrict.style.display = 'inline';
         }
         city.style.display = 'none';
-        lblcity.style.display = 'none';
         // Default to empty selection
         district.selectedIndex = 0;
         city.selectedIndex = 0;
         newFilters['district'] = '';
         newFilters['city'] = '';
+        console.log(label);
+        console.log(value);
         updatePatients(normalize(rawPatients.filter(x => x.state == value), false));
-        var newGraph = rowsToGraph(rawPatients.filter(x => x.state == value), false);
+        var newGraph = rowsToGraph(rawPatients.filter(x => x.state == value), false, false);
         let filterState = [];
         filterState[value] = states[value];
         console.log(filterState);
@@ -89,34 +93,42 @@ states
         if (value === '') 
         {
           city.style.display = 'none'
-          lblcity.style.display = 'none'
         }
         else
         { 
           city.style.display = 'inline';
-          lblcity.style.display = 'inline'
         }
         // Default to empty selection
         city.selectedIndex = 0;
         newFilters['city'] = '';
         updatePatients(normalize(rawPatients.filter(x => x.district == value), false));
-        updateGraph(rowsToGraph(rawPatients.filter(x => x.district == value), false));
+        updateGraph(rowsToGraph(rawPatients.filter(x => x.district == value), false, false));
       }
       else if(label == 'city')
       {
         updatePatients(normalize(rawPatients.filter(x => x.city == value), false));
-        updateGraph(rowsToGraph(rawPatients.filter(x => x.city == value), false));
+        updateGraph(rowsToGraph(rawPatients.filter(x => x.city == value), false, false));
       }
        
       return newFilters;
     }
    )
   };
+ 
+  useEffect(() => {
+    setstateOptions(getSortedValues(rawPatients, 'state'));
+    setdistrictOptions(getSortedValues(rawPatients, 'district'));
+    setdistrictOptions(getSortedValues(rawPatients, 'city'));
+  },[]);
 
   function getSortedValues(obj, key) {
     const setValues = new Set(obj.map((p) => p[key]));
-    if (setValues.size > 1) setValues.add('');
-    return Array.from(setValues).sort();
+    if (setValues.size > 1) setValues.add('All');
+    let returnValue = Array.from(setValues).sort().map((x, i) => 
+    {
+      return {'value': i, 'label':x};
+    })
+    return returnValue;
   }
   
   return (
@@ -126,87 +138,44 @@ states
   <Title>
         State, District and city filter:
   </Title>
+  <br></br>
 <div className="select">
-  <label>  State: </label>
+<Select
+        id="state"
+        onChange={(value) => {
+          handleFilters('state', value.label);}}
+        options={stateOptions}
+        isClearable={true}
+        defaultValue={{ label: 'Select State', value: -1 }}
 
-  <select
-    style={{animationDelay: '0.3s'}}
-    id="state"
-    onChange={(event) => {
-      handleFilters('state', event.target.value);
-    }}
-  >
-    <option value="" disabled selected>
-      Select State
-    </option>
-    {getSortedValues(rawPatients, 'state').map(
-      (state, index) => {
-        return (
-          <option key={index} value={state}>
-            {state === '' ? 'All' : state}
-          </option>
-        );
-      }
-    )}
-  </select>
+      />
+
+<Select
+        id="district"
+        onChange={(value) => {
+          handleFilters('district', value);}}
+        options={districtOptions}
+        isClearable={true}
+        defaultValue={{ label: 'Select District', value: -1 }}
+        styles={mystyle}
+      />
+
+<Select
+        id="city"
+        onChange={(value) => {
+          handleFilters('city', value);}}
+        options={districtOptions}
+        isClearable={true}
+        defaultValue={{ label: 'Select City', value: -1 }}
+        styles={mystyle}
+      />    
 </div>
 
 <div className="select">
  <label id='lbldistrict' style={{display:'none'}}>District: </label> 
-  <select
-    style={{animationDelay: '0.4s', display: 'none'}}
-    id="district"
-    onChange={(event) => {
-      handleFilters('district', event.target.value);
-    }}
-  >
-    <option value="" disabled selected>
-      Select District
-    </option>
-    {getSortedValues(
-      filterByObject(rawPatients, {
-        state: filters.state,
-      }),
-      'district'
-    ).map((district, index) => {
-      return (
-        <option key={index} value={district}>
-          {district === '' ? 'All' : district}
-        </option>
-      );
-    })}
-  </select>
-</div>
-
-<div className="select">
-  <label id="lblcity" style={{display:'none'}}>City:</label>
-  <select
-    style={{animationDelay: '0.4s', display: 'none'}}
-    id="city"
-    onChange={(event) => {
-      handleFilters('city', event.target.value);
-    }}
-  >
-    <option value="" disabled selected>
-      Select City
-    </option>
-    {getSortedValues(
-      filterByObject(rawPatients, {
-        state: filters.state,
-        district: filters.district,
-      }),
-      'city'
-    ).map((city, index) => {
-      return (
-        <option key={index} value={city}>
-          {city === '' ? 'All' : city}
-        </option>
-      );
-    })}
-  </select>
-</div>
 <br></br>
 <hr></hr>
+</div>
 </div>
   )
 }

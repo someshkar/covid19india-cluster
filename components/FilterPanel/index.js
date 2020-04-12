@@ -118,7 +118,7 @@ const FilterPanel = ({
     selectFilter(name)
       if(name != 'State')
       {
-        var newGraph = rowsToGraph(rawPatients, false);
+        var newGraph = rowsToGraph(rawPatients, false, false);
         let allPatients = normalize(rawPatients, false);
         newGraph = choosenFilter.add(newGraph, allPatients.byId, states);
         updateGraph(newGraph)

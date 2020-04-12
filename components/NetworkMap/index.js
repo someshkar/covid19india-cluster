@@ -58,7 +58,7 @@ const NetworkMap = ({
     })
       .then(resp => resp.json())
       .then(res => {
-        updateGraph(rowsToGraph(res.data.rawPatientData, true));
+        updateGraph(rowsToGraph(res.data.rawPatientData, false, true));
         updatePatients(normalize(res.data.rawPatientData, true));
         updateLastRefreshed(res.data.lastRefreshed);
         updateRawPatients(res.data.rawPatientData);
