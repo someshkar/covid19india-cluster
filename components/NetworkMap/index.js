@@ -48,7 +48,7 @@ const NetworkMap = ({
           }
         })
     }
-  })
+  }, [])
 
   useEffect(() => {
     fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {

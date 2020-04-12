@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import useDebounce from '../../util/useDebounce'
+import { useSelector } from 'react-redux'
 
 const Input = styled.input`
   margin: 10px;
@@ -16,9 +17,17 @@ const Input = styled.input`
   }
 `
 
-export const SearchInput = ({ searchTerm }) => {
+const Checkbox = props => (
+    <input type="checkbox" {...props} />
+)
+
+export const SearchInput = ({ searchTerm, edgeNodeFilter }) => {
   const [term, setTerm] = useState('')
+  const [removeNonEdgeNode, changeRemoveNonEdgeNodeValue] = useState(false)
   const debouncedTerm = useDebounce(term)
+  const { filterState } = useSelector(state => ({
+      filterState: state.filter === 'P2P'
+  }))
 
   useEffect(() => {
     if (debouncedTerm) {
@@ -26,16 +35,33 @@ export const SearchInput = ({ searchTerm }) => {
     }
   }, [debouncedTerm])
 
+  useEffect(() => {
+      edgeNodeFilter(removeNonEdgeNode)
+  }, [removeNonEdgeNode])
+
   const handleTextChange = e => {
     setTerm(e.target.value)
   }
 
+  const handleCheckBoxChange = e => {
+      changeRemoveNonEdgeNodeValue(e.target.checked)
+  }
+
   return (
-    <Input
-      placeholder="Type patient number to search..."
-      value={term}
-      onChange={handleTextChange}
-      aria-label="Search input"
-    />
+    <div>
+      <Input
+        placeholder="Type patient number to search..."
+        value={term}
+        onChange={handleTextChange}
+        aria-label="Search input"
+      />
+      <label hidden={!filterState}>
+        <Checkbox
+          checked={removeNonEdgeNode}
+          onChange={handleCheckBoxChange}
+        />
+        <span>Remove non contracted patients</span>
+      </label>
+    </div>
   )
 }
