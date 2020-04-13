@@ -142,7 +142,7 @@ function addClusterNode(row, clusters, graph) {
     return graph;
 }
 
-export const rowsToGraph = (rows, removeLeafNode) => {
+export const rowsToGraph = (rows, removeLeafNode, addPInPatientId) => {
   let graph = {
     nodes: [],
     edges: [],
@@ -161,7 +161,11 @@ export const rowsToGraph = (rows, removeLeafNode) => {
   }
 
   rows.forEach(row => {
-    const patientCode = letterToCode('P' + row.patientId)
+    let patientCode = row.patientId;
+    if(addPInPatientId)
+    {
+      patientCode = letterToCode('P' + row.patientId)
+    }
     if (row.contractedFrom) {
       let edge = {}
       if (row.contractedFrom[0] === 'E') {
