@@ -27,6 +27,15 @@ const updatePatients = patients => (dispatch, getState) => {
   })
 }
 
+const updateRawPatients = rawPatients => (dispatch, getState) => {
+  // Dispatch the result.
+  dispatch({
+    type: actionTypes.UPDATE_RAW_PATIENTS,
+    payload: {
+      rawPatients: rawPatients,
+    },
+  })
+}
 const updateLastRefreshed = lastRefreshed => (dispatch, getState) => {
   // Dispatch the result.
   dispatch({
@@ -46,7 +55,6 @@ const selectPatient = patient => (dispatch, getState) => {
 }
 
 const selectFilter = filter => (dispatch, getState) => {
-  // Dispatch the result.
   dispatch({
     type: actionTypes.SELECT_FILTER,
     payload: {
@@ -82,4 +90,4 @@ const updateIsLoading = (isLoading) => (dispatch) => {
 }
 
 // Export the actions.
-export { updateGraph, updatePatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, updateStates, updateIsLoading}
+export { updateGraph, updatePatients, updateRawPatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, updateStates, updateIsLoading}

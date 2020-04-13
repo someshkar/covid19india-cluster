@@ -108,7 +108,7 @@ function getPatientNode(patientCode, row) {
     return node
 }
 
-export const rowsToGraph = (rows, removeLeafNode) => {
+export const rowsToGraph = (rows, removeLeafNode, addPInPatientId) => {
   let graph = {
     nodes: [],
     edges: [],
@@ -127,7 +127,11 @@ export const rowsToGraph = (rows, removeLeafNode) => {
   }
 
   rows.forEach(row => {
-    const patientCode = letterToCode('P' + row.patientId)
+    let patientCode = row.patientId;
+    if(addPInPatientId)
+    {
+      patientCode = letterToCode('P' + row.patientId)
+    }
     if (row.contractedFrom) {
       const CONTRACTED_FROM = row.contractedFrom
       const PATIENT_CODE_CONTRACTED_FROM = letterToCode(CONTRACTED_FROM)

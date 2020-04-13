@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Graph from 'react-graph-vis'
 import { Tooltip, TooltipArrow, TooltipInner } from 'styled-tooltip-component'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates, updateIsLoading } from '../Redux/actions'
+import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates, updateRawPatients, updateIsLoading } from '../Redux/actions'
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
@@ -19,6 +19,7 @@ const NetworkMap = ({
   height,
   width,
   states,
+  updateRawPatients,
   isLoading: isGraphLoading,
 }) => {
   const graphRef = useRef()
@@ -32,6 +33,7 @@ const NetworkMap = ({
     searchTerm: state.searchTerm,
     selected: state.patient,
   }))
+
   useEffect(() => {
     if(!states){
       fetch('https://api.covid19india.org/state_district_wise.json', {
@@ -57,13 +59,14 @@ const NetworkMap = ({
     })
       .then(resp => resp.json())
       .then(res => {
-        updateGraph(rowsToGraph(res.data.rawPatientData))
-        updatePatients(normalize(res.data.rawPatientData))
-        updateLastRefreshed(res.data.lastRefreshed)
-        setIsLoading(false)
+        updateGraph(rowsToGraph(res.data.rawPatientData, false, true));
+        updatePatients(normalize(res.data.rawPatientData, true));
+        updateLastRefreshed(res.data.lastRefreshed);
+        updateRawPatients(res.data.rawPatientData);
+        setIsLoading(false);
       })
       .catch(err => console.log('error', err))
-  }, [isLoading])
+  }, [])
 
   useEffect(() => {
     // TODO: Figure out a way to make this do-able with patient Id search
@@ -183,8 +186,8 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm, filter, states, isLoading } = state
-  return { graph, searchTerm, filter, states, isLoading}
+  let { graph, searchTerm, filter, states, rawPatientData, isLoading } = state
+  return { graph, searchTerm, filter, states, rawPatientData, isLoading}
 }
 
 export default connect(mapStateToProps, {
@@ -193,4 +196,5 @@ export default connect(mapStateToProps, {
   updateStates,
   updateLastRefreshed,
   selectPatient,
+  updateRawPatients
 })(NetworkMap)

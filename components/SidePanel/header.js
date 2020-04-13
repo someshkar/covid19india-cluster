@@ -78,7 +78,7 @@ function Header({ patient, lastRefreshed, setSearchTerm, selectFilter, updateGra
     })
       .then(resp => resp.json())
       .then(res => {
-          updateGraph(rowsToGraph(res.data.rawPatientData, removeLeafNode))
+          updateGraph(rowsToGraph(res.data.rawPatientData, removeLeafNode, false))
           selectFilter('P2P')
       })
       .catch(err => console.log('error', err))
