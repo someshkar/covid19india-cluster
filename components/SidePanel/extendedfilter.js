@@ -23,9 +23,7 @@ function filterByObject(obj, filters) {
     });
   });
 }
-const mystyle = {
-  dislay: "None"
-};
+
 
 const ExtendedFilter = ({rawPatients,
 updateGraph,
@@ -49,7 +47,7 @@ states
     district: '',
     city: ''
   });
-  
+
   const addFilters = [
     { name: 'State',  add: addStates, remove: removeStates },
     { name: 'City',  add: addCities, remove: removeCities },
@@ -61,8 +59,11 @@ states
       const newFilters = {...f};
       newFilters[label] = value;
       if (label === 'state') {
-        const district = document.getElementById('district');
-        const city = document.getElementById('city');
+        const district = document.getElementById('dvdistrict');
+        const city = document.getElementById('dvcity');
+        setdistrictOptions(getSortedValues(filterByObject(rawPatients, {
+          state: value,
+        }), 'district'));
         // Hide boxes
         if (value === '') 
         {
@@ -70,7 +71,7 @@ states
         }
         else 
         {
-          district.style.display = 'inline';
+          district.style.display = 'block';
         }
         city.style.display = 'none';
         // Default to empty selection
@@ -78,17 +79,19 @@ states
         city.selectedIndex = 0;
         newFilters['district'] = '';
         newFilters['city'] = '';
-        console.log(label);
-        console.log(value);
         updatePatients(normalize(rawPatients.filter(x => x.state == value), false));
         var newGraph = rowsToGraph(rawPatients.filter(x => x.state == value), false, false);
         let filterState = [];
         filterState[value] = states[value];
-        console.log(filterState);
         newGraph = addStates(newGraph, rawPatients.filter(x => x.state == value), filterState);
         updateGraph(newGraph);
       } else if (label === 'district') {
-        const city = document.getElementById('city');
+        const city = document.getElementById('dvcity');
+        setdistrictOptions(getSortedValues(filterByObject(rawPatients, {
+          state: filters.state,
+          district: value,
+        }), 'city'));
+        console.log(value);
         // Hide box
         if (value === '') 
         {
@@ -96,7 +99,7 @@ states
         }
         else
         { 
-          city.style.display = 'inline';
+          city.style.display = 'block';
         }
         // Default to empty selection
         city.selectedIndex = 0;
@@ -117,13 +120,10 @@ states
  
   useEffect(() => {
     setstateOptions(getSortedValues(rawPatients, 'state'));
-    setdistrictOptions(getSortedValues(rawPatients, 'district'));
-    setdistrictOptions(getSortedValues(rawPatients, 'city'));
   },[]);
 
   function getSortedValues(obj, key) {
     const setValues = new Set(obj.map((p) => p[key]));
-    if (setValues.size > 1) setValues.add('All');
     let returnValue = Array.from(setValues).sort().map((x, i) => 
     {
       return {'value': i, 'label':x};
@@ -149,30 +149,26 @@ states
         defaultValue={{ label: 'Select State', value: -1 }}
 
       />
-
+ <div id="dvdistrict" style={{display: "none", "margin-top": "10px"}}>
 <Select
         id="district"
         onChange={(value) => {
-          handleFilters('district', value);}}
+          handleFilters('district', value.label);}}
         options={districtOptions}
         isClearable={true}
         defaultValue={{ label: 'Select District', value: -1 }}
-        styles={mystyle}
       />
-
+</div>
+<div id="dvcity" style={{display: "none", "margin-top": "10px"}}>
 <Select
         id="city"
         onChange={(value) => {
-          handleFilters('city', value);}}
+          handleFilters('city', value.label);}}
         options={districtOptions}
         isClearable={true}
         defaultValue={{ label: 'Select City', value: -1 }}
-        styles={mystyle}
       />    
-</div>
-
-<div className="select">
- <label id='lbldistrict' style={{display:'none'}}>District: </label> 
+  </div>
 <br></br>
 <hr></hr>
 </div>
