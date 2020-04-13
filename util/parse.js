@@ -66,7 +66,6 @@ import {
   cluster_node,
 } from '../images/index'
 import hash from 'object-hash'
-import dotProp from 'dot-prop-immutable'
 
 export function letterToCode(str) {
   const letterPos = parseInt(str[0], 36)
@@ -74,28 +73,15 @@ export function letterToCode(str) {
 }
 
 export function getIcon(patient) {
-  if (patient.gender === 'male') {
-    if (patient.status === 'Recovered') {
-      return male_cured
-    } else if (patient.status === 'Hospitalized') {
-      return male_hosp
-    } else if (patient.status === 'Deceased') {
-      return male_dead
-    } else {
-      return male_hosp
-    }
-  } else if (patient.gender === 'female') {
-    if (patient.status === 'Recovered') {
-      return female_cured
-    } else if (patient.status === 'Hospitalized') {
-      return female_hosp
-    } else if (patient.status === 'Deceased') {
-      return female_dead
-    } else {
-      return female_hosp
-    }
-  } else {
-    return female_hosp
+  switch (patient.status) {
+    case 'Recovered':
+      return patient.gender === 'male' ? male_cured : female_cured
+    case 'Hospitalized':
+      return patient.gender === 'male' ? male_hosp : female_hosp
+    case 'Deceased':
+      return patient.gender === 'male' ? male_dead : female_dead
+    default:
+      return patient.gender === 'male' ? male_hosp : female_hosp
   }
 }
 
@@ -110,7 +96,7 @@ export const codeToLetter = code => {
 
 const extractEvents = rows => {}
 
-function addPatientNode(patientCode, row, graph) {
+function getPatientNode(patientCode, row) {
     let node = {
         id: patientCode,
         label: 'P' + row.patientId,
@@ -119,27 +105,7 @@ function addPatientNode(patientCode, row, graph) {
         group: 'patient'
     }
 
-    graph = dotProp.set(graph, 'nodes', list => [...list, node])
-    return graph;
-}
-
-function addClusterNode(row, clusters, graph) {
-    if (row.contractedFrom) {
-        if (!clusters[hash(row.contractedFrom)] && row.contractedFrom[0] === 'E') {
-            const patientCode = letterToCode(row.contractedFrom)
-            clusters[hash(row.contractedFrom)] = row.contractedFrom
-
-            let clusterNode = {
-                id: patientCode,
-                label: 'Event ' + row.contractedFrom[1],
-                shape: 'image',
-                size: 60,
-                image: cluster_node,
-            }
-            graph = dotProp.set(graph, 'nodes', list => [...list, clusterNode])
-        }
-    }
-    return graph;
+    return node
 }
 
 export const rowsToGraph = (rows, removeLeafNode, addPInPatientId) => {
@@ -167,26 +133,42 @@ export const rowsToGraph = (rows, removeLeafNode, addPInPatientId) => {
       patientCode = letterToCode('P' + row.patientId)
     }
     if (row.contractedFrom) {
+      const CONTRACTED_FROM = row.contractedFrom
+      const PATIENT_CODE_CONTRACTED_FROM = letterToCode(CONTRACTED_FROM)
       let edge = {}
-      if (row.contractedFrom[0] === 'E') {
+      if (CONTRACTED_FROM[0] === 'E') {
         edge = {
-           from: letterToCode(row.contractedFrom),
+           from: PATIENT_CODE_CONTRACTED_FROM,
            to: patientCode,
            length: 500,
            dashes: true,
-        }} else {
+        }
+        const CONTRACTED_FROM_HASH = hash(CONTRACTED_FROM)
+        // adding the cluster node
+        if (!clusters[CONTRACTED_FROM_HASH]) {
+          clusters[CONTRACTED_FROM_HASH] = CONTRACTED_FROM
+
+          let clusterNode = {
+              id: PATIENT_CODE_CONTRACTED_FROM,
+              label: 'Event ' + CONTRACTED_FROM[1],
+              shape: 'image',
+              size: 60,
+              image: cluster_node,
+          }
+          graph.nodes.push(clusterNode)
+        }
+      } else {
            edge = {
-             from: letterToCode(row.contractedFrom),
+             from: PATIENT_CODE_CONTRACTED_FROM,
              to: patientCode,
            }
         }
-        graph = dotProp.set(graph, 'edges', list => [...list, edge])
+        graph.edges.push(edge)
       }
-      graph = addClusterNode(row, clusters, graph);
-      if(removeLeafNode && listOfConnectedCases.has(patientCode) ) {
-          graph = addPatientNode(patientCode, row, graph);
-      }else if(!removeLeafNode){
-          graph = addPatientNode(patientCode, row, graph);
+      if (!removeLeafNode) {
+        graph.nodes.push(getPatientNode(patientCode, row))
+      } else if (listOfConnectedCases.has(patientCode)) {
+        graph.nodes.push(getPatientNode(patientCode, row))
       }
   })
   return graph

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import DayPicker from 'react-day-picker'
 
 import { connect } from 'react-redux'
-import { updateGraph, selectFilter } from './Redux/actions'
+import { updateGraph, selectFilter, updateIsLoading } from './Redux/actions'
 import { rowsToGraph } from '../util/parse'
 import { isBrowser } from 'react-device-detect'
 
@@ -26,13 +26,14 @@ const DatePickerButton = styled.button`
   border: 1px solid #e7e7e7;
 `
 
-function DatePicker({ updateGraph, selectFilter }) {
+function DatePicker({ updateGraph, selectFilter, updateIsLoading }) {
   const [selectedDay, changeSelectedDay] = useState(new Date());
   const [isDayPickerVisible, changeDayPickerVisibility] = useState(false);
 
   const toggleDayPickerVisibility = () => changeDayPickerVisibility(!isDayPickerVisible);
 
   function handleDayClick(date, modifiers) {
+    updateIsLoading(true)
 
     // Do not proceed with click action if the date is disabled
     if(modifiers.disabled){
@@ -109,4 +110,4 @@ function DatePicker({ updateGraph, selectFilter }) {
   )
 }
 
-export default connect(null, { updateGraph, selectFilter })(DatePicker)
+export default connect(null, { updateGraph, selectFilter, updateIsLoading })(DatePicker)

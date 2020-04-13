@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Graph from 'react-graph-vis'
 import { Tooltip, TooltipArrow, TooltipInner } from 'styled-tooltip-component'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates, updateRawPatients } from '../Redux/actions'
+import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates, updateRawPatients, updateIsLoading } from '../Redux/actions'
 import { rowsToGraph, letterToCode } from '../../util/parse'
 import normalize from '../../util/normalize'
 import DatePicker from '../DatePicker'
@@ -19,7 +19,8 @@ const NetworkMap = ({
   height,
   width,
   states,
-  updateRawPatients
+  updateRawPatients,
+  isLoading: isGraphLoading,
 }) => {
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
@@ -32,7 +33,7 @@ const NetworkMap = ({
     searchTerm: state.searchTerm,
     selected: state.patient,
   }))
- 
+
   useEffect(() => {
     if(!states){
       fetch('https://api.covid19india.org/state_district_wise.json', {
@@ -157,12 +158,14 @@ const NetworkMap = ({
       {isLoading ? null : (
         <>
           <NetworkMapLegend currentFilter={filter} />
-          <Graph
+          {!isGraphLoading && (
+            <Graph
             ref={graphRef}
             graph={graph}
             options={options}
             events={events}
           />
+          )}
           <DatePicker />
           {toolTipVisible && (
             <Tooltip
@@ -183,8 +186,8 @@ const NetworkMap = ({
 }
 
 const mapStateToProps = state => {
-  let { graph, searchTerm, filter, states, rawPatientData } = state
-  return { graph, searchTerm, filter, states, rawPatientData}
+  let { graph, searchTerm, filter, states, rawPatientData, isLoading } = state
+  return { graph, searchTerm, filter, states, rawPatientData, isLoading}
 }
 
 export default connect(mapStateToProps, {

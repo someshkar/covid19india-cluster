@@ -82,5 +82,12 @@ const updateStates = states => (dispatch, getState) => {
   })
 }
 
+const updateIsLoading = (isLoading) => (dispatch) => {
+  dispatch({
+    type: actionTypes.UPDATE_IS_LOADING,
+    payload: isLoading,
+  })
+}
+
 // Export the actions.
-export { updateGraph, updatePatients, updateRawPatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, updateStates}
+export { updateGraph, updatePatients, updateRawPatients, updateLastRefreshed, selectPatient, selectFilter, setSearchTerm, updateStates, updateIsLoading}
