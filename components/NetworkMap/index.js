@@ -2,12 +2,18 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Graph from 'react-graph-vis'
 import { Tooltip, TooltipArrow, TooltipInner } from 'styled-tooltip-component'
 import { connect, useSelector } from 'react-redux'
-import { updateGraph, updatePatients, updateLastRefreshed, selectPatient, updateStates } from '../Redux/actions'
-import { rowsToGraph, letterToCode } from '../../util/parse'
-import normalize from '../../util/normalize'
+
+import {
+  updateGraph,
+  updatePatients,
+  updateLastRefreshed,
+  selectPatient,
+  updateStates,
+} from '../Redux/actions'
+
 import DatePicker from '../DatePicker'
-import NetworkMapLegend from '../NetworkMapLegend'
-import { useError } from '../../util/logger'
+import NetworkMapLegend from './Legend'
+import { useError, useLog, getAPIData, rowsToGraph, letterToCode, normalize } from '../../util'
 
 const NetworkMap = ({
   filter,
@@ -19,7 +25,7 @@ const NetworkMap = ({
   selectPatient,
   height,
   width,
-  states
+  states,
 }) => {
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
@@ -32,37 +38,46 @@ const NetworkMap = ({
     searchTerm: state.searchTerm,
     selected: state.patient,
   }))
+
+
+  async function fetchStateWiseData() {
+    const data = await getAPIData(
+      'https://api.covid19india.org/state_district_wise.json')
+    if (data) { 
+      updateStates(Object.keys(data)) 
+    }
+  }
+
+  async function fetchUnofficialData() {
+    const data = await getAPIData(
+      'https://api.rootnet.in/covid19-in/unofficial/covid19india.org')
+    if (data) {
+      const _rawPatientData = data.rawPatientData
+      updateGraph(rowsToGraph(_rawPatientData))
+      updatePatients(normalize(_rawPatientData))
+      updateLastRefreshed(data.lastRefreshed)
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
-    if(!states){
-      fetch('https://api.covid19india.org/state_district_wise.json', {
-        cors: 'no-cors',
-        method: 'GET',
-        redirect: 'follow',
-      })
-        .then(resp => resp.json())
-        .then(res => {
-          if(res){
-            let stateNames = Object.keys(res);
-            updateStates(stateNames);
-          }
-        })
+    if (!states) {
+      try {
+        fetchStateWiseData()
+      } catch (error) {
+        useError(error)
+      }
     }
   })
 
   useEffect(() => {
-    fetch('https://api.rootnet.in/covid19-in/unofficial/covid19india.org', {
-      cors: 'no-cors',
-      method: 'GET',
-      redirect: 'follow',
-    })
-      .then(resp => resp.json())
-      .then(res => {
-        updateGraph(rowsToGraph(res.data.rawPatientData))
-        updatePatients(normalize(res.data.rawPatientData))
-        updateLastRefreshed(res.data.lastRefreshed)
-        setIsLoading(false)
-      })
-      .catch(err => useError(err))
+    if (!states) {
+      try {
+        fetchUnofficialData()
+      } catch (error) {
+        useError(error)
+      }
+    }
   }, [isLoading])
 
   useEffect(() => {
@@ -93,6 +108,7 @@ const NetworkMap = ({
         selectPatient({ id: nodeKey, coords: coordsMap[nodeKey] })
       } catch (e) {
         // None found. TODO: Add a UI response
+        useError(e)
       }
     }
   }, [searchTerm])
@@ -182,7 +198,7 @@ const NetworkMap = ({
 
 const mapStateToProps = state => {
   let { graph, searchTerm, filter, states } = state
-  return { graph, searchTerm, filter, states}
+  return { graph, searchTerm, filter, states }
 }
 
 export default connect(mapStateToProps, {

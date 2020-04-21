@@ -6,7 +6,7 @@
 
 // Action Types
 import actionTypes from './actionTypes'
-import { useLog } from '../../util/logger'
+import { useLog } from '../../util'
 
 const updateGraph = graph => (dispatch, getState) => {
   // Dispatch the result.

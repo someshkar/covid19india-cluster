@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 
-import { getIcon } from '../../util/parse'
+import { getIcon } from '../../util'
 import { SearchInput } from '../UI/search-input'
 import { setSearchTerm } from '../Redux/actions'
 

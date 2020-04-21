@@ -1,5 +1,5 @@
 const { doc, creds } = require('./db')
-const { useLog } = require('../../util/logger');
+const { useLog } = require('../../util');
 
 module.exports = async (req, res) => {
   await doc.useServiceAccountAuth(creds)
