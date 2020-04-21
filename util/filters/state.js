@@ -5,7 +5,6 @@ import dotProp from 'dot-prop-immutable'
 import { useLog } from '../logger'
 
 export const addStates = (graph, patients, states) => {
-  
   for (const stateName in states) {
     if (states.hasOwnProperty(stateName)) {
       const stateKey = states[stateName];
@@ -17,9 +16,8 @@ export const addStates = (graph, patients, states) => {
         image: state_node,
       }
       graph = dotProp.set(graph, 'nodes', list => [...list, node])
-    }
   }
-
+  }
   for (let patientId in patients) {
     if(!patients[patientId].state){
       useLog(patients[patientId]);
@@ -44,7 +42,6 @@ export const addStates = (graph, patients, states) => {
 }
 
 export const removeStates = (graph, patients, states) => {
-  
   for (var stateName in states) {
     let index = _.findIndex(dotProp.get(graph, 'nodes'), function(o) {
       return o.id == states[stateName]

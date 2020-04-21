@@ -9,11 +9,18 @@ import {
   updateLastRefreshed,
   selectPatient,
   updateStates,
+  updateRawPatients,
 } from '../Redux/actions'
 
 import DatePicker from '../DatePicker'
 import NetworkMapLegend from './Legend'
-import { useError, useLog, getAPIData, rowsToGraph, letterToCode, normalize } from '../../util'
+import {
+  useError,
+  getAPIData,
+  rowsToGraph,
+  letterToCode,
+  normalize,
+} from '../../util'
 
 const NetworkMap = ({
   filter,
@@ -26,6 +33,7 @@ const NetworkMap = ({
   height,
   width,
   states,
+  updateRawPatients,
 }) => {
   const graphRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
@@ -34,29 +42,30 @@ const NetworkMap = ({
   const toolTipVisible = useMemo(() => {
     return toolTipPosition !== null
   }, [toolTipPosition])
-  const { selected, searchTerm } = useSelector(state => ({
+  const { selected, searchTerm } = useSelector((state) => ({
     searchTerm: state.searchTerm,
     selected: state.patient,
   }))
 
-
   async function fetchStateWiseData() {
     const data = await getAPIData(
-      'https://api.covid19india.org/state_district_wise.json')
-    if (data) { 
-      updateStates(Object.keys(data)) 
+      'https://api.covid19india.org/state_district_wise.json'
+    )
+    if (data) {
+      updateStates(Object.keys(data))
     }
   }
 
   async function fetchUnofficialData() {
     const data = await getAPIData(
-      'https://api.rootnet.in/covid19-in/unofficial/covid19india.org')
+      'https://api.rootnet.in/covid19-in/unofficial/covid19india.org'
+    )
     if (data) {
       const _rawPatientData = data.rawPatientData
       updateGraph(rowsToGraph(_rawPatientData))
       updatePatients(normalize(_rawPatientData))
       updateLastRefreshed(data.lastRefreshed)
-      setIsLoading(false)
+      // setIsLoading(false)
     }
   }
 
@@ -68,7 +77,7 @@ const NetworkMap = ({
         useError(error)
       }
     }
-  })
+  }, [])
 
   useEffect(() => {
     if (!states) {
@@ -136,9 +145,9 @@ const NetworkMap = ({
   }
 
   const events = {
-    select: function(event) {
+    select: function (event) {
       const selectedNodeId = event.nodes[0]
-      const selectedNode = graph.nodes.find(v => v.id === selectedNodeId)
+      const selectedNode = graph.nodes.find((v) => v.id === selectedNodeId)
       if (selectedNode) {
         switch (selectedNode.group) {
           case 'patient':
@@ -151,16 +160,16 @@ const NetworkMap = ({
         }
       }
     },
-    hoverNode: function(e) {
+    hoverNode: function (e) {
       const { node, event } = e
-      const selectedNode = graph.nodes.find(v => v.id === node)
+      const selectedNode = graph.nodes.find((v) => v.id === node)
       setToolTipContent(selectedNode.label)
       setToolTipPosition({
         top: event.pageY,
         left: event.pageX,
       })
     },
-    blurNode: function(event) {
+    blurNode: function (event) {
       setToolTipContent('')
       setToolTipPosition(null)
     },
@@ -196,9 +205,9 @@ const NetworkMap = ({
   )
 }
 
-const mapStateToProps = state => {
-  let { graph, searchTerm, filter, states } = state
-  return { graph, searchTerm, filter, states }
+const mapStateToProps = (state) => {
+  let { graph, searchTerm, filter, states, rawPatientData } = state
+  return { graph, searchTerm, filter, states, rawPatientData }
 }
 
 export default connect(mapStateToProps, {
@@ -207,4 +216,5 @@ export default connect(mapStateToProps, {
   updateStates,
   updateLastRefreshed,
   selectPatient,
+  updateRawPatients,
 })(NetworkMap)

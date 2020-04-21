@@ -15,7 +15,8 @@ const initialState = {
   graph: null,
   patients: null,
   searchTerm: '',
-  states: null
+  states: null,
+  rawPatients: null
 }
 
 // Export the Device Reducer.
@@ -35,7 +36,11 @@ export default (state = initialState, action) => {
     }
     case actionTypes.UPDATE_PATIENTS: {
       const { patients } = action.payload
-      return { ...state, patients: patients, patient: patients.byId[251] } // `P1` in code
+      return { ...state, patients: patients, patient: patients.byId[patients.allIds[0]] } // `P1` in code
+    }
+    case actionTypes.UPDATE_RAW_PATIENTS: {
+      const { rawPatients } = action.payload
+      return { ...state, rawPatients: rawPatients }
     }
     case actionTypes.UPDATE_LAST_REFRESHED: {
       const { lastRefreshed } = action.payload
