@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import useDebounce from '../../util/useDebounce'
+import { useDebounce } from '../../util'
 import { useSelector } from 'react-redux'
 
 const Input = styled.input`

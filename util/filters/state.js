@@ -2,6 +2,7 @@ import hash from 'object-hash'
 import { state_node } from '../../images'
 import _ from 'lodash'
 import dotProp from 'dot-prop-immutable'
+import { useLog } from '../logger'
 
 export const addStates = (graph, patients, states) => {
   for (const stateName in states) {
@@ -19,7 +20,7 @@ export const addStates = (graph, patients, states) => {
   }
   for (let patientId in patients) {
     if(!patients[patientId].state){
-      console.log(patients[patientId]);
+      useLog(patients[patientId]);
       continue;
     }
     let edge = {

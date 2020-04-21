@@ -5,7 +5,7 @@ const normalize = (array, addPInPatientId) => {
     allIds: [],
   }
 
-  array.forEach(item => {
+  array && array.forEach(item => {
     let patientCode = item.patientId
     if(addPInPatientId)
     {
@@ -17,5 +17,4 @@ const normalize = (array, addPInPatientId) => {
   })
   return newArray
 }
-
-export default normalize
+export { normalize }

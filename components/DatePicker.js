@@ -4,7 +4,7 @@ import DayPicker from 'react-day-picker'
 
 import { connect } from 'react-redux'
 import { updateGraph, selectFilter } from './Redux/actions'
-import { rowsToGraph } from '../util/parse'
+import { useLog, useError, rowsToGraph } from '../util'
 import { isBrowser } from 'react-device-detect'
 
 const Container = styled.div`
@@ -27,19 +27,19 @@ const DatePickerButton = styled.button`
 `
 
 function DatePicker({ updateGraph, selectFilter }) {
-  const [selectedDay, changeSelectedDay] = useState(new Date());
-  const [isDayPickerVisible, changeDayPickerVisibility] = useState(false);
+  const [selectedDay, changeSelectedDay] = useState(new Date())
+  const [isDayPickerVisible, changeDayPickerVisibility] = useState(false)
 
-  const toggleDayPickerVisibility = () => changeDayPickerVisibility(!isDayPickerVisible);
+  const toggleDayPickerVisibility = () =>
+    changeDayPickerVisibility(!isDayPickerVisible)
 
   function handleDayClick(date, modifiers) {
-
     // Do not proceed with click action if the date is disabled
-    if(modifiers.disabled){
-      return;
+    if (modifiers.disabled) {
+      return
     }
 
-    toggleDayPickerVisibility();
+    toggleDayPickerVisibility()
 
     function formatDate(date) {
       var d = new Date(date),
@@ -56,51 +56,44 @@ function DatePicker({ updateGraph, selectFilter }) {
     const newDate = formatDate(date)
 
     if (formatDate(selectedDay) !== newDate) {
-      console.log(newDate)
+      useLog(newDate)
       changeSelectedDay(date)
 
-      const apiURL =
-        'https://api.rootnet.in/covid19-in/unofficial/covid19india.org/patientdb/' +
-        newDate
-
-      fetch(apiURL, {
-        cors: 'no-cors',
-        method: 'GET',
-        redirect: 'follow',
-      })
-        .then(resp => resp.json())
-        .then(res => {
-          console.log(res)
-          // Update the graph only if res.success is true
-          if(res.success){
-            updateGraph(rowsToGraph(res.data.rawPatientData))
-            selectFilter('P2P');
-          }
-        })
+      try {
+        const data = getAPIData(
+          `https://api.rootnet.in/covid19-in/unofficial/covid19india.org/patientdb/${newDate}`
+        )
+  
+        if (data) {
+          updateGraph(rowsToGraph(data.rawPatientData))
+          selectFilter('P2P')
+        }
+      } catch (error) {
+        useError(error)
+      }
     }
   }
 
-  const renderDayPicker = () => isDayPickerVisible ? (
-    <DayPicker
-      selectedDays={selectedDay}
-      onDayClick={handleDayClick}
-      disabledDays={[
-        {
-          before: new Date(2020, 2, 23),
-          after: new Date(),
-        },
-      ]}
-    />
-  ) : null
+  const renderDayPicker = () =>
+    isDayPickerVisible ? (
+      <DayPicker
+        selectedDays={selectedDay}
+        onDayClick={handleDayClick}
+        disabledDays={[
+          {
+            before: new Date(2020, 2, 23),
+            after: new Date(),
+          },
+        ]}
+      />
+    ) : null
 
   return (
     <Container>
       {isBrowser ? (
         <>
           {renderDayPicker()}
-          <DatePickerButton
-            onClick={toggleDayPickerVisibility}
-          >
+          <DatePickerButton onClick={toggleDayPickerVisibility}>
             <span>{selectedDay.toDateString()}</span>
           </DatePickerButton>
         </>

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import Head from 'next/head'
 
-import { initGA, logPageView } from '../util/googleAnalytics'
+import { initGA, logPageView } from '../util'
 
 import Dashboard from '../components/Dashboard'
 

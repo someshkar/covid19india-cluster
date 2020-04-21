@@ -3,18 +3,18 @@ import styled from 'styled-components'
 
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import normalize from '../../util/normalize'
 import { state, city, abroad, p2p } from '../../images/index'
 import {
+  normalize,
   addStates,
   removeStates,
   addCities,
   removeCities,
   addTravel,
   removeTravel,
-} from '../../util/filters'
+  rowsToGraph
+} from '../..//util'
 import { updateGraph, selectFilter, updatePatients } from '../Redux/actions'
-import { rowsToGraph } from '../../util/parse'
 
 const filters = [
   {
@@ -108,7 +108,7 @@ const FilterPanel = ({
   // const [selected, selectCategory] = React.useState('P2P')
 
   const changeGraph = name => {
-    // console.log('Changegraph', graph, patients.byId)
+    // useLog('Changegraph', graph, patients.byId)
     let currentFilter = _.find(filters, function(o) {
       return o.name === filter
     })
