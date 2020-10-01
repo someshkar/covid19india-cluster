@@ -1,6 +1,6 @@
-# COVID19 India Cluster Network Graph
+# COVID-19 India Cluster Network Graph
 
-This is a dashboard of network connections and clusters to track outbreak and transmission COVID19 in India. The primary data source is collected by volunteers at [covid19india.org](https://www.covid19india.org), a crowdsourced database collated from various news as well as government sources. This can be forked and connected to your Google sheet too. The intention of this graph is to open up options for analysis for policy/decision makers so that they can be more strategic in testing cases and deploying resources like ventilators, beds & medicines.
+This is a dashboard of network connections and clusters made to track outbreak and transmission COVID19 in India. The primary data source is collected by volunteers at [covid19india.org](https://www.covid19india.org), a crowdsourced database collated from various news as well as government sources. This can be forked and connected to your Google sheet too. The intention of this graph is to open up options for analysis for policy/decision makers so that they can be more strategic in testing cases and deploying resources like ventilators, beds & medicines.
 
 Primary app is at [https://covid19india-network.now.sh](https://covid19india-network.now.sh/).
 
@@ -8,7 +8,7 @@ Primary app is at [https://covid19india-network.now.sh](https://covid19india-net
 
 ## Roadmap
 
-1.  More precise cluster filters based on state, district, travel abroad etc
+1.  More precise cluster filters based on state, district, travel abroad etc.
 2.  NLP based analysis of Notes section to find out relationship info, travel history etc.
 3.  Travel history of locations visited of patients, stay time etc.
 
